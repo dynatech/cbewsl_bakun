@@ -313,13 +313,6 @@ const MarirongHeader = () => {
               }}>
               <MenuItem
                 onClick={() => {
-                  navigate('/resources');
-                  handleClose();
-                }}>
-                Resources
-              </MenuItem>
-              <MenuItem
-                onClick={() => {
                   navigate('/feedback');
                   handleClose();
                 }}>
