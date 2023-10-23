@@ -14,15 +14,19 @@ import {
 import { useNavigate } from "react-router-dom";
 import { makeStyles } from "@material-ui/core/styles";
 import { Paper, Link, Box } from "@material-ui/core";
-import tile_1 from "../../assets/tile/tile_1.png";
-import tile_2 from "../../assets/tile/tile_2.png";
-import tile_3 from "../../assets/tile/tile_3.png";
-import tile_4 from "../../assets/tile/tile_4.png";
 import { SignInLogo } from "../../components/utils/SignInLogo";
 import UserProfileModal from "../marirong/modals/UserProfileModal";
 import PromptModal from "../marirong/modals/PromptModal";
 import { signIn, forgotPassword, verifyOTP } from "../../apis/UserManagement";
 import { getNumberOfFiles } from "../../apis/Misc";
+
+import phivolcs_seal from '../../assets/phivolcs_seal.png';
+import dynaslope_seal from '../../assets/dynaslope_seal.png';
+import province_seal from '../../assets/benguet_province_seal.png';
+import municipality_seal from '../../assets/bakun_municipal_seal.png';
+import barangay_seal from '../../assets/brgy_seal.png';
+import lewc_seal from '../../assets/bak_lewc_seal.png';
+// import backdrop from '../../assets/signinbackdrop.png';
 
 const imageDivider = makeStyles((theme) => ({
   animated_divider: {
@@ -150,7 +154,8 @@ const Signin = () => {
             style={{ width: "100%" }}
             onChange={(e) => {
               setIndicator(e.target.value);
-            }}
+            }}sx={{backgroundImage:'images/cover.jpeg'}}
+            height='385px'
           />
 
           <Link
@@ -296,163 +301,219 @@ const Signin = () => {
         notifMessage={notifMessage}
         title={promptTitle}
       />
-
-      <Grid container>
-        <Grid className={imageDiv.animated_divider} item xs={0} sm={0} md={7}>
-          <div>
-            <img
-              src={tile_1}
+      
+    <Fragment>
+      <Grid container 
+          // style={{backgroundImage:`url(${backdrop})`, backgroundSize: 'cover',
+          // backgroundPosition: 'center',
+          // height: '97.8vh',}}
+      >
+        <Grid item xs={12} sm={12} style={{ paddingTop: "8%", marginBottom: "3%"}}>
+            <div
               style={{
-                position: "fixed",
-                width: "58.3%",
-                height: "100%",
-              }}
-            />
-            <img
-              src={tile_2}
-              style={{
-                position: "fixed",
-                width: "58.3%",
-                height: "100%",
-              }}
-            />
-            <img
-              src={tile_3}
-              style={{
-                position: "fixed",
-                width: "58.3%",
-                height: "100%",
-              }}
-            />
-            <img
-              src={tile_4}
-              style={{
-                position: "fixed",
-                width: "58.3%",
-                height: "100%",
-              }}
-            />
-          </div>
-        </Grid>
+                textAlign:'center',
+                height: 'auto',
+                width: 'auto',
+                padding: 10
+              }}>
+                <img
+                  src={phivolcs_seal}
+                  alt="phivolcs-seal-png"
+                  style={{
+                    objectFit: 'contain',
+                    height: 150,
+                    width: 150,
+                    marginRight: 20,
+                  }}
+                />
+                <img
+                  src={dynaslope_seal}
+                  alt="dynaslope-seal-png"
+                  style={{
+                    objectFit: 'contain',
+                    height: 140,
+                    width: 140,
+                    marginRight: 20,
+                  }}
+                />
+                <img
+                  src={province_seal}
+                  alt="province-seal-png"
+                  style={{
+                    objectFit: 'contain',
+                    height: 150,
+                    width: 150,
+                    marginRight: 20,
+                  }}
+                />
+                <img
+                  src={municipality_seal}
+                  alt="municipality-seal-png"
+                  style={{
+                    objectFit: 'contain',
+                    height: 150,
+                    width: 150,
+                    marginRight: 20,
+                  }}
+                />
+                <img
+                  src={barangay_seal}
+                  alt="barangay-seal-png"
+                  style={{
+                    objectFit: 'contain',
+                    height: 150,
+                    width: 150,
+                    marginRight: 20,
+                  }}
+                />
+                <img
+                  src={lewc_seal}
+                  alt="lewc-seal-png"
+                  style={{
+                    objectFit: 'contain',
+                    height: 150,
+                    width: 150,
+                    marginRight: 20,
+                  }}
+                />
+              </div>
+          </Grid>
 
-        <Grid item xs={12} sm={12} md={5} elevation={6} alignContents="center">
-          <SignInLogo />
+          <Grid item xs={12} sm={12} md={12} elevation={6} alignContents="center">
 
-          <Typography
-            component="h2"
-            variant="h3"
-            style={{ textAlign: "center" }}
-          >
-            Community Based Early Warning
-          </Typography>
-          <Typography
-            component="h2"
-            variant="h3"
-            style={{ paddingBottom: "3%", textAlign: "center" }}
-          >
-            Systems for Landslides
-          </Typography>
+            <Typography
+              variant="h2"
+              align="center"
+              color="grey.700"
+              fontWeight="fontWeightBold"
+              sx={{
+                backgroundColor: "#f89422",
+                // backgroundImage: `linear-gradient(45deg, #ffac4d, #f89422)`,
+                backgroundSize: "100%",
+                backgroundRepeat: "repeat",
+                backgroundClip: "text",
+                WebkitBackgroundClip: "text",
+                WebkitTextFillColor: "transparent",
+                WebkitTextStroke: '.5px black'
+              }}
+            >
+              Community Based Early Warning System for Landslides
+            </Typography>
 
-          <Typography
-            component="h3"
-            variant="h4"
-            style={{ textAlign: "center", paddingBottom: "5%" }}
-          >
-            Brgy. Marirong, Leon, Iloilo
-          </Typography>
-          <Grid container spacing={4} textAlign="center">
-            <Grid item xs={12} sm={12} md={12}>
-              <TextField
-                id="filled-helperText"
-                placeholder="E.g. JuanDelacruz"
-                inputProps={{ min: 0, style: { textAlign: "center" } }}
-                helperText={
-                  <Typography
-                    variant="caption"
-                    display="block"
-                    style={{ textAlign: "center" }}
-                  >
-                    Username
-                  </Typography>
-                }
-                variant="standard"
-                style={{ width: "80%" }}
-                onChange={(e) => {
-                  setUsername(e.target.value);
-                }}
-                onKeyPress={(event) => {
-                  if (event.code === "Enter") {
-                    handleLogin();
+            <Typography
+              variant="h4"
+              align="center"
+              color="grey.700"
+              fontWeight="fontWeightBold"
+              sx={{
+                backgroundColor: "#16526D",
+                // backgroundImage: `linear-gradient(45deg, #16526d, #16526d)`,
+                backgroundSize: "100%",
+                backgroundRepeat: "repeat",
+                backgroundClip: "text",
+                WebkitBackgroundClip: "text",
+                WebkitTextFillColor: "transparent",
+                marginBottom: 5
+              }}
+            >
+              Brgy. Poblacion, Bakun, Benguet
+            </Typography>
+
+            <Grid container spacing={4} textAlign="center">
+              <Grid item xs={12} sm={12} md={12}>
+                <TextField
+                  id="filled-helperText"
+                  placeholder="E.g. JuanDelacruz"
+                  inputProps={{ min: 0, style: { textAlign: "center" } }}
+                  helperText={
+                    <Typography
+                      variant="caption"
+                      display="block"
+                      style={{ textAlign: "center" }}
+                    >
+                      Username
+                    </Typography>
                   }
-                }}
-              />
-            </Grid>
-            <Grid item xs={12} sm={12} md={12}>
-              <TextField
-                id="filled-helperText"
-                placeholder="**************"
-                inputProps={{ min: 0, style: { textAlign: "center" } }}
-                type="password"
-                helperText={
-                  <Typography
-                    variant="caption"
-                    display="block"
-                    style={{ textAlign: "center" }}
-                  >
-                    Password
-                  </Typography>
-                }
-                variant="standard"
-                style={{ width: "80%" }}
-                onChange={(e) => {
-                  setPassword(e.target.value);
-                }}
-                onKeyPress={(event) => {
-                  if (event.code === "Enter") {
+                  variant="standard"
+                  style={{ width: "25%" }}
+                  onChange={(e) => {
+                    setUsername(e.target.value);
+                  }}
+                  onKeyPress={(event) => {
                     if (event.code === "Enter") {
                       handleLogin();
                     }
-                  }
-                }}
-              />
-            </Grid>
-            <Grid item xs={12} sm={12} md={12}>
-              <Button
-                variant="contained"
-                onClick={() => {
-                  handleLogin();
-                }}
-              >
-                Sign in
-              </Button>
-            </Grid>
-            <Grid item xs={12} sm={12} md={12}>
-              <Grid>
-                <Link
-                  component="button"
-                  style={{ fontStyle: "italic", fontSize: 16 }}
-                  onClick={(e) => {
-                    setOpenModal(true);
                   }}
-                >
-                  Forgot Password?
-                </Link>
+                />
               </Grid>
-              <Grid>
-                <Link
-                  component="button"
-                  style={{ fontStyle: "italic", fontSize: 16 }}
-                  onClick={(e) => {
-                    setCreateAccountModal(true);
+              <Grid item xs={12} sm={12} md={12}>
+                <TextField
+                  id="filled-helperText"
+                  placeholder="**************"
+                  inputProps={{ min: 0, style: { textAlign: "center" } }}
+                  type="password"
+                  helperText={
+                    <Typography
+                      variant="caption"
+                      display="block"
+                      style={{ textAlign: "center" }}
+                    >
+                      Password
+                    </Typography>
+                  }
+                  variant="standard"
+                  style={{ width: "25%" }}
+                  onChange={(e) => {
+                    setPassword(e.target.value);
                   }}
-                >
-                  No account yet? Register here!
-                </Link>
+                  onKeyPress={(event) => {
+                    if (event.code === "Enter") {
+                      if (event.code === "Enter") {
+                        handleLogin();
+                      }
+                    }
+                  }}
+                />
+              </Grid>
+              <Grid item xs={12} sm={12} md={12}>
+                <Grid style={{marginBottom: 10}}>
+                  <Button
+                      variant="contained"
+                      onClick={() => {
+                        handleLogin();
+                      }}
+                      style={{backgroundColor: '#FFC000', color: 'black'}}
+                    >
+                      Sign in
+                  </Button>
+                </Grid>
+                <Grid>
+                  <Link
+                      component="button"
+                      style={{ fontStyle: "italic", fontSize: 16 }}
+                      onClick={(e) => {
+                        setOpenModal(true);
+                      }}
+                    >
+                      Forgot Password?
+                  </Link>
+                </Grid>
+                </Grid>
+                <Grid item xs={12} sm={12} md={12}>
+                  <Button
+                    variant="contained"
+                    onClick={(e) => {
+                      setCreateAccountModal(true)
+                    }}
+                    style={{backgroundColor: 'green', color: 'white'}}
+                  >
+                    No account yet? Register here!
+                  </Button>
+                </Grid>
               </Grid>
             </Grid>
           </Grid>
-        </Grid>
-      </Grid>
+    </Fragment>
     </Fragment>
   );
 };
