@@ -12,11 +12,11 @@ import {
 } from '@mui/material';
 import DostSeal from '../../assets/phivolcs_seal.png';
 import DynaslopeSealMini from '../../assets/dynaslope_seal_mini.png';
-
 import ilolo_province_seal from '../../assets/iloilo_province_seal.png';
 import leon_municipal_seal from '../../assets/leon_municipal_seal.png';
 import leon_mdrrmc_responder from '../../assets/leon_mdrrmc_responder.png';
 import mar_lewc_seal from '../../assets/mar_lewc_seal.png';
+import HazardMap from '../../assets/hazard_map.jpg'
 
 import MenuIcon from '@mui/icons-material/Menu';
 import Menu from '@mui/material/Menu';
@@ -121,7 +121,7 @@ const MarirongHeader = () => {
     if (path_name === '/opcen') {
       setValue(0);
     } else if (
-      path_name === '/hazard_mapping' ||
+      // path_name === '/hazard_mapping' ||
       path_name === '/cav'
     ) {
       setValue(1);
@@ -144,6 +144,10 @@ const MarirongHeader = () => {
       setValue(-1);
     }
   };
+
+  const handleOpen = () => {
+    window.open(HazardMap, '_blank');
+  }
 
   useEffect(() => {
     handleCurrentTab()
@@ -420,7 +424,7 @@ const MarirongHeader = () => {
           }}>
           <MenuItem
             onClick={() => {
-              navigate('/hazard_mapping');
+              handleOpen();
               handleClose();
             }}>
             Hazard Map

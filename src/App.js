@@ -17,7 +17,6 @@ import Assessment from './components/marirong/Assessment';
 import MarirongHeader from './components/utils/MarirongHeader';
 import CRA from './components/marirong/CRA';
 import GroundData from './components/marirong/GroundData';
-import HazardMapping from './components/marirong/HazardMapping';
 import CaV from './components/marirong/CaV';
 import Rainfall from './components/marirong/Rainfall';
 import Subsurface from './components/marirong/Subsurface';
@@ -87,13 +86,6 @@ const App = props => {
               <Route exact path="/assessment" element={<Assessment />} />
               <Route exact path="/cra" element={<CRA />} />
               <Route exact path="/ground_data" element={<GroundData />} />
-              <Route exact path="/hazard_mapping" element={
-                <main className='sandbox'>
-                  <section className='sandbox__carousel'>
-                    <HazardMapping slides={SLIDES} options={OPTIONS} />
-                  </section>
-                </main> 
-                } />
               <Route exact path="/cav" element={<CaV />} />
               <Route exact path="/rainfall" element={<Rainfall />} />
               <Route exact path="/subsurface" element={<Subsurface />} />
