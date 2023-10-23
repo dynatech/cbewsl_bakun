@@ -394,7 +394,6 @@ const Signin = () => {
                 backgroundClip: "text",
                 WebkitBackgroundClip: "text",
                 WebkitTextFillColor: "transparent",
-                WebkitTextStroke: '.5px black'
               }}
             >
               Community Based Early Warning System for Landslides

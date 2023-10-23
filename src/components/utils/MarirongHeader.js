@@ -12,10 +12,10 @@ import {
 } from '@mui/material';
 import DostSeal from '../../assets/phivolcs_seal.png';
 import DynaslopeSealMini from '../../assets/dynaslope_seal_mini.png';
-import ilolo_province_seal from '../../assets/iloilo_province_seal.png';
-import leon_municipal_seal from '../../assets/leon_municipal_seal.png';
-import leon_mdrrmc_responder from '../../assets/leon_mdrrmc_responder.png';
-import mar_lewc_seal from '../../assets/mar_lewc_seal.png';
+import benguet_provincial_seal from '../../assets/benguet_province_seal.png';
+import bakun_municipal_seal from '../../assets/bakun_municipal_seal.png';
+import bakun_brgy_seal from '../../assets/brgy_seal.png';
+import bakun_lewc_seal from '../../assets/bak_lewc_seal.png';
 import HazardMap from '../../assets/hazard_map.jpg'
 
 import MenuIcon from '@mui/icons-material/Menu';
@@ -163,34 +163,16 @@ const MarirongHeader = () => {
 
   return (
     <Fragment>
-      <Grid container style={{background: '#16526D'}}>
-        <Grid item xs={4} sm={4} md={4} lg={4}>
+      <Grid container spacing={0} style={{background: 'white'}}>
+
+      <Grid item xs={4} md={4} lg={3.5} sx={{marginTop: 1, marginBottom: 2}}>
           <div
             style={{
               textAlign: 'left',
               height: 'auto',
               width: '100%',
-              padding: 20,
-            }}>
-            <Typography
-              variant="h5"
-              style={{fontWeight: '600', color: 'white'}}>
-              COMMUNITY-BASED EARLY WARNING SYSTEM FOR LANDSLIDES
-            </Typography>
-            <Typography
-              variant="h6"
-              style={{fontWeight: '300', color: 'white'}}>
-              Brgy. Marirong, Leon, Iloilo
-            </Typography>
-          </div>
-        </Grid>
-        <Grid item xs={4} sm={4} md={4} lg={6} sx={{marginTop: 2}}>
-          <div
-            style={{
-              textAlign: 'center',
-              height: 'auto',
-              width: '100%',
-              padding: 10,
+              marginTop: 10,
+              marginLeft: 40
             }}>
             <img
               src={DostSeal}
@@ -213,8 +195,8 @@ const MarirongHeader = () => {
               }}
             />
             <img
-              src={ilolo_province_seal}
-              alt="ilolo_province_seal"
+              src={benguet_provincial_seal}
+              alt="benguet_provincial_seal"
               style={{
                 objectFit: 'cover',
                 height: 70,
@@ -223,8 +205,8 @@ const MarirongHeader = () => {
               }}
             />
             <img
-              src={leon_municipal_seal}
-              alt="leon_municipal_seal"
+              src={bakun_municipal_seal}
+              alt="bakun_municipal_seal"
               style={{
                 objectFit: 'contain',
                 height: 70,
@@ -233,8 +215,8 @@ const MarirongHeader = () => {
               }}
             />
             <img
-              src={leon_mdrrmc_responder}
-              alt="leon_mdrrmc_responder"
+              src={bakun_brgy_seal}
+              alt="bakun_brgy_seal"
               style={{
                 objectFit: 'contain',
                 height: 70,
@@ -243,24 +225,45 @@ const MarirongHeader = () => {
               }}
             />
             <img
-              src={mar_lewc_seal}
-              alt="mar_lewc_seal"
+              src={bakun_lewc_seal}
+              alt="bakun_lewc_seal"
               style={{
                 objectFit: 'contain',
                 height: 70,
                 width: 70,
-                marginRight: 8,
               }}
             />
           </div>
         </Grid>
-        <Grid item xs={4} sm={4} md={4} lg={2}>
-          <div style={{textAlign: 'end', padding: 5}}>
+
+        <Grid item xs={12} md={6} lg={6.5}>
+          <div
+            style={{
+              textAlign: 'left',
+              height: 'auto',
+              width: '100%',
+              marginTop: 30,
+            }}>
+            <Typography
+              variant="h5"
+              style={{fontWeight: '600', color: '#16526D'}}>
+              COMMUNITY-BASED EARLY WARNING SYSTEM FOR LANDSLIDES
+            </Typography>
+            <Typography
+              variant="h6"
+              style={{fontWeight: '300', color: '#16526D'}}>
+              Brgy. Poblacion, Bakun, Benguet
+            </Typography>
+          </div>
+        </Grid>
+
+        <Grid item xs={12} md={12} lg={2}>
+          <div style={{textAlign: 'end'}}>
             <Tooltip title="Notification">
               <IconButton onClick={() => {}} sx={{p: 2, mt: 4}}>
                 <NotificationsNoneIcon
                   alt="Notification"
-                  style={{color: 'white'}}
+                  style={{color: '#16526D'}}
                 />
               </IconButton>
             </Tooltip>
@@ -301,7 +304,7 @@ const MarirongHeader = () => {
               aria-expanded={open ? 'true' : undefined}
               onClick={handleClick}
               sx={{p: 2, mt: 4}}>
-              <MenuIcon alt="Menu" style={{color: 'white'}} />
+              <MenuIcon alt="Menu" style={{color: '#16526D'}} />
             </IconButton>
             <Menu
               id="menu"
@@ -326,11 +329,6 @@ const MarirongHeader = () => {
                 Logout
               </MenuItem>
             </Menu>
-            <Grid item md={12} style={{alignSelf: 'center'}}>
-              <Typography variant="body1" style={{color: 'white'}}>
-                {server_time.toUpperCase()}
-              </Typography>
-            </Grid>
           </div>
         </Grid>
         <Grid
@@ -343,7 +341,7 @@ const MarirongHeader = () => {
             width: '100%',
           }}>
           <AppBar position="static" color="inherit">
-            <Grid container style={{backgroundColor: '#F8991D'}}>
+            <Grid container style={{backgroundColor: '#16526D'}}>
               <Grid item md={10}>
                 <Toolbar style={{justifyContent: 'center'}}>
                   <Tabs
@@ -401,6 +399,11 @@ const MarirongHeader = () => {
                     />
                   </Tabs>
                 </Toolbar>
+              </Grid>
+              <Grid item md={2} style={{ alignSelf: 'center' }}>
+                <Typography variant="body1" style={{color: 'white'}}>
+                  {server_time.toUpperCase()}
+                </Typography>
               </Grid>
             </Grid>
           </AppBar>
