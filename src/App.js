@@ -24,7 +24,6 @@ import Surficial from './components/marirong/Surficial';
 import Earthquake from './components/marirong/Earthquake';
 import SurficialMarkers from './components/marirong/SurficialMarkers';
 import Moms from './components/marirong/Moms';
-import Resources from './components/marirong/Resources';
 import Feedback from './components/marirong/Feedback';
 import ChangePassword from './components/utils/ChangePassword';
 import ProfileSettings from './components/utils/ProfileSettings';
@@ -91,8 +90,6 @@ const App = props => {
               <Route exact path="/subsurface" element={<Subsurface />} />
               <Route exact path="/surficial" element={<Surficial />} />
               <Route exact path="/earthquake" element={<Earthquake />} />
-              <Route exact path="/resources" element={<Resources />} />
-              <Route exact path="/resources" element={<Resources />} />
               <Route exact path="/change-password" element={<ChangePassword />} />
               <Route exact path="/profile-settings" element={<ProfileSettings />} />
               <Route
