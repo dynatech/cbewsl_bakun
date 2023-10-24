@@ -3,7 +3,11 @@ import {FormControl, IconButton, Avatar, Button,
         Container, Grid, Typography, Card, TextField,
         CardActions, CardContent, CardMedia, InputLabel, 
         MenuItem, Select, Tooltip} from '@mui/material'
-import MarDrone from '../../assets/mar_drone2.jpg';
+
+import bak_view from '../../assets/bakun_view.png';
+import male_icon from '../../assets/male_icon.png';
+import female_icon from '../../assets/female_icon.png';
+
 import {LocalizationProvider} from '@mui/x-date-pickers/LocalizationProvider';
 import {AdapterDayjs} from '@mui/x-date-pickers/AdapterDayjs';
 import {DesktopDatePicker} from '@mui/x-date-pickers/DesktopDatePicker';
@@ -32,6 +36,7 @@ const ProfileSettings = () => {
     const [mobileNum, setMobileNum] = useState('');
     const [profilePicture, setProfilePicture] = useState(null);
     const [imageUrl, setImageUrl] = useState(null);
+    const [profileIcon, setProfileIcon] = useState(null);
 
     const [openPrompt, setOpenPrompt] = useState(false)
     const [promptTitle, setPromptTitle] = useState("")
@@ -75,6 +80,13 @@ const ProfileSettings = () => {
         const mobile_no = parse_data.mobile_no ? parse_data.mobile_no : parse_data.user.mobile_number;
         const user_id = parse_data.profile.user_id;
         const profile_picture = parse_data.profile.pic_path !== "" ? `${STORAGE_URL}/${parse_data.profile.pic_path}` : "";
+
+        if (gender === 'Male') {
+            setProfileIcon(male_icon)
+        } else {
+            setProfileIcon(female_icon)
+        }
+
         setFirstName(first_name);
         setLastName(last_name);
         setMiddleName(middle_name);
@@ -177,15 +189,15 @@ const ProfileSettings = () => {
                             <CardMedia
                                 component="img"
                                 alt="lewc"
-                                image={MarDrone}
-                                height="200"
+                                image={bak_view}
+                                height="300"
                             />
                             <CardContent>
                                 <Grid container>
                                     <Grid item xs={3} 
                                         sx={{marginTop: -10, marginBottom: 5}}
                                         justify="center">
-                                            <input
+                                            {/* <input
                                                 accept="image/*"
                                                 type="file"
                                                 id="select-image"
@@ -193,17 +205,17 @@ const ProfileSettings = () => {
                                                 onChange={e =>
                                                     setProfilePicture(e.target.files[0])}
                                             />
-                                            <Tooltip title="Edit profile picture">
+                                            <Tooltip title="Edit profile picture"> */}
                                                     <IconButton>
-                                                    <label htmlFor="select-image">
+                                                    {/* <label htmlFor="select-image"> */}
                                                     <Avatar
                                                         sx={{ bgcolor: 'gray', width: 150, height: 150}}
                                                         alt={firstName}
-                                                        src={imageUrl}
+                                                        src={profileIcon}
                                                         />
-                                                        </label>
+                                                        {/* </label> */}
                                                     </IconButton>
-                                            </Tooltip>
+                                            {/* </Tooltip> */}
                                     </Grid>
                                     <Grid item xs={9} justifyContent='flex-start'>
                                         <Typography variant='h4'>{firstName}&nbsp;{lastName}</Typography>

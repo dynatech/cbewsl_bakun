@@ -200,9 +200,10 @@ const MarirongHeader = () => {
               alt="dynaslope-seal-mini-png"
               style={{
                 objectFit: 'contain',
-                height: 75,
+                height: 72,
                 width: 75,
                 marginRight: 8,
+                marginBottom: 2
               }}
             />
             <img
@@ -213,6 +214,7 @@ const MarirongHeader = () => {
                 height: 70,
                 width: 70,
                 marginRight: 8,
+                marginBottom: 3
               }}
             />
             <img
@@ -223,6 +225,7 @@ const MarirongHeader = () => {
                 height: 70,
                 width: 70,
                 marginRight: 8,
+                marginBottom: 3
               }}
             />
             <img
@@ -233,6 +236,7 @@ const MarirongHeader = () => {
                 height: 70,
                 width: 70,
                 marginRight: 8,
+                marginBottom: 3
               }}
             />
             <img
@@ -242,6 +246,7 @@ const MarirongHeader = () => {
                 objectFit: 'contain',
                 height: 70,
                 width: 70,
+                marginBottom: 3
               }}
             />
           </div>
