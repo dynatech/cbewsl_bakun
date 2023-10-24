@@ -59,7 +59,7 @@ const Events = (props) => {
 
   const columns = [
     {name: 'title', label: 'Activity name'},
-    {name: 'desc', label: 'Activity details'},
+    {name: 'note', label: 'Activity details'},
     {name: 'start', label: 'Start date'},
     {name: 'end', label: 'End date'},
     {name: 'actions', label: 'Actions'},
@@ -133,22 +133,28 @@ const Events = (props) => {
 
     deleteEvent(tempDelete, (response) => {
       if(response.status == true){
-        setOpenPrompt(true)
         if (passedId != null) {
           setErrorPrompt(false)
           setPromptTitle("Success")
-          setNotifMessage("Activity successfully deleted!", response.message)
+          setNotifMessage("Activity successfully deleted!", response.feedback)
           setConfirmation(false)
         }
         getAllEvents()
         setDeleteID(null)
+        setOpenPrompt(true);
+        setErrorPrompt(false)
+        setPromptTitle("Success")
+        setNotifMessage("Activity successfully deleted!", response.feedback)
+        setConfirmation(false)
+        setCalendarEvent({});
+        
       }
       else{
         if (passedId != null) {
           setOpenPrompt(true)
           setErrorPrompt(true)
           setPromptTitle("Fail")
-          setNotifMessage(response.message)
+          setNotifMessage(response.feedback)
           setConfirmation(false)
           setDeleteID(null)
         }
@@ -163,6 +169,22 @@ const Events = (props) => {
     setOpenAddActivityModal(true)
     setActivityAction("edit")
   }
+
+  const eventStyleGetter = () => {
+    const style = {
+      backgroundColor: 'green',
+      borderRadius: '3px',
+      opacity: 0.8,
+      color: 'white',
+      border: '0px',
+      display: 'block',
+    };
+
+    return {
+      style,
+    };
+  };
+  
 
   const ActivityCard = () => {
     const [editModal, setEditModal] = useState(false);
@@ -205,7 +227,7 @@ const Events = (props) => {
                   <Grid sx={{display: 'flex', flexDirection: 'row'}}>
                     <Grid>
                       <Container>
-                        <CircleIcon color="warning" fontSize="large" />
+                        <CircleIcon fontSize="large" sx={{color:"#ffd400"}}/>
                       </Container>
                     </Grid>
                     <Grid>
@@ -286,7 +308,7 @@ const Events = (props) => {
             <Grid sx={{display: 'flex', flexDirection: 'row'}}>
               <Grid>
                 <Container>
-                  <CircleIcon color="primary" fontSize="large" />
+                  <CircleIcon fontSize="large" sx={{color:"green"}}/>
                 </Container>
               </Grid>
               <Grid>
@@ -345,6 +367,7 @@ const Events = (props) => {
           views={views}
           selected
           onSelectEvent={setCalendarEvent}
+          eventPropGetter={eventStyleGetter}
           onSelectSlot={e => {
             setSlotInfo(e)
           }}
