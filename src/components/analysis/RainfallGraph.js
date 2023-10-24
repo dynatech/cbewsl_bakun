@@ -8,6 +8,8 @@ import { Skeleton } from "@mui/material";
 
 import { Grid, Paper, Hidden, TextField } from "@material-ui/core";
 import { getRainfallPlotData } from "../../apis/analysis";
+import { CBEWSL_SITE } from "../../host";
+import DateRangeSelector from "./DateRangeSelector";
 
 function computeForStartTs(ts, duration = 7, unit = "days") {
   if (unit === "all") {
@@ -558,7 +560,7 @@ function RainfallGraph(props) {
     moment(ts_start, "YYYY-MM-DD HH:mm:ss"),
     "days"
   );
-  const input = { days_diff, ts_start, ts_end, site_code: "mar" };
+  const input = { days_diff, ts_start, ts_end, site_code: CBEWSL_SITE };
 
   const default_options = {
     cumulative: prepareCumulativeRainfallChartOption(default_data, input),
@@ -606,8 +608,15 @@ function RainfallGraph(props) {
 
   return (
     <Fragment>
-      <div style={{ marginTop: 16 }}>
+      <div>
         <Grid container spacing={4}>
+          <Grid container item xs justifyContent="flex-end">
+            <DateRangeSelector
+              selectedRangeInfo={selected_range_info}
+              setSelectedRangeInfo={setSelectedRangeInfo}
+              disableAll
+            />
+          </Grid>
           <Grid item xs={12} md={12}>
             {/* <TextField
                             label="Start Date"
