@@ -1024,8 +1024,8 @@ function OpCen2(props) {
                 variant="contained"
                 size="small"
                 onClick={openOnDemandForm}
-                endIcon={<Landscape />} style={{ marginLeft: 5, float: "right" }}>
-                Release On-demand
+                endIcon={<Landscape />} style={{ marginLeft: 5, float: "right", backgroundColor: '#ffd400', color: 'black'}}>
+                <b>Release On-demand</b>
               </Button>
             </div>
           </Grid>

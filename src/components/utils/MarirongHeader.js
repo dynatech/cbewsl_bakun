@@ -16,7 +16,9 @@ import benguet_provincial_seal from '../../assets/benguet_province_seal.png';
 import bakun_municipal_seal from '../../assets/bakun_municipal_seal.png';
 import bakun_brgy_seal from '../../assets/brgy_seal.png';
 import bakun_lewc_seal from '../../assets/bak_lewc_seal.png';
-import HazardMap from '../../assets/hazard_map.jpg'
+import HazardMap from '../../assets/hazard_map.jpg';
+import male_icon from '../../assets/male_icon.png';
+import female_icon from '../../assets/female_icon.png';
 
 import MenuIcon from '@mui/icons-material/Menu';
 import Menu from '@mui/material/Menu';
@@ -30,8 +32,9 @@ const MarirongHeader = () => {
   let navigate = useNavigate();
   const [value, setValue] = useState(0);
   const [server_time, setServerTime] = useState('');
-  const [profilePicture] = useState(null);
-  const [imageUrl, setImageUrl] = useState(null);
+  // const [profilePicture] = useState(null);
+  const [profileIcon, setProfileIcon] = useState(null);
+  // const [imageUrl, setImageUrl] = useState(null);
 
   const handleChange = (event, newValue) => {
     setValue(newValue);
@@ -60,16 +63,24 @@ const MarirongHeader = () => {
   useEffect(() => {
     const data = localStorage.getItem('credentials');
     const parse_data = JSON.parse(data);
-    const profile_picture = parse_data.profile.pic_path !== "" ? `${STORAGE_URL}/${parse_data.profile.pic_path}` : "";
-    setImageUrl(profile_picture)
+    const user_sex = parse_data.user.sex;
+
+    if (user_sex === 'Male'){
+      setProfileIcon(male_icon)
+    } else {
+      setProfileIcon(female_icon)
+    }
+
+    // const profile_picture = parse_data.profile.pic_path !== "" ? `${STORAGE_URL}/${parse_data.profile.pic_path}` : "";
+    // setImageUrl(profile_picture)
   }, []);
 
-  useEffect(() => {
-    if (profilePicture) {
-      const file = URL.createObjectURL(profilePicture);
-      setImageUrl(file);
-    }
-  }, [profilePicture]);
+  // useEffect(() => {
+  //   if (profilePicture) {
+  //     const file = URL.createObjectURL(profilePicture);
+  //     setImageUrl(file);
+  //   }
+  // }, [profilePicture]);
 
   const a11yProps = index => {
     return {
@@ -246,12 +257,12 @@ const MarirongHeader = () => {
             }}>
             <Typography
               variant="h5"
-              style={{fontWeight: '600', color: '#16526D'}}>
+              style={{fontWeight: '600', color: 'green'}}>
               COMMUNITY-BASED EARLY WARNING SYSTEM FOR LANDSLIDES
             </Typography>
             <Typography
               variant="h6"
-              style={{fontWeight: '300', color: '#16526D'}}>
+              style={{fontWeight: '300', color: 'black'}}>
               Brgy. Poblacion, Bakun, Benguet
             </Typography>
           </div>
@@ -269,7 +280,7 @@ const MarirongHeader = () => {
             </Tooltip>
             <Tooltip title="Open settings">
               <IconButton onClick={(e) => { setAnchorElSettings(e.currentTarget) }} sx={{p: 2, mt: 4}}>
-                <Avatar src={imageUrl} alt="Profile photo" />
+                <Avatar src={profileIcon} alt="Profile photo" />
               </IconButton>
             </Tooltip>
 
@@ -341,12 +352,15 @@ const MarirongHeader = () => {
             width: '100%',
           }}>
           <AppBar position="static" color="inherit">
-            <Grid container style={{backgroundColor: '#16526D'}}>
+            <Grid container style={{backgroundColor: 'green'}}>
               <Grid item md={10}>
                 <Toolbar style={{justifyContent: 'center'}}>
                   <Tabs
                     value={value}
                     onChange={handleChange}
+                    TabIndicatorProps={{
+                      style: {background: 'white'}
+                    }}
                     aria-label="basic tabs example">
                     <Tab
                       label={
