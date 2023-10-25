@@ -534,7 +534,7 @@ function prepareCumulativeRainfallChartOption(row, input) {
 }
 
 function RainfallGraph(props) {
-  const arr_num = 3;
+  const arr_num = 4;
 
   const [rainfall_data, setRainfallData] = useState([]);
   const [processed_data, setProcessedData] = useState([]);
