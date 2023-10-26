@@ -1,6 +1,19 @@
 import { API_URL } from "../config";
 import axios from "axios";
-import { CBEWSL_SITE } from "../host";
+import { CBEWSL_SITE, CBEWSL_SITE_CODE } from "../host";
+
+export const getTableSurficial = (data, callback) => {
+  let apii = `${API_URL}/api/surficial/tabled_marker_observations/${CBEWSL_SITE_CODE}/${data.startDate}/${data.endDate}`;
+  console.log("data", apii);
+  axios
+    .get(
+      `${API_URL}/api/surficial/tabled_marker_observations/${CBEWSL_SITE_CODE}/${data.startDate}/${data.endDate}`
+    )
+    .then((response) => {
+      callback(response.data);
+    })
+    .catch((error) => {});
+};
 
 export const getSurficialData = (data, callback) => {
   axios
