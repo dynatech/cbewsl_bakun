@@ -54,6 +54,8 @@ const MarirongHeader = () => {
       case 4:
         navigate('/events');
         break;
+      case 5:
+        navigate('/profile-settings')
       default:
         navigate('/assessment');
         break;
@@ -152,7 +154,7 @@ const MarirongHeader = () => {
     } else if (path_name === '/events') {
       setValue(4);
     } else {
-      setValue(-1);
+      setValue(5);
     }
   };
 
@@ -366,9 +368,9 @@ const MarirongHeader = () => {
                     TabIndicatorProps={{
                       style: {background: 'white'}
                     }}
-                    aria-label="basic tabs example">
+                      aria-label="basic tabs example">
                     <Tab
-                      label={
+                        label={
                         <span style={{color: 'white', fontWeight: 'bold'}}>
                           DASHBOARD
                         </span>
@@ -387,7 +389,7 @@ const MarirongHeader = () => {
                       }}
                     />
                     <Tab
-                      label={
+                        label={
                         <span style={{color: 'white', fontWeight: 'bold'}}>
                           DATA ANALYSIS
                         </span>
@@ -398,7 +400,7 @@ const MarirongHeader = () => {
                       }}
                     />
                     <Tab
-                      label={
+                        label={
                         <span style={{color: 'white', fontWeight: 'bold'}}>
                           GROUND DATA
                         </span>
@@ -409,13 +411,14 @@ const MarirongHeader = () => {
                       }}
                     />
                     <Tab
-                      label={
+                        label={
                         <span style={{color: 'white', fontWeight: 'bold'}}>
                           SCHEDULE
                         </span>
                       }
                       {...a11yProps(1)}
                     />
+                    <Tab style={{display: 'none'}} {...a11yProps(2)}/>
                   </Tabs>
                 </Toolbar>
               </Grid>
