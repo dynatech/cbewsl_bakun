@@ -142,7 +142,6 @@ const ProfileSettings = () => {
                     title: 'Success!',
                     text: message
                 })
-                navigate('/opcen');
             } else {
                 Swal.fire({
                     icon: 'error',
