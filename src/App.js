@@ -31,12 +31,6 @@ import Bulletin from './components/utils/Bulletin';
 import './components/marirong/css/sandbox.css'
 import './components/marirong/css/embla.css'
 
-console.log(localStorage.getItem('credentials'))
-const OPTIONS = {}
-let SLIDE_COUNT = localStorage.getItem('credentials') != null ? JSON.parse(localStorage.getItem('credentials'))['img_length'] : 0
-
-const SLIDES = Array.from(Array(SLIDE_COUNT).keys())
-
 const App = props => {
 
   const [nav, setNav] = useState(null);

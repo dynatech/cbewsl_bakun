@@ -306,8 +306,7 @@ function UserProfileModal(props){
               <MenuItem value={2}>BLGU</MenuItem>
               <MenuItem value={3}>MLGU</MenuItem>
               <MenuItem value={4}>PLGU</MenuItem>
-              <MenuItem value={5}>Dynaslope</MenuItem>
-              <MenuItem value={6}>Community</MenuItem>
+              <MenuItem value={5}>Community</MenuItem>
             </Select>
           </FormControl>
 

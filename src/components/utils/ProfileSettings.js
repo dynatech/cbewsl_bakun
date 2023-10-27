@@ -11,10 +11,8 @@ import female_icon from '../../assets/female_icon.png';
 import {LocalizationProvider} from '@mui/x-date-pickers/LocalizationProvider';
 import {AdapterDayjs} from '@mui/x-date-pickers/AdapterDayjs';
 import {DesktopDatePicker} from '@mui/x-date-pickers/DesktopDatePicker';
-import PhoneIphoneIcon from '@mui/icons-material/PhoneIphone';
 import moment from 'moment';
 import { updateProfile } from '../../apis/ProfileUpdating';
-import { STORAGE_URL } from '../../config';
 import {useNavigate} from 'react-router-dom';
 import Swal from 'sweetalert2'
 
@@ -34,8 +32,6 @@ const ProfileSettings = () => {
     const [designation, setDesignation] = useState('');
     const [birthdate, setBirthdate] = useState(null);
     const [mobileNum, setMobileNum] = useState('');
-    const [profilePicture, setProfilePicture] = useState(null);
-    const [imageUrl, setImageUrl] = useState(null);
     const [profileIcon, setProfileIcon] = useState(null);
 
     const [openPrompt, setOpenPrompt] = useState(false)
@@ -60,13 +56,6 @@ const ProfileSettings = () => {
       };
 
     useEffect(() => {
-       if (profilePicture) {
-         const file = URL.createObjectURL(profilePicture);
-         setImageUrl(file);
-       }
-     }, [profilePicture]);
-
-    useEffect(() => {
         const data = localStorage.getItem('credentials');
         const parse_data = JSON.parse(data);
         const first_name = parse_data.user.first_name ? parse_data.user.first_name : parse_data.user.firstname;
@@ -79,7 +68,6 @@ const ProfileSettings = () => {
         const birthday = parse_data.user.birthday ? parse_data.user.birthday : parse_data.user.kaarawan;
         const mobile_no = parse_data.mobile_no ? parse_data.mobile_no : parse_data.user.mobile_number;
         const user_id = parse_data.profile.user_id;
-        const profile_picture = parse_data.profile.pic_path !== "" ? `${STORAGE_URL}/${parse_data.profile.pic_path}` : "";
 
         if (gender === 'Male') {
             setProfileIcon(male_icon)
@@ -97,7 +85,6 @@ const ProfileSettings = () => {
         setBirthdate(birthday);
         setMobileNum(mobile_no);
         setUserID(user_id);
-        setImageUrl(profile_picture)
       }, []);
 
     const designation_list = [
@@ -123,10 +110,6 @@ const ProfileSettings = () => {
         form_data.append('kaarawan', updatedBday);
         form_data.append('nickname', firstName);
         form_data.append('mobile_number', mobileNum);
-        if (profilePicture != null) {
-            form_data.append('file', profilePicture);
-        }
-        
 
         const input = {
             first_name: firstName,
@@ -140,7 +123,6 @@ const ProfileSettings = () => {
         const prof_input = {
             address: address,
             designation_id: designation_id,
-            pic_path: profilePicture != null ? profilePicture.name : "N/A",
         }
         
         updateProfile(form_data, data => {
@@ -168,7 +150,6 @@ const ProfileSettings = () => {
                     text: message
                 })
             }
-
         })
       }
 
@@ -197,25 +178,11 @@ const ProfileSettings = () => {
                                     <Grid item xs={3} 
                                         sx={{marginTop: -10, marginBottom: 5}}
                                         justify="center">
-                                            {/* <input
-                                                accept="image/*"
-                                                type="file"
-                                                id="select-image"
-                                                style={{display: 'none'}}
-                                                onChange={e =>
-                                                    setProfilePicture(e.target.files[0])}
-                                            />
-                                            <Tooltip title="Edit profile picture"> */}
-                                                    <IconButton>
-                                                    {/* <label htmlFor="select-image"> */}
-                                                    <Avatar
-                                                        sx={{ bgcolor: 'gray', width: 150, height: 150}}
-                                                        alt={firstName}
-                                                        src={profileIcon}
-                                                        />
-                                                        {/* </label> */}
-                                                    </IconButton>
-                                            {/* </Tooltip> */}
+                                            <Avatar
+                                                sx={{ bgcolor: 'gray', width: 150, height: 150}}
+                                                alt={firstName}
+                                                src={profileIcon}
+                                                />
                                     </Grid>
                                     <Grid item xs={9} justifyContent='flex-start'>
                                         <Typography variant='h4'>{firstName}&nbsp;{lastName}</Typography>
