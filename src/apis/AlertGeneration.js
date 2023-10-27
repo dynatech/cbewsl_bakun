@@ -1,6 +1,6 @@
 import { API_URL } from "../config";
 import axios from "axios";
-import { CBEWSL_SITE } from "../host";
+import { CBEWSL_SITE, CBEWSL_SITE_CODE } from "../host";
 
 export const getLatestCandidatesAndAlerts = (callback) => {
   console.log("1");
@@ -36,7 +36,7 @@ export const generateAlert = (data) => {
 
 export function getCandidateAlert(callback) {
   console.log("2");
-  const api_link = `${API_URL}/api/monitoring/candidate_alerts/${CBEWSL_SITE}`;
+  const api_link = `${API_URL}/api/monitoring/candidate_alerts/${CBEWSL_SITE_CODE}`;
   axios
     .get(api_link)
     .then((response) => {
