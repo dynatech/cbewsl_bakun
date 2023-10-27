@@ -165,7 +165,7 @@ export function insertOnDemandToDb(on_demand_data, callback) {
 }
 
 export function checkLatestSiteEventIfHasOnDemand(site_id, callback) {
-  const api_link = `${API_URL}/api/monitoring/check_if_current_site_event_has_on_demand/${site_id}`;
+  const api_link = `${API_URL}/api/monitoring/check_if_current_site_event_has_on_demand/${CBEWSL_SITE}`;
   axios
     .get(api_link)
     .then((response) => {

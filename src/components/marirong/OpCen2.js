@@ -1,30 +1,38 @@
-import React, { Fragment, useState, useEffect } from 'react';
-import { Grid, Card, Typography, Divider, Chip, Tooltip, responsiveFontSizes } from '@mui/material';
-import moment from 'moment';
-import Accordion from '@mui/material/Accordion';
-import AccordionSummary from '@mui/material/AccordionSummary';
-import AccordionDetails from '@mui/material/AccordionDetails';
-import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
-import Stack from '@mui/material/Stack';
-import Button from '@mui/material/Button';
-import Snackbar from '@mui/material/Snackbar';
-import MuiAlert from '@mui/material/Alert';
-import Table from '@mui/material/Table';
-import TableBody from '@mui/material/TableBody';
-import TableCell from '@mui/material/TableCell';
-import TableContainer from '@mui/material/TableContainer';
-import TableHead from '@mui/material/TableHead';
-import TableRow from '@mui/material/TableRow';
-import Paper from '@mui/material/Paper';
-import Backdrop from '@mui/material/Backdrop';
-import CircularProgress from '@mui/material/CircularProgress';
-import ValidationModal from './modals/ValidationModal';
-import NewAlertsModal from './modals/NewAlertsModal';
-import PromptModal from './modals/PromptModal';
-import AlertReleaseFormModal from './modals/AlertReleaseModal';
-import DisseminateModal from './modals/DisseminateModal';
-import NotificationSoundFolder from '../../audio/notif_sound.mp3';
-import { useNavigate } from 'react-router-dom';
+import React, { Fragment, useState, useEffect } from "react";
+import {
+  Grid,
+  Card,
+  Typography,
+  Divider,
+  Chip,
+  Tooltip,
+  responsiveFontSizes,
+} from "@mui/material";
+import moment from "moment";
+import Accordion from "@mui/material/Accordion";
+import AccordionSummary from "@mui/material/AccordionSummary";
+import AccordionDetails from "@mui/material/AccordionDetails";
+import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
+import Stack from "@mui/material/Stack";
+import Button from "@mui/material/Button";
+import Snackbar from "@mui/material/Snackbar";
+import MuiAlert from "@mui/material/Alert";
+import Table from "@mui/material/Table";
+import TableBody from "@mui/material/TableBody";
+import TableCell from "@mui/material/TableCell";
+import TableContainer from "@mui/material/TableContainer";
+import TableHead from "@mui/material/TableHead";
+import TableRow from "@mui/material/TableRow";
+import Paper from "@mui/material/Paper";
+import Backdrop from "@mui/material/Backdrop";
+import CircularProgress from "@mui/material/CircularProgress";
+import ValidationModal from "./modals/ValidationModal";
+import NewAlertsModal from "./modals/NewAlertsModal";
+import PromptModal from "./modals/PromptModal";
+import AlertReleaseFormModal from "./modals/AlertReleaseModal";
+import DisseminateModal from "./modals/DisseminateModal";
+import NotificationSoundFolder from "../../audio/notif_sound.mp3";
+import { useNavigate } from "react-router-dom";
 
 import {
   getCandidateAlert,
@@ -32,26 +40,32 @@ import {
   getReleasedMessages,
   getTempMoms,
   getContacts,
-} from '../../apis/AlertGeneration';
+} from "../../apis/AlertGeneration";
 
-import { Cancel, Check, CheckCircle, Info, Landscape } from '@material-ui/icons';
-import UpdateMomsModal from './modals/UpdateMomsModal';
-import OnDemandModal from './modals/OnDemandModal';
+import {
+  Cancel,
+  Check,
+  CheckCircle,
+  Info,
+  Landscape,
+} from "@material-ui/icons";
+import UpdateMomsModal from "./modals/UpdateMomsModal";
+import OnDemandModal from "./modals/OnDemandModal";
 
 const alert_level_colors = [
-  { alert_level: 0, color: '#c5e0b4' },
-  { alert_level: 1, color: '#FCEE27' },
-  { alert_level: 2, color: '#F8991D' },
-  { alert_level: 3, color: '#FE0000' },
+  { alert_level: 0, color: "#c5e0b4" },
+  { alert_level: 1, color: "#FCEE27" },
+  { alert_level: 2, color: "#F8991D" },
+  { alert_level: 3, color: "#FE0000" },
 ];
 function capitalizeFirstLetter(str, every_word = false) {
-  const capitalize = s => s.charAt(0).toUpperCase() + s.slice(1);
+  const capitalize = (s) => s.charAt(0).toUpperCase() + s.slice(1);
 
   if (every_word) {
-    const arr = str.split(' ');
-    const cap_arr = arr.map(s => capitalize(s));
+    const arr = str.split(" ");
+    const cap_arr = arr.map((s) => capitalize(s));
 
-    return cap_arr.join(' ');
+    return cap_arr.join(" ");
   }
 
   return capitalize(str);
@@ -80,7 +94,7 @@ function TempMomsTable(props) {
     }
   }, []);
 
-  const selectMoms = data => {
+  const selectMoms = (data) => {
     console.log(data);
     setSelectedMomsData(data);
     setIsOpenUpdateMomsModal(true);
@@ -92,11 +106,12 @@ function TempMomsTable(props) {
         <TableContainer
           component={Paper}
           style={{
-            width: 'auto',
+            width: "auto",
             marginLeft: 70,
             marginRight: 70,
             marginBottom: 70,
-          }}>
+          }}
+        >
           <Table aria-label="simple table">
             <TableHead>
               <TableRow>
@@ -125,11 +140,14 @@ function TempMomsTable(props) {
                     return (
                       <TableRow
                         key={temp_moms_id}
-                        sx={{ '&:last-child td, &:last-child th': { border: 0 } }}>
+                        sx={{
+                          "&:last-child td, &:last-child th": { border: 0 },
+                        }}
+                      >
                         <TableCell align="left">{feature_type}</TableCell>
                         <TableCell align="left">{feature_name}</TableCell>
                         <TableCell align="left">
-                          {moment(observance_ts).format('LLL')}
+                          {moment(observance_ts).format("LLL")}
                         </TableCell>
                         <TableCell align="left">{remarks}</TableCell>
                         <TableCell align="left">{location}</TableCell>
@@ -138,7 +156,8 @@ function TempMomsTable(props) {
                           <Button
                             size="small"
                             variant="contained"
-                            onClick={() => selectMoms(row)}>
+                            onClick={() => selectMoms(row)}
+                          >
                             Validate
                           </Button>
                         </TableCell>
@@ -157,22 +176,23 @@ function TempMomsTable(props) {
 function HeaderAlertInformation(props) {
   const { onGoingData, routineData, ewiTemplates } = props;
   const [alert_level, setAlertLevel] = useState(0);
-  const [data_timestamp, setDataTimestamp] = useState(moment().format('LLL'));
+  const [data_timestamp, setDataTimestamp] = useState(moment().format("LLL"));
   const [latest_triggers, setLatestTriggers] = useState([]);
   const [reponses, setResponses] = useState({
-    barangay_reponse: '',
-    community_reponse: '',
+    barangay_reponse: "",
+    community_reponse: "",
   });
   const [validity, setValidity] = useState(null);
 
   useEffect(() => {
-    console.log('ON GOING', onGoingData);
+    console.log("ON GOING", onGoingData);
     if (onGoingData.length > 0) {
-      console.log('with data');
-      const { highest_event_alert_level, latest_event_triggers } = onGoingData[0];
+      console.log("with data");
+      const { highest_event_alert_level, latest_event_triggers } =
+        onGoingData[0];
       setAlertLevel(highest_event_alert_level);
       const template = ewiTemplates.find(
-        e => e.alert_level === highest_event_alert_level,
+        (e) => e.alert_level === highest_event_alert_level
       );
       setResponses(template);
       const triggers = latest_event_triggers.map((row, index) => {
@@ -180,27 +200,39 @@ function HeaderAlertInformation(props) {
         const { trigger_symbol } = internal_sym;
         const { trigger_hierarchy } = trigger_symbol;
         const { trigger_source } = trigger_hierarchy;
-        let template = ewiTemplates.find(e => e.trigger === trigger_source && e.alert_level === highest_event_alert_level);
+        let template = ewiTemplates.find(
+          (e) =>
+            e.trigger === trigger_source &&
+            e.alert_level === highest_event_alert_level
+        );
         if (trigger_source === "on demand") {
           const { on_demand } = trigger_misc;
           const { eq_id } = on_demand;
           if (eq_id) {
-            template = ewiTemplates.find(e => e.alert_level === highest_event_alert_level && e.trigger === "earthquake");
+            template = ewiTemplates.find(
+              (e) =>
+                e.alert_level === highest_event_alert_level &&
+                e.trigger === "earthquake"
+            );
           } else {
-            template = ewiTemplates.find(e => e.alert_level === highest_event_alert_level && e.trigger === "rainfall");
+            template = ewiTemplates.find(
+              (e) =>
+                e.alert_level === highest_event_alert_level &&
+                e.trigger === "rainfall"
+            );
           }
         }
         if (template) {
-          return template
+          return template;
         }
       });
       console.log(triggers);
       setLatestTriggers(triggers);
     } else {
       if (ewiTemplates.length > 0) {
-        const template = ewiTemplates.find(e => e.alert_level === 0);
+        const template = ewiTemplates.find((e) => e.alert_level === 0);
         setResponses(template);
-        console.log(template)
+        console.log(template);
         setLatestTriggers([template]);
         setAlertLevel(0);
       }
@@ -209,53 +241,70 @@ function HeaderAlertInformation(props) {
   }, [onGoingData]);
 
   return (
-
     <Grid
       container
-      justifyContent={'center'}
-      alignItems={'center'}
-      textAlign={'center'}>
-      <Grid item xs={12} style={{ width: '100%', margin: 10 }}>
+      justifyContent={"center"}
+      alignItems={"center"}
+      textAlign={"center"}
+    >
+      <Grid item xs={12} style={{ width: "100%", margin: 10 }}>
         <Grid container spacing={1}>
           <Grid
             item
             xs={12}
             style={{
-              alignSelf: 'center',
+              alignSelf: "center",
               marginTop: 8,
-              justifyItems: 'center',
-            }}>
+              justifyItems: "center",
+            }}
+          >
             <Typography variant="h4">Current alert status</Typography>
             <Typography variant="h5">{data_timestamp}</Typography>
             <Divider variant="middle" style={{ padding: 10 }} />
             <div
               style={{
-                display: 'flex',
-                justifyContent: 'center',
+                display: "flex",
+                justifyContent: "center",
                 paddingTop: 20,
-              }}>
+              }}
+            >
               <Card
                 style={{
-                  backgroundColor: alert_level_colors.find(e => e.alert_level === alert_level).color,
+                  backgroundColor: alert_level_colors.find(
+                    (e) => e.alert_level === alert_level
+                  ).color,
                   width: 500,
-                }}>
+                }}
+              >
                 <Typography variant="h3">ALERT LEVEL {alert_level}</Typography>
               </Card>
             </div>
             <Typography variant="h5">
-              {
-                validity ? `valid until ${validity}` : ""
-              }
-
+              {validity ? `valid until ${validity}` : ""}
             </Typography>
             <Grid container justifyContent={"center"} marginTop={2}>
-              <Grid style={{width: "85%"}}>
-                <h3>Response (MDRRMO): {reponses.municipyo_response ? reponses.municipyo_response : `N/A`}</h3>
-                <h3>Response (LEWC at Barangay): {reponses.barangay_response ? reponses.barangay_response : `N/A`}</h3>
-                <h3>Response (Komunidad): {reponses.commmunity_response ? reponses.commmunity_response : `N/A`}</h3>
+              <Grid style={{ width: "85%" }}>
+                <h3>
+                  Response (MDRRMO):{" "}
+                  {reponses.municipyo_response
+                    ? reponses.municipyo_response
+                    : `N/A`}
+                </h3>
+                <h3>
+                  Response (LEWC at Barangay):{" "}
+                  {reponses.barangay_response
+                    ? reponses.barangay_response
+                    : `N/A`}
+                </h3>
+                <h3>
+                  Response (Komunidad):{" "}
+                  {reponses.commmunity_response
+                    ? reponses.commmunity_response
+                    : `N/A`}
+                </h3>
               </Grid>
             </Grid>
-            
+
             <Divider variant="middle" style={{ paddingBottom: 10 }} />
           </Grid>
         </Grid>
@@ -266,14 +315,14 @@ function HeaderAlertInformation(props) {
 
 function ExtendedAccordionPanel(props) {
   const { data, key, handleDisseminate } = props;
-  const [header_color, setHeaderColor] = useState('');
+  const [header_color, setHeaderColor] = useState("");
   const [data_timestamp, setDataTimestamp] = useState(null);
   const [alert_level, setAlertLevel] = useState(0);
   const [ext_day, setExtDay] = useState(null);
   const [isMessageSend, setIsMessageSend] = useState(null);
 
-  const checkReleasedMessage = release_id => {
-    getReleasedMessages(release_id, response => {
+  const checkReleasedMessage = (release_id) => {
+    getReleasedMessages(release_id, (response) => {
       const { status, data } = response;
       if (status) {
         setIsMessageSend(data ? true : false);
@@ -281,7 +330,7 @@ function ExtendedAccordionPanel(props) {
     });
   };
   useEffect(() => {
-    console.log('EXTENDED DATA', data);
+    console.log("EXTENDED DATA", data);
     if (data) {
       const {
         event,
@@ -303,7 +352,9 @@ function ExtendedAccordionPanel(props) {
       const { alert_level: alertLevel } = public_alert_symbol;
       console.log(alertLevel);
       setAlertLevel(alertLevel);
-      const colors = alert_level_colors.find(e => e.alert_level === alertLevel);
+      const colors = alert_level_colors.find(
+        (e) => e.alert_level === alertLevel
+      );
       setHeaderColor(colors.color);
     }
   }, [data]);
@@ -314,17 +365,20 @@ function ExtendedAccordionPanel(props) {
         style={{ marginLeft: 70, marginRight: 70, marginBottom: 70 }}
         expanded={true}
         // onChange={handleChange(`pending_panel_${key}`)}
-        key={`pending_panel_${key}`}>
+        key={`pending_panel_${key}`}
+      >
         <AccordionSummary
           // expandIcon={<ExpandMoreIcon />}
           aria-controls={`pending-panel-content-${key}`}
           style={{ backgroundColor: `${header_color}` }}
-          id={`pending-panel-header-${key}`}>
+          id={`pending-panel-header-${key}`}
+        >
           <Grid
             container
-            justifyContent={'center'}
-            alignItems={'center'}
-            textAlign={'left'}>
+            justifyContent={"center"}
+            alignItems={"center"}
+            textAlign={"left"}
+          >
             <Grid item xs={3}>
               <Typography variant="h6">
                 {`Alert level ${alert_level}`}
@@ -333,7 +387,7 @@ function ExtendedAccordionPanel(props) {
             <Grid item xs={6}>
               {data_timestamp && (
                 <Typography variant="h6">
-                  Data Timestamp: {moment(data_timestamp).format('LLL')}
+                  Data Timestamp: {moment(data_timestamp).format("LLL")}
                 </Typography>
               )}
             </Grid>
@@ -343,7 +397,7 @@ function ExtendedAccordionPanel(props) {
           <br />
 
           <Grid container spacing={4}>
-            <Grid item md={12} style={{ textAlign: 'center' }}>
+            <Grid item md={12} style={{ textAlign: "center" }}>
               {ext_day && (
                 <Typography variant="body1">
                   Day {ext_day} of 3-day extended monitoring
@@ -353,19 +407,21 @@ function ExtendedAccordionPanel(props) {
             <Grid item md={12}>
               <Tooltip
                 title={
-                  isMessageSend ? 'Warning sent!' : 'Please disseminate warning'
+                  isMessageSend ? "Warning sent!" : "Please disseminate warning"
                 }
-                placement="top">
+                placement="top"
+              >
                 <Button
                   onClick={() => handleDisseminate(data)}
                   size="small"
                   variant="contained"
                   color="success"
                   style={{
-                    float: 'right',
+                    float: "right",
                     marginTop: 50,
-                    textTransform: 'none',
-                  }}>
+                    textTransform: "none",
+                  }}
+                >
                   Disseminate Warning
                 </Button>
               </Tooltip>
@@ -403,34 +459,34 @@ function PendingAccordionPanel(props) {
     data_timestamp = data_ts;
   }
 
-  const charts = ['subsurface', 'surficial', 'rainfall', 'earthquake'];
+  const charts = ["subsurface", "surficial", "rainfall", "earthquake"];
   const [disable_generate_button, setDisableGenerateButton] = useState(true);
-  const [header_color, setHeaderColor] = useState('');
+  const [header_color, setHeaderColor] = useState("");
 
-  const viewChart = chart => {
+  const viewChart = (chart) => {
     const url = `${window.location.origin}${chart}`;
-    window.open(url, '_blank', 'noopener,noreferrer');
+    window.open(url, "_blank", "noopener,noreferrer");
   };
 
-  const openValidateModal = trigger => {
+  const openValidateModal = (trigger) => {
     console.log(trigger);
     setIsOpenValidationModal(true);
     setAlertTrigger(trigger);
   };
 
   useEffect(() => {
-    if (general_status === 'routine' || general_status === 'extended') {
+    if (general_status === "routine" || general_status === "extended") {
       setDisableGenerateButton(false);
     }
 
     if (trigger_list_arr) {
       const button_status = trigger_list_arr.find(
-        e => e.validating_status === null || e.validating_status === 0,
+        (e) => e.validating_status === null || e.validating_status === 0
       );
       setDisableGenerateButton(button_status);
     }
     const colors = alert_level_colors.find(
-      e => e.alert_level === public_alert_level,
+      (e) => e.alert_level === public_alert_level
     );
     setHeaderColor(colors.color);
   }, [data]);
@@ -441,17 +497,20 @@ function PendingAccordionPanel(props) {
         style={{ marginLeft: 70, marginRight: 70, marginBottom: 70 }}
         expanded={true}
         // onChange={handleChange(`pending_panel_${key}`)}
-        key={`pending_panel_${key}`}>
+        key={`pending_panel_${key}`}
+      >
         <AccordionSummary
           // expandIcon={<ExpandMoreIcon />}
           aria-controls={`pending-panel-content-${key}`}
           style={{ backgroundColor: `${header_color}` }}
-          id={`pending-panel-header-${key}`}>
+          id={`pending-panel-header-${key}`}
+        >
           <Grid
             container
-            justifyContent={'center'}
-            alignItems={'center'}
-            textAlign={'left'}>
+            justifyContent={"center"}
+            alignItems={"center"}
+            textAlign={"left"}
+          >
             <Grid item xs={4}>
               <Typography variant="h6">
                 {`Alert level ${public_alert_level}`}
@@ -460,13 +519,13 @@ function PendingAccordionPanel(props) {
             <Grid item xs={6}>
               {data_timestamp && (
                 <Typography variant="h6">
-                  Data Timestamp: {moment(data_timestamp).format('LLL')}
+                  Data Timestamp: {moment(data_timestamp).format("LLL")}
                 </Typography>
               )}
             </Grid>
             <Grid item xs={2}>
               {general_status && (
-                <Typography variant="h6" style={{ float: 'right' }}>
+                <Typography variant="h6" style={{ float: "right" }}>
                   {capitalizeFirstLetter(general_status)}
                 </Typography>
               )}
@@ -481,7 +540,10 @@ function PendingAccordionPanel(props) {
                 row;
               const has_chart = charts.includes(trigger_type);
               return (
-                <Grid container style={{ textAlign: 'center', marginBottom: 15 }}>
+                <Grid
+                  container
+                  style={{ textAlign: "center", marginBottom: 15 }}
+                >
                   <Grid item md={2}>
                     <Typography variant="h6">Trigger</Typography>
                     <Typography>
@@ -490,7 +552,7 @@ function PendingAccordionPanel(props) {
                   </Grid>
                   <Grid item md={3}>
                     <Typography variant="h6">Trigger timestamp</Typography>
-                    <Typography>{moment(ts_updated).format('LLL')}</Typography>
+                    <Typography>{moment(ts_updated).format("LLL")}</Typography>
                   </Grid>
                   <Grid item md={5}>
                     <Typography variant="h6">Technical Information</Typography>
@@ -500,22 +562,23 @@ function PendingAccordionPanel(props) {
                         size="small"
                         variant="contained"
                         style={{ marginTop: 5 }}
-                        onClick={() => viewChart(`/${trigger_type}`)}>
+                        onClick={() => viewChart(`/${trigger_type}`)}
+                      >
                         View Chart
                       </Button>
                     )}
                   </Grid>
-                  <Grid item md={2} style={{ alignSelf: 'center' }}>
+                  <Grid item md={2} style={{ alignSelf: "center" }}>
                     {(validating_status === null ||
                       validating_status === 0) && (
-                        <Chip
-                          icon={<Info />}
-                          label="Validate"
-                          clickable
-                          color="primary"
-                          onClick={() => openValidateModal(row)}
-                        />
-                      )}
+                      <Chip
+                        icon={<Info />}
+                        label="Validate"
+                        clickable
+                        color="primary"
+                        onClick={() => openValidateModal(row)}
+                      />
+                    )}
 
                     {validating_status === 1 && (
                       <Chip
@@ -540,17 +603,17 @@ function PendingAccordionPanel(props) {
               );
             })
           ) : (
-            <Grid container style={{ textAlign: 'center' }}>
+            <Grid container style={{ textAlign: "center" }}>
               <Grid item md={12}>
-                {general_status === 'routine' ? (
-                  <Typography variant="body1" style={{ textAlign: 'center' }}>
+                {general_status === "routine" ? (
+                  <Typography variant="body1" style={{ textAlign: "center" }}>
                     Please release routine monitoring
                   </Typography>
                 ) : (
-                  <Typography variant="body1" style={{ textAlign: 'center' }}>
-                    {general_status === 'extended'
-                      ? 'Please generate warning for extended monitoring.'
-                      : 'No new triggers.'}
+                  <Typography variant="body1" style={{ textAlign: "center" }}>
+                    {general_status === "extended"
+                      ? "Please generate warning for extended monitoring."
+                      : "No new triggers."}
                   </Typography>
                 )}
               </Grid>
@@ -564,7 +627,8 @@ function PendingAccordionPanel(props) {
                 variant="contained"
                 color="success"
                 disabled={disable_generate_button}
-                style={{ float: 'right', marginTop: 50, textTransform: 'none' }}>
+                style={{ float: "right", marginTop: 50, textTransform: "none" }}
+              >
                 Generate Warning
               </Button>
             </Grid>
@@ -582,7 +646,7 @@ function LatestAccordionPanel(props) {
     props;
   const [header_color, setHeaderColor] = useState(null);
   const [data_timestamp, setDataTimestamp] = useState(null);
-  const [trig_source, setTriggerSource] = useState('');
+  const [trig_source, setTriggerSource] = useState("");
   const [alert_validity, setAlertValidity] = useState(null);
   const [rel_id, setReleaseId] = useState(null);
   const [latest_rel_id, setLatestReleaseId] = useState(null);
@@ -590,10 +654,10 @@ function LatestAccordionPanel(props) {
   const [trig_ts, setTriggerTimestamp] = useState(null);
   const [alert_level, setAlertLevel] = useState(0);
   const [isMessageSend, setIsMessageSend] = useState(null);
-  const [alert_general_status, setAlertGeneralStatus] = useState('');
+  const [alert_general_status, setAlertGeneralStatus] = useState("");
 
-  const checkReleasedMessage = release_id => {
-    getReleasedMessages(release_id, response => {
+  const checkReleasedMessage = (release_id) => {
+    getReleasedMessages(release_id, (response) => {
       const { status, data } = response;
       if (status) {
         setIsMessageSend(data ? true : false);
@@ -605,14 +669,14 @@ function LatestAccordionPanel(props) {
     if (isRoutine) {
       const { data_ts, release_id } = data;
       setDataTimestamp(data_ts);
-      const colors = alert_level_colors.find(e => e.alert_level === 0);
+      const colors = alert_level_colors.find((e) => e.alert_level === 0);
       setHeaderColor(colors.color);
-      setDataTimestamp(moment(data_ts).add(30, 'minutes').format('LLL'));
+      setDataTimestamp(moment(data_ts).add(30, "minutes").format("LLL"));
       data.isRoutine = true;
       data.public_alert_level = 0;
       setAlertLevel(0);
       checkReleasedMessage(release_id);
-      setAlertGeneralStatus('Routine');
+      setAlertGeneralStatus("Routine");
     } else {
       if (data) {
         const {
@@ -629,7 +693,7 @@ function LatestAccordionPanel(props) {
         } = data;
         const { site, validity } = event;
         setAlertValidity(validity);
-        console.log('latest_event_triggers', latest_event_triggers);
+        console.log("latest_event_triggers", latest_event_triggers);
         if (latest_event_triggers.length > 0) {
           const {
             info,
@@ -641,13 +705,14 @@ function LatestAccordionPanel(props) {
           const {
             trigger_hierarchy: { trigger_source },
           } = trigger_symbol;
-          const { release_time, data_ts, trigger_list, release_id } = releases[0];
+          const { release_time, data_ts, trigger_list, release_id } =
+            releases[0];
           setAlertGeneralStatus(general_status);
           checkReleasedMessage(release_id);
           if (releases.length === 1) {
-            setDataTimestamp(moment(data_ts).format('LLL'));
+            setDataTimestamp(moment(data_ts).format("LLL"));
           } else {
-            setDataTimestamp(moment(data_ts).add(30, 'minutes').format('LLL'));
+            setDataTimestamp(moment(data_ts).add(30, "minutes").format("LLL"));
           }
           setTriggerSource(trigger_source);
           setReleaseId(release_id);
@@ -658,7 +723,7 @@ function LatestAccordionPanel(props) {
           console.log(alertLevel);
           setAlertLevel(alertLevel);
           const colors = alert_level_colors.find(
-            e => e.alert_level === alertLevel,
+            (e) => e.alert_level === alertLevel
           );
           setHeaderColor(colors.color);
         }
@@ -671,33 +736,36 @@ function LatestAccordionPanel(props) {
       style={{ marginLeft: 70, marginRight: 70, marginBottom: 70 }}
       expanded={true}
       onChange={handleChange(`event_panel_${key}`)}
-      key={`event_panel_${key}`}>
+      key={`event_panel_${key}`}
+    >
       <AccordionSummary
         style={{ backgroundColor: `${header_color}` }}
         aria-controls={`event-panel-content-${key}`}
-        id={`event-panel-header-${key}`}>
+        id={`event-panel-header-${key}`}
+      >
         <Grid
           container
-          justifyContent={'center'}
-          alignItems={'center'}
-          textAlign={'left'}>
-          <Grid item xs={12} style={{ width: '100%' }}></Grid>
+          justifyContent={"center"}
+          alignItems={"center"}
+          textAlign={"left"}
+        >
+          <Grid item xs={12} style={{ width: "100%" }}></Grid>
           <Grid item xs={2}>
             <Typography variant="h6">Alert level {alert_level}</Typography>
           </Grid>
           <Grid item xs={7}>
-            <Typography variant="h6" style={{ textAlign: 'center' }}>
+            <Typography variant="h6" style={{ textAlign: "center" }}>
               Date and Time: {data_timestamp}
             </Typography>
             {!isRoutine && (
-              <Typography variant="h6" style={{ textAlign: 'center' }}>
-                Validity: {moment(alert_validity).format('LLL')}
+              <Typography variant="h6" style={{ textAlign: "center" }}>
+                Validity: {moment(alert_validity).format("LLL")}
               </Typography>
             )}
           </Grid>
           <Grid item xs={3}>
-            <Typography variant="h6" style={{ float: 'right' }}>
-              {alert_general_status ? alert_general_status : 'Ongoing'}
+            <Typography variant="h6" style={{ float: "right" }}>
+              {alert_general_status ? alert_general_status : "Ongoing"}
             </Typography>
           </Grid>
         </Grid>
@@ -706,14 +774,14 @@ function LatestAccordionPanel(props) {
         <br />
 
         {!isRoutine && latest_rel_id === rel_id ? (
-          <Grid container style={{ textAlign: 'center' }}>
+          <Grid container style={{ textAlign: "center" }}>
             <Grid item md={3}>
               <Typography variant="h6">Trigger</Typography>
               <Typography>{capitalizeFirstLetter(trig_source)}</Typography>
             </Grid>
             <Grid item md={3}>
               <Typography variant="h6">Trigger timestamp</Typography>
-              <Typography>{moment(trig_ts).format('LLL')}</Typography>
+              <Typography>{moment(trig_ts).format("LLL")}</Typography>
             </Grid>
             <Grid item md={6}>
               <Typography variant="h6">Technical Information</Typography>
@@ -724,20 +792,23 @@ function LatestAccordionPanel(props) {
                 spacing={1}
                 direction="row"
                 justifyContent="flex-end"
-                style={{ marginTop: 20 }}>
+                style={{ marginTop: 20 }}
+              >
                 <Tooltip
                   title={
                     isMessageSend
-                      ? 'Warning sent!'
-                      : 'Please disseminate warning'
+                      ? "Warning sent!"
+                      : "Please disseminate warning"
                   }
-                  placement="top">
+                  placement="top"
+                >
                   <Button
                     size="small"
                     variant="contained"
-                    style={{ textTransform: 'none' }}
+                    style={{ textTransform: "none" }}
                     startIcon={isMessageSend ? <Check /> : <Info />}
-                    onClick={() => handleDisseminate(data)}>
+                    onClick={() => handleDisseminate(data)}
+                  >
                     Disseminate Warning
                   </Button>
                 </Tooltip>
@@ -745,10 +816,10 @@ function LatestAccordionPanel(props) {
             </Grid>
           </Grid>
         ) : (
-          <Grid container style={{ textAlign: 'center' }}>
+          <Grid container style={{ textAlign: "center" }}>
             <Grid item md={12}>
               <Typography>
-                {isMessageSend ? 'Warning sent!' : 'Please disseminate warning'}
+                {isMessageSend ? "Warning sent!" : "Please disseminate warning"}
               </Typography>
             </Grid>
             <Grid item md={12}>
@@ -756,20 +827,23 @@ function LatestAccordionPanel(props) {
                 spacing={1}
                 direction="row"
                 justifyContent="flex-end"
-                style={{ marginTop: 20 }}>
+                style={{ marginTop: 20 }}
+              >
                 <Tooltip
                   title={
                     isMessageSend
-                      ? 'Warning sent!'
-                      : 'Please disseminate warning'
+                      ? "Warning sent!"
+                      : "Please disseminate warning"
                   }
-                  placement="top">
+                  placement="top"
+                >
                   <Button
                     size="small"
-                    style={{ textTransform: 'none' }}
+                    style={{ textTransform: "none" }}
                     variant="contained"
                     startIcon={isMessageSend ? <Check /> : <Info />}
-                    onClick={() => handleDisseminate(data)}>
+                    onClick={() => handleDisseminate(data)}
+                  >
                     Disseminate Warning
                   </Button>
                 </Tooltip>
@@ -783,8 +857,8 @@ function LatestAccordionPanel(props) {
   );
 }
 function OpCen2(props) {
-  const [alertLevel, setAlertLevel] = useState('1');
-  const [alertTs, setAlertTs] = useState(moment().format('LLLL'));
+  const [alertLevel, setAlertLevel] = useState("1");
+  const [alertTs, setAlertTs] = useState(moment().format("LLLL"));
   const [expanded, setExpanded] = React.useState(false);
   const [is_validated, setIsValidated] = useState(false);
   const [is_open_validation_modal, setIsOpenValidationModal] = useState(false);
@@ -793,9 +867,9 @@ function OpCen2(props) {
   const [is_open_release_modal, setIsOpenReleaseModal] = useState(false);
   const [is_open_disseminate_modal, setIsOpenDisseminateModal] =
     useState(false);
-  const [alert_trigger, setAlertTrigger] = useState('');
-  const [disseminate_data, setDisseminateData] = useState('');
-  const [notif_message, setNotifMessage] = useState('');
+  const [alert_trigger, setAlertTrigger] = useState("");
+  const [disseminate_data, setDisseminateData] = useState("");
+  const [notif_message, setNotifMessage] = useState("");
   const [triggers, setTriggers] = useState([]);
   const [monitoring_releases, setMonitoringReleases] = useState([]);
   const [is_open_update_moms_modal, setIsOpenUpdateMomsModal] = useState(false);
@@ -807,14 +881,14 @@ function OpCen2(props) {
   const [extended_alerts, setExtendedAlerts] = useState([]);
   const [routine, setRoutine] = useState({ released_sites: [] });
   const [cbewsl_ewi_template, setEwiTemplates] = useState([]);
-  const [alert_variant, setAlertVariant] = useState('success');
+  const [alert_variant, setAlertVariant] = useState("success");
   const [all_contacts, setAllContacts] = useState([]);
   const [current_user, setCurrentUser] = useState([]);
   const [openBackdrop, setOpenBackdrop] = useState(false);
   const [is_open_ondemand_modal, setIsOpenOndemandModal] = useState(false);
 
   const navigate = useNavigate();
-  const handleChange = panel => (event, isExpanded) => {
+  const handleChange = (panel) => (event, isExpanded) => {
     setExpanded(isExpanded ? panel : false);
   };
 
@@ -823,25 +897,25 @@ function OpCen2(props) {
     setOpen(true);
   };
   const handleClose = (event, reason) => {
-    if (reason === 'clickaway') {
+    if (reason === "clickaway") {
       return;
     }
 
     setOpen(false);
   };
 
-  const handleValidate = trigger => {
+  const handleValidate = (trigger) => {
     setAlertTrigger(trigger);
     setIsOpenValidationModal(!is_open_validation_modal);
   };
 
-  const handleValidation = message => {
+  const handleValidation = (message) => {
     setIsOpenValidationModal(!is_open_validation_modal);
     setNotifMessage(message);
     setIsOpenPromptModal(true);
   };
 
-  const handleRelease = trigger => {
+  const handleRelease = (trigger) => {
     trigger.is_event_valid = true;
     trigger.is_manually_lowered = false;
     setAlertTrigger(trigger);
@@ -852,24 +926,28 @@ function OpCen2(props) {
     setIsOpenValidationModal(false);
     setNotifMessage(message);
     setIsOpenPromptModal(true);
-    setAlertVariant(status ? 'success' : 'error');
+    setAlertVariant(status ? "success" : "error");
   };
 
-
-  const handleDisseminate = data => {
+  const handleDisseminate = (data) => {
     setDisseminateData(data);
     setIsOpenDisseminateModal(!is_open_disseminate_modal);
   };
 
   const generateDashboardData = () => {
-    getCandidateAlert(data => {
+    getCandidateAlert((data) => {
       console.log(data);
       const { candidate_alerts, on_going, ewi_templates } = data;
       // setCandidateAlerts([JSON.parse(candidate_alerts)[1]]);
 
       const temp_candidate = JSON.parse(candidate_alerts);
       const temp_on_going = JSON.parse(on_going);
-      const { latest, overdue, extended, routine: routine_data } = temp_on_going;
+      const {
+        latest,
+        overdue,
+        extended,
+        routine: routine_data,
+      } = temp_on_going;
       let temp = [];
       temp.push(...latest);
       temp.push(...overdue);
@@ -881,10 +959,10 @@ function OpCen2(props) {
       setEwiTemplates(ewi_templates);
       setExtendedAlerts(extended);
       if (extended.length > 0) {
-        const extended_site = extended.find(e => e.event.site.site_id);
+        const extended_site = extended.find((e) => e.event.site.site_id);
         if (extended_site) {
           setCandidateAlerts(
-            temp_candidate.filter(e => e.general_status === 'extended'),
+            temp_candidate.filter((e) => e.general_status === "extended")
           );
         }
       } else {
@@ -894,18 +972,18 @@ function OpCen2(props) {
   };
 
   const generateMomsForValidation = () => {
-    getTempMoms(data => {
+    getTempMoms((data) => {
       setMomsData(data);
     });
   };
 
   const getAllContacts = () => {
-    getContacts(data => {
+    getContacts((data) => {
       setAllContacts(data);
     });
   };
 
-  const handleSendSMS = message => {
+  const handleSendSMS = (message) => {
     setOpenBackdrop(!openBackdrop);
     console.log(disseminate_data);
     let alert_release_id;
@@ -918,7 +996,7 @@ function OpCen2(props) {
     }
 
     const recipient_user_ids = [];
-    all_contacts.data.map(obj => {
+    all_contacts.data.map((obj) => {
       const {
         user: { user_id },
       } = obj;
@@ -939,16 +1017,16 @@ function OpCen2(props) {
 
     console.log(input);
 
-    sendMessage(input, callback => {
+    sendMessage(input, (callback) => {
       const { status, feedback } = callback;
       setNotifMessage(feedback);
       if (status) {
         setIsOpenDisseminateModal(false);
         setIsOpenPromptModal(true);
-        setAlertVariant('success');
+        setAlertVariant("success");
         generateDashboardData();
       } else {
-        setAlertVariant('error');
+        setAlertVariant("error");
         setIsOpenPromptModal(true);
       }
       setOpenBackdrop(false);
@@ -957,7 +1035,7 @@ function OpCen2(props) {
 
   const openOnDemandForm = () => {
     setIsOpenOndemandModal(true);
-  }
+  };
 
   // useEffect(() => {
   //     if (is_validated) {
@@ -967,6 +1045,7 @@ function OpCen2(props) {
   // }, [is_validated])
 
   const [audio] = useState(new Audio(NotificationSoundFolder));
+
   useEffect(() => {
     console.log(is_open_new_alert_modal);
     if (is_open_new_alert_modal) audio.play();
@@ -980,16 +1059,25 @@ function OpCen2(props) {
     generateDashboardData();
     generateMomsForValidation();
     getAllContacts();
-    const data = localStorage.getItem('data');
+    const data = localStorage.getItem("data");
     setCurrentUser(JSON.parse(data));
   }, []);
 
   useEffect(() => {
-    console.log('candidate_alerts', candidate_alerts);
-    console.log('on_going_alerts', on_going_alerts);
-    console.log('extended_alerts', extended_alerts);
-    console.log('routine', routine);
-    console.log('ewi', cbewsl_ewi_template);
+    const interval = setInterval(() => {
+      generateDashboardData();
+      console.log("This will run every 5 minutes");
+    }, 300000);
+
+    return () => clearInterval(interval);
+  }, []);
+
+  useEffect(() => {
+    console.log("candidate_alerts", candidate_alerts);
+    console.log("on_going_alerts", on_going_alerts);
+    console.log("extended_alerts", extended_alerts);
+    console.log("routine", routine);
+    console.log("ewi", cbewsl_ewi_template);
   }, [candidate_alerts, on_going_alerts, extended_alerts, cbewsl_ewi_template]);
 
   return (
@@ -1001,7 +1089,11 @@ function OpCen2(props) {
       />
 
       {moms_data && moms_data.length > 0 && (
-        <Grid item xs={12} style={{ width: '95%', marginLeft: 50, padding: 10 }}>
+        <Grid
+          item
+          xs={12}
+          style={{ width: "95%", marginLeft: 50, padding: 10 }}
+        >
           <Typography variant="h4">Landslide Features Validation</Typography>
         </Grid>
       )}
@@ -1013,7 +1105,16 @@ function OpCen2(props) {
           setIsOpenUpdateMomsModal={setIsOpenUpdateMomsModal}
         />
       )}
-      <Grid item xs={12} style={{ width: '95%', marginLeft: 50, padding: 10, alignItems: "center" }}>
+      <Grid
+        item
+        xs={12}
+        style={{
+          width: "95%",
+          marginLeft: 50,
+          padding: 10,
+          alignItems: "center",
+        }}
+      >
         <Grid container>
           <Grid item md={6}>
             <Typography variant="h4">Pending Alert Validation</Typography>
@@ -1024,7 +1125,14 @@ function OpCen2(props) {
                 variant="contained"
                 size="small"
                 onClick={openOnDemandForm}
-                endIcon={<Landscape />} style={{ marginLeft: 5, float: "right", backgroundColor: '#ffd400', color: 'black'}}>
+                endIcon={<Landscape />}
+                style={{
+                  marginLeft: 5,
+                  float: "right",
+                  backgroundColor: "#ffd400",
+                  color: "black",
+                }}
+              >
                 <b>Release On-demand</b>
               </Button>
             </div>
@@ -1048,7 +1156,7 @@ function OpCen2(props) {
         })
       ) : (
         <div>
-          <Typography variant="body1" style={{ textAlign: 'center' }}>
+          <Typography variant="body1" style={{ textAlign: "center" }}>
             No pending alerts
           </Typography>
         </div>
@@ -1056,7 +1164,8 @@ function OpCen2(props) {
       <Grid
         item
         xs={12}
-        style={{ width: '95%', marginLeft: 50, padding: 10, marginTop: 30 }}>
+        style={{ width: "95%", marginLeft: 50, padding: 10, marginTop: 30 }}
+      >
         <Typography variant="h4">Event Monitoring</Typography>
       </Grid>
       {on_going_alerts.length > 0 ? (
@@ -1075,7 +1184,8 @@ function OpCen2(props) {
         <div>
           <Typography
             variant="body1"
-            style={{ textAlign: 'center', marginBottom: 30 }}>
+            style={{ textAlign: "center", marginBottom: 30 }}
+          >
             No event monitoring
           </Typography>
         </div>
@@ -1085,7 +1195,8 @@ function OpCen2(props) {
         <Grid
           item
           xs={12}
-          style={{ width: '95%', marginLeft: 50, padding: 10, marginTop: 30 }}>
+          style={{ width: "95%", marginLeft: 50, padding: 10, marginTop: 30 }}
+        >
           <Typography variant="h4">Routine Monitoring</Typography>
         </Grid>
       )}
@@ -1108,7 +1219,8 @@ function OpCen2(props) {
         <Grid
           item
           xs={12}
-          style={{ width: '95%', marginLeft: 50, padding: 10, marginTop: 30 }}>
+          style={{ width: "95%", marginLeft: 50, padding: 10, marginTop: 30 }}
+        >
           <Typography variant="h4">Extended Monitoring</Typography>
         </Grid>
       )}
@@ -1128,8 +1240,9 @@ function OpCen2(props) {
 
       <Grid>
         <Backdrop
-          sx={{ color: '#fff', zIndex: theme => theme.zIndex.drawer + 99999 }}
-          open={openBackdrop}>
+          sx={{ color: "#fff", zIndex: (theme) => theme.zIndex.drawer + 99999 }}
+          open={openBackdrop}
+        >
           <CircularProgress color="inherit" />
         </Backdrop>
       </Grid>
