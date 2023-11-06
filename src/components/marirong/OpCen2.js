@@ -178,9 +178,10 @@ function HeaderAlertInformation(props) {
   const [alert_level, setAlertLevel] = useState(0);
   const [data_timestamp, setDataTimestamp] = useState(moment().format("LLL"));
   const [latest_triggers, setLatestTriggers] = useState([]);
-  const [reponses, setResponses] = useState({
-    barangay_reponse: "",
-    community_reponse: "",
+  const [responses, setResponses] = useState({
+    barangay_response: "",
+    community_response: "",
+    munisipyo_response: "",
   });
   const [validity, setValidity] = useState(null);
 
@@ -242,75 +243,58 @@ function HeaderAlertInformation(props) {
 
   return (
     <Grid
-      container
-      justifyContent={"center"}
-      alignItems={"center"}
-      textAlign={"center"}
-    >
-      <Grid item xs={12} style={{ width: "100%", margin: 10 }}>
-        <Grid container spacing={1}>
-          <Grid
-            item
-            xs={12}
-            style={{
-              alignSelf: "center",
-              marginTop: 8,
-              justifyItems: "center",
-            }}
-          >
-            <Typography variant="h4">Current alert status</Typography>
-            <Typography variant="h5">{data_timestamp}</Typography>
-            <Divider variant="middle" style={{ padding: 10 }} />
-            <div
-              style={{
-                display: "flex",
-                justifyContent: "center",
-                paddingTop: 20,
-              }}
-            >
-              <Card
+        container
+        justifyContent={'center'}
+        alignItems={'center'}
+        textAlign={'center'}>
+        <Grid item xs={12} style={{ width: '100%', margin: 50 }}>
+            <Card
                 style={{
-                  backgroundColor: alert_level_colors.find(
-                    (e) => e.alert_level === alert_level
-                  ).color,
-                  width: 500,
-                }}
-              >
-                <Typography variant="h3">ALERT LEVEL {alert_level}</Typography>
-              </Card>
-            </div>
-            <Typography variant="h5">
-              {validity ? `valid until ${validity}` : ""}
-            </Typography>
-            <Grid container justifyContent={"center"} marginTop={2}>
-              <Grid style={{ width: "85%" }}>
-                <h3>
-                  Response (MDRRMO):{" "}
-                  {reponses.municipyo_response
-                    ? reponses.municipyo_response
-                    : `N/A`}
-                </h3>
-                <h3>
-                  Response (LEWC at Barangay):{" "}
-                  {reponses.barangay_response
-                    ? reponses.barangay_response
-                    : `N/A`}
-                </h3>
-                <h3>
-                  Response (Komunidad):{" "}
-                  {reponses.commmunity_response
-                    ? reponses.commmunity_response
-                    : `N/A`}
-                </h3>
-              </Grid>
-            </Grid>
+                    padding: 10,
+                    backgroundColor: alert_level_colors.find(
+                                        (e) => e.alert_level === alert_level
+                                      ).color,
+                    borderTopLeftRadius: 0,
+                    borderTopRightRadius: 60,
+                }}>
+                <Grid container spacing={1}>
+                    <Grid item xs={3} style={{ alignSelf: "center" }} >
+                        <Typography variant="h3">ALERT LEVEL {alert_level}</Typography>
+                        <Typography variant="h5">{data_timestamp}</Typography>
+                    </Grid>
+                    <Grid item xs={9} style={{ alignSelf: "center", borderLeft: "solid 2px rgba(0, 0, 0, 0.5)", marginTop: 8 }}>
+                        <h2>
+                            Alert {alert_level} (
+                            {latest_triggers.length > 0 && (
+                                latest_triggers.map((row, index) => {
+                                    const { trigger_description } = row;
+                                    return (
+                                        trigger_description
+                                    )
 
-            <Divider variant="middle" style={{ paddingBottom: 10 }} />
-          </Grid>
+                                })
+                            )}
+                            )<br />
+                            {validity && (
+                                validity
+                            )}
+                        </h2>
+                        <h3>
+                            Responde (Komunidad): {responses.community_response ? responses.community_response : "N/A"}
+                        </h3>
+                        <h3>
+                            Responde (LEWC at Barangay): {responses.barangay_response ? responses.barangay_response: "N/A"}
+                        </h3>
+                        <h3>
+                            Responde (Munisipyo): {responses.munisipyo_response ? responses.munisipyo_response: "N/A"}
+                        </h3>
+                    </Grid>
+                </Grid>
+            </Card>
         </Grid>
-      </Grid>
     </Grid>
-  );
+)
+
 }
 
 function ExtendedAccordionPanel(props) {
