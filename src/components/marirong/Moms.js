@@ -556,7 +556,7 @@ const Moms = (props) => {
             <Grid item xs={12}>
               <Grid container align="center">
                 <Grid item xs={12}>
-                  <Button variant="contained" onClick={handleClickOpen}>
+                  <Button variant="contained" onClick={handleClickOpen} style={{backgroundColor: "#ffd400", color: "black"}}>
                     Add manifestations of movement
                   </Button>
 
