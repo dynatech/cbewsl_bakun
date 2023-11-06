@@ -272,7 +272,7 @@ const ProfileSettings = () => {
                             </CardContent>
                             <CardActions>
                                 <Grid container justifyContent='center'>
-                                    <Button variant='contained' onClick={handleUpdate}>
+                                    <Button variant='contained' onClick={handleUpdate} style={{backgroundColor: "#ffd400", color: "black"}}>
                                         Save
                                     </Button>
                                 </Grid>

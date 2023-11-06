@@ -209,6 +209,7 @@ function Feedback() {
             <Button
               size="small"
               variant="contained"
+              style={{backgroundColor: "#ffd400", color: "black"}}
               onClick={() => handleSend()}
               disabled={sendButtonState}>
               Submit Feedback
