@@ -20,13 +20,15 @@ import PromptModal from "../marirong/modals/PromptModal";
 import { signIn, forgotPassword, verifyOTP } from "../../apis/UserManagement";
 import { getNumberOfFiles } from "../../apis/Misc";
 
-import phivolcs_seal from '../../assets/phivolcs_seal.png';
-import dynaslope_seal from '../../assets/dynaslope_seal.png';
-import province_seal from '../../assets/benguet_province_seal.png';
-import municipality_seal from '../../assets/bakun_municipal_seal.png';
-import barangay_seal from '../../assets/brgy_seal.png';
-import lewc_seal from '../../assets/bak_lewc_seal.png';
+import phivolcs_seal from "../../assets/phivolcs_seal.png";
+import dynaslope_seal from "../../assets/dynaslope_seal.png";
+import province_seal from "../../assets/benguet_province_seal.png";
+import municipality_seal from "../../assets/bakun_municipal_seal.png";
+import barangay_seal from "../../assets/brgy_seal.png";
+import lewc_seal from "../../assets/bak_lewc_seal.png";
 // import backdrop from '../../assets/signinbackdrop.png';
+
+import { CBEWSL_SITE_NAME } from "../../host";
 
 const imageDivider = makeStyles((theme) => ({
   animated_divider: {
@@ -112,7 +114,7 @@ const Signin = () => {
           let temp = { ...response.data };
           temp["img_length"] = fileCount;
           localStorage.setItem("credentials", JSON.stringify(temp));
-          window.location = "/opcen";
+          window.location = `${CBEWSL_SITE_NAME}/opcen`;
         } else {
           setOpenPrompt(true);
           setErrorPrompt(true);
@@ -154,8 +156,9 @@ const Signin = () => {
             style={{ width: "100%" }}
             onChange={(e) => {
               setIndicator(e.target.value);
-            }}sx={{backgroundImage:'images/cover.jpeg'}}
-            height='385px'
+            }}
+            sx={{ backgroundImage: "images/cover.jpeg" }}
+            height="385px"
           />
 
           <Link
@@ -301,86 +304,99 @@ const Signin = () => {
         notifMessage={notifMessage}
         title={promptTitle}
       />
-      
-    <Fragment>
-      <Grid container 
+
+      <Fragment>
+        <Grid
+          container
           // style={{backgroundImage:`url(${backdrop})`, backgroundSize: 'cover',
           // backgroundPosition: 'center',
           // height: '97.8vh',}}
-      >
-        <Grid item xs={12} sm={12} style={{ paddingTop: "8%", marginBottom: "3%"}}>
+        >
+          <Grid
+            item
+            xs={12}
+            sm={12}
+            style={{ paddingTop: "8%", marginBottom: "3%" }}
+          >
             <div
               style={{
-                textAlign:'center',
-                height: 'auto',
-                width: 'auto',
-                padding: 10
-              }}>
-                <img
-                  src={phivolcs_seal}
-                  alt="phivolcs-seal-png"
-                  style={{
-                    objectFit: 'contain',
-                    height: 150,
-                    width: 150,
-                    marginRight: 20,
-                  }}
-                />
-                <img
-                  src={dynaslope_seal}
-                  alt="dynaslope-seal-png"
-                  style={{
-                    objectFit: 'contain',
-                    height: 140,
-                    width: 140,
-                    marginRight: 20,
-                  }}
-                />
-                <img
-                  src={province_seal}
-                  alt="province-seal-png"
-                  style={{
-                    objectFit: 'contain',
-                    height: 150,
-                    width: 150,
-                    marginRight: 20,
-                  }}
-                />
-                <img
-                  src={municipality_seal}
-                  alt="municipality-seal-png"
-                  style={{
-                    objectFit: 'contain',
-                    height: 150,
-                    width: 150,
-                    marginRight: 20,
-                  }}
-                />
-                <img
-                  src={barangay_seal}
-                  alt="barangay-seal-png"
-                  style={{
-                    objectFit: 'contain',
-                    height: 150,
-                    width: 150,
-                    marginRight: 20,
-                  }}
-                />
-                <img
-                  src={lewc_seal}
-                  alt="lewc-seal-png"
-                  style={{
-                    objectFit: 'contain',
-                    height: 150,
-                    width: 150,
-                    marginRight: 20,
-                  }}
-                />
-              </div>
+                textAlign: "center",
+                height: "auto",
+                width: "auto",
+                padding: 10,
+              }}
+            >
+              <img
+                src={phivolcs_seal}
+                alt="phivolcs-seal-png"
+                style={{
+                  objectFit: "contain",
+                  height: 150,
+                  width: 150,
+                  marginRight: 20,
+                }}
+              />
+              <img
+                src={dynaslope_seal}
+                alt="dynaslope-seal-png"
+                style={{
+                  objectFit: "contain",
+                  height: 140,
+                  width: 140,
+                  marginRight: 20,
+                }}
+              />
+              <img
+                src={province_seal}
+                alt="province-seal-png"
+                style={{
+                  objectFit: "contain",
+                  height: 150,
+                  width: 150,
+                  marginRight: 20,
+                }}
+              />
+              <img
+                src={municipality_seal}
+                alt="municipality-seal-png"
+                style={{
+                  objectFit: "contain",
+                  height: 150,
+                  width: 150,
+                  marginRight: 20,
+                }}
+              />
+              <img
+                src={barangay_seal}
+                alt="barangay-seal-png"
+                style={{
+                  objectFit: "contain",
+                  height: 150,
+                  width: 150,
+                  marginRight: 20,
+                }}
+              />
+              <img
+                src={lewc_seal}
+                alt="lewc-seal-png"
+                style={{
+                  objectFit: "contain",
+                  height: 150,
+                  width: 150,
+                  marginRight: 20,
+                }}
+              />
+            </div>
           </Grid>
 
-          <Grid item xs={12} sm={12} md={12} elevation={6} alignContents="center">
-
+          <Grid
+            item
+            xs={12}
+            sm={12}
+            md={12}
+            elevation={6}
+            alignContents="center"
+          >
             <Typography
               variant="h2"
               align="center"
@@ -412,7 +428,7 @@ const Signin = () => {
                 backgroundClip: "text",
                 WebkitBackgroundClip: "text",
                 WebkitTextFillColor: "transparent",
-                marginBottom: 5
+                marginBottom: 5,
               }}
             >
               Brgy. Poblacion, Bakun, Benguet
@@ -475,44 +491,44 @@ const Signin = () => {
                 />
               </Grid>
               <Grid item xs={12} sm={12} md={12}>
-                <Grid style={{marginBottom: 10}}>
+                <Grid style={{ marginBottom: 10 }}>
                   <Button
-                      variant="contained"
-                      onClick={() => {
-                        handleLogin();
-                      }}
-                      style={{backgroundColor: '#FFC000', color: 'black'}}
-                    >
-                      Sign in
+                    variant="contained"
+                    onClick={() => {
+                      handleLogin();
+                    }}
+                    style={{ backgroundColor: "#FFC000", color: "black" }}
+                  >
+                    Sign in
                   </Button>
                 </Grid>
                 <Grid>
                   <Link
-                      component="button"
-                      style={{ fontStyle: "italic", fontSize: 16 }}
-                      onClick={(e) => {
-                        setOpenModal(true);
-                      }}
-                    >
-                      Forgot Password?
+                    component="button"
+                    style={{ fontStyle: "italic", fontSize: 16 }}
+                    onClick={(e) => {
+                      setOpenModal(true);
+                    }}
+                  >
+                    Forgot Password?
                   </Link>
                 </Grid>
-                </Grid>
-                <Grid item xs={12} sm={12} md={12}>
-                  <Button
-                    variant="contained"
-                    onClick={(e) => {
-                      setCreateAccountModal(true)
-                    }}
-                    style={{backgroundColor: 'green', color: 'white'}}
-                  >
-                    No account yet? Register here!
-                  </Button>
-                </Grid>
+              </Grid>
+              <Grid item xs={12} sm={12} md={12}>
+                <Button
+                  variant="contained"
+                  onClick={(e) => {
+                    setCreateAccountModal(true);
+                  }}
+                  style={{ backgroundColor: "green", color: "white" }}
+                >
+                  No account yet? Register here!
+                </Button>
               </Grid>
             </Grid>
           </Grid>
-    </Fragment>
+        </Grid>
+      </Fragment>
     </Fragment>
   );
 };
