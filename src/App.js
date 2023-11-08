@@ -33,7 +33,10 @@ const App = (props) => {
   const [nav, setNav] = useState(null);
   const Header = () => {
     let location = window.location.pathname;
-    if (location !== `${CBEWSL_SITE_NAME}/signin` && location !== "/") {
+    if (
+      location !== `${CBEWSL_SITE_NAME}/signin` &&
+      location !== `/${CBEWSL_SITE_NAME}`
+    ) {
       return <MarirongHeader />;
     }
   };
@@ -156,11 +159,11 @@ const App = (props) => {
               />
             </Routes>
           ) : (
-            window.location.pathname != "/" &&
+            window.location.pathname != `/${CBEWSL_SITE_NAME}` &&
             window.location.pathname != `${CBEWSL_SITE_NAME}` &&
             window.location.pathname != `${CBEWSL_SITE_NAME}/signin` &&
             window.location.pathname != `${CBEWSL_SITE_NAME}/feedback` &&
-            (window.location = `/`)
+            (window.location = `/${CBEWSL_SITE_NAME}`)
           )}
         </Router>
       </SnackbarProvider>

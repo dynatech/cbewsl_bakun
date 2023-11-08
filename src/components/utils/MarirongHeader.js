@@ -363,7 +363,7 @@ const MarirongHeader = () => {
               <MenuItem
                 onClick={() => {
                   localStorage.removeItem("credentials")(
-                    (window.location = "/")
+                    (window.location = `/${CBEWSL_SITE_NAME}`)
                   );
                 }}
               >
