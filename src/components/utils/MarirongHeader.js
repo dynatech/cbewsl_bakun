@@ -1,4 +1,4 @@
-import React, {Fragment, useState, useEffect} from 'react';
+import React, { Fragment, useState, useEffect } from "react";
 import {
   Grid,
   IconButton,
@@ -9,29 +9,31 @@ import {
   Toolbar,
   Tooltip,
   Avatar,
-} from '@mui/material';
-import DostSeal from '../../assets/phivolcs_seal.png';
-import DynaslopeSealMini from '../../assets/dynaslope_seal_mini.png';
-import benguet_provincial_seal from '../../assets/benguet_province_seal.png';
-import bakun_municipal_seal from '../../assets/bakun_municipal_seal.png';
-import bakun_brgy_seal from '../../assets/brgy_seal.png';
-import bakun_lewc_seal from '../../assets/bak_lewc_seal.png';
-import HazardMap from '../../assets/hazard_map.jpg';
-import male_icon from '../../assets/male_icon.png';
-import female_icon from '../../assets/female_icon.png';
+} from "@mui/material";
+import DostSeal from "../../assets/phivolcs_seal.png";
+import DynaslopeSealMini from "../../assets/dynaslope_seal_mini.png";
+import benguet_provincial_seal from "../../assets/benguet_province_seal.png";
+import bakun_municipal_seal from "../../assets/bakun_municipal_seal.png";
+import bakun_brgy_seal from "../../assets/brgy_seal.png";
+import bakun_lewc_seal from "../../assets/bak_lewc_seal.png";
+import HazardMap from "../../assets/hazard_map.jpg";
+import male_icon from "../../assets/male_icon.png";
+import female_icon from "../../assets/female_icon.png";
 
-import MenuIcon from '@mui/icons-material/Menu';
-import Menu from '@mui/material/Menu';
-import MenuItem from '@mui/material/MenuItem';
-import NotificationsNoneIcon from '@mui/icons-material/NotificationsNone';
-import {useNavigate} from 'react-router-dom';
-import moment from 'moment';
-import { STORAGE_URL } from '../../config';
+import MenuIcon from "@mui/icons-material/Menu";
+import Menu from "@mui/material/Menu";
+import MenuItem from "@mui/material/MenuItem";
+import NotificationsNoneIcon from "@mui/icons-material/NotificationsNone";
+import { useNavigate } from "react-router-dom";
+import moment from "moment";
+import { STORAGE_URL } from "../../config";
+
+import { CBEWSL_SITE_NAME } from "../../host";
 
 const MarirongHeader = () => {
   let navigate = useNavigate();
   const [value, setValue] = useState(0);
-  const [server_time, setServerTime] = useState('');
+  const [server_time, setServerTime] = useState("");
   // const [profilePicture] = useState(null);
   const [profileIcon, setProfileIcon] = useState(null);
   // const [imageUrl, setImageUrl] = useState(null);
@@ -40,7 +42,7 @@ const MarirongHeader = () => {
     setValue(newValue);
     switch (newValue) {
       case 0:
-        navigate('/opcen');
+        navigate(`${CBEWSL_SITE_NAME}/opcen`);
         break;
       case 1:
         event.preventDefault();
@@ -52,25 +54,25 @@ const MarirongHeader = () => {
         event.preventDefault();
         break;
       case 4:
-        navigate('/events');
+        navigate(`${CBEWSL_SITE_NAME}/events`);
         break;
       case 5:
-        navigate('/profile-settings')
+        navigate(`${CBEWSL_SITE_NAME}/profile-settings`);
       default:
-        navigate('/assessment');
+        navigate(`${CBEWSL_SITE_NAME}/assessment`);
         break;
     }
   };
 
   useEffect(() => {
-    const data = localStorage.getItem('credentials');
+    const data = localStorage.getItem("credentials");
     const parse_data = JSON.parse(data);
     const user_sex = parse_data.user.sex;
 
-    if (user_sex === 'Male'){
-      setProfileIcon(male_icon)
+    if (user_sex === "Male") {
+      setProfileIcon(male_icon);
     } else {
-      setProfileIcon(female_icon)
+      setProfileIcon(female_icon);
     }
 
     // const profile_picture = parse_data.profile.pic_path !== "" ? `${STORAGE_URL}/${parse_data.profile.pic_path}` : "";
@@ -84,10 +86,10 @@ const MarirongHeader = () => {
   //   }
   // }, [profilePicture]);
 
-  const a11yProps = index => {
+  const a11yProps = (index) => {
     return {
       id: `simple-tab-${index}`,
-      'aria-controls': `simple-tabpanel-${index}`,
+      "aria-controls": `simple-tabpanel-${index}`,
     };
   };
   const [anchorElSettings, setAnchorElSettings] = React.useState(null);
@@ -101,23 +103,23 @@ const MarirongHeader = () => {
   const openGroundData = Boolean(anchorElGroundData);
   const openSettings = Boolean(anchorElSettings);
 
-  const preventDefault = event => {
+  const preventDefault = (event) => {
     event.preventDefault();
   };
 
-  const handleClick = event => {
+  const handleClick = (event) => {
     setAnchorEl(event.currentTarget);
   };
 
-  const handleClickCRA = event => {
+  const handleClickCRA = (event) => {
     setAnchorElCRA(event.currentTarget);
   };
 
-  const handleClickAnalysis = event => {
+  const handleClickAnalysis = (event) => {
     setAnchorElAnalysis(event.currentTarget);
   };
 
-  const handleClickGroundData = event => {
+  const handleClickGroundData = (event) => {
     setAnchorElGroundData(event.currentTarget);
   };
 
@@ -131,27 +133,27 @@ const MarirongHeader = () => {
 
   const handleCurrentTab = () => {
     const path_name = window.location.pathname;
-    if (path_name === '/opcen') {
+    if (path_name === `${CBEWSL_SITE_NAME}/opcen`) {
       setValue(0);
     } else if (
       // path_name === '/hazard_mapping' ||
-      path_name === '/cav'
+      path_name === `${CBEWSL_SITE_NAME}/cav`
     ) {
       setValue(1);
     } else if (
-      path_name === '/analysis' ||
-      path_name === '/rainfall' ||
-      path_name === '/surficial' ||
-      path_name === '/subsurface' ||
-      path_name === '/earthquake'
+      path_name === `${CBEWSL_SITE_NAME}/analysis` ||
+      path_name === `${CBEWSL_SITE_NAME}/rainfall` ||
+      path_name === `${CBEWSL_SITE_NAME}/surficial` ||
+      path_name === `${CBEWSL_SITE_NAME}/subsurface` ||
+      path_name === `${CBEWSL_SITE_NAME}/earthquake`
     ) {
       setValue(2);
     } else if (
-      path_name === '/surficial_markers' ||
-      path_name === '/moms'
+      path_name === `${CBEWSL_SITE_NAME}/surficial_markers` ||
+      path_name === `${CBEWSL_SITE_NAME}/moms`
     ) {
       setValue(3);
-    } else if (path_name === '/events') {
+    } else if (path_name === `${CBEWSL_SITE_NAME}/events`) {
       setValue(4);
     } else {
       setValue(5);
@@ -159,39 +161,44 @@ const MarirongHeader = () => {
   };
 
   const handleOpen = () => {
-    window.open(HazardMap, '_blank');
-  }
+    window.open(HazardMap, "_blank");
+  };
 
   useEffect(() => {
-    handleCurrentTab()
-  })
+    handleCurrentTab();
+  });
 
   useEffect(() => {
     setInterval(() => {
-      let dt = moment().format('ddd DD-MMM-YYYY hh:mm:ss A');
+      let dt = moment().format("ddd DD-MMM-YYYY hh:mm:ss A");
       setServerTime(dt);
     }, 1000);
-    
   }, []);
 
   return (
     <Fragment>
-      <Grid container spacing={0} style={{background: 'white'}}>
-
-      <Grid item xs={4} md={4} lg={3.5} sx={{marginTop: 1, marginBottom: 2}}>
+      <Grid container spacing={0} style={{ background: "white" }}>
+        <Grid
+          item
+          xs={4}
+          md={4}
+          lg={3.5}
+          sx={{ marginTop: 1, marginBottom: 2 }}
+        >
           <div
             style={{
-              textAlign: 'left',
-              height: 'auto',
-              width: '100%',
+              textAlign: "left",
+              height: "auto",
+              width: "100%",
               marginTop: 10,
-              marginLeft: 40
-            }}>
+              marginLeft: 40,
+            }}
+          >
             <img
               src={DostSeal}
               alt="dost-seal-png"
               style={{
-                objectFit: 'contain',
+                objectFit: "contain",
                 height: 75,
                 width: 75,
                 marginRight: 8,
@@ -201,54 +208,54 @@ const MarirongHeader = () => {
               src={DynaslopeSealMini}
               alt="dynaslope-seal-mini-png"
               style={{
-                objectFit: 'contain',
+                objectFit: "contain",
                 height: 72,
                 width: 75,
                 marginRight: 8,
-                marginBottom: 2
+                marginBottom: 2,
               }}
             />
             <img
               src={benguet_provincial_seal}
               alt="benguet_provincial_seal"
               style={{
-                objectFit: 'cover',
+                objectFit: "cover",
                 height: 70,
                 width: 70,
                 marginRight: 8,
-                marginBottom: 3
+                marginBottom: 3,
               }}
             />
             <img
               src={bakun_municipal_seal}
               alt="bakun_municipal_seal"
               style={{
-                objectFit: 'contain',
+                objectFit: "contain",
                 height: 70,
                 width: 70,
                 marginRight: 8,
-                marginBottom: 3
+                marginBottom: 3,
               }}
             />
             <img
               src={bakun_brgy_seal}
               alt="bakun_brgy_seal"
               style={{
-                objectFit: 'contain',
+                objectFit: "contain",
                 height: 70,
                 width: 70,
                 marginRight: 8,
-                marginBottom: 3
+                marginBottom: 3,
               }}
             />
             <img
               src={bakun_lewc_seal}
               alt="bakun_lewc_seal"
               style={{
-                objectFit: 'contain',
+                objectFit: "contain",
                 height: 70,
                 width: 70,
-                marginBottom: 3
+                marginBottom: 3,
               }}
             />
           </div>
@@ -257,36 +264,44 @@ const MarirongHeader = () => {
         <Grid item xs={12} md={6} lg={6.5}>
           <div
             style={{
-              textAlign: 'left',
-              height: 'auto',
-              width: '100%',
+              textAlign: "left",
+              height: "auto",
+              width: "100%",
               marginTop: 30,
-            }}>
+            }}
+          >
             <Typography
               variant="h5"
-              style={{fontWeight: '600', color: 'green'}}>
+              style={{ fontWeight: "600", color: "green" }}
+            >
               COMMUNITY-BASED EARLY WARNING SYSTEM FOR LANDSLIDES
             </Typography>
             <Typography
               variant="h6"
-              style={{fontWeight: '300', color: 'black'}}>
+              style={{ fontWeight: "300", color: "black" }}
+            >
               Brgy. Poblacion, Bakun, Benguet
             </Typography>
           </div>
         </Grid>
 
         <Grid item xs={12} md={12} lg={2}>
-          <div style={{textAlign: 'end'}}>
+          <div style={{ textAlign: "end" }}>
             <Tooltip title="Notification">
-              <IconButton onClick={() => {}} sx={{p: 2, mt: 4}}>
+              <IconButton onClick={() => {}} sx={{ p: 2, mt: 4 }}>
                 <NotificationsNoneIcon
                   alt="Notification"
-                  style={{color: '#16526D'}}
+                  style={{ color: "#16526D" }}
                 />
               </IconButton>
             </Tooltip>
             <Tooltip title="Open settings">
-              <IconButton onClick={(e) => { setAnchorElSettings(e.currentTarget) }} sx={{p: 2, mt: 4}}>
+              <IconButton
+                onClick={(e) => {
+                  setAnchorElSettings(e.currentTarget);
+                }}
+                sx={{ p: 2, mt: 4 }}
+              >
                 <Avatar src={profileIcon} alt="Profile photo" />
               </IconButton>
             </Tooltip>
@@ -297,32 +312,36 @@ const MarirongHeader = () => {
               open={openSettings}
               onClose={handleClose}
               MenuListProps={{
-                'aria-labelledby': 'button',
-              }}>
+                "aria-labelledby": "button",
+              }}
+            >
               <MenuItem
                 onClick={() => {
-                  navigate('/profile-settings');
+                  navigate(`${CBEWSL_SITE_NAME}/profile-settings`);
                   handleClose();
-                }}>
+                }}
+              >
                 Profile Settings
               </MenuItem>
               <MenuItem
                 onClick={() => {
-                  navigate('/change-password');
+                  navigate(`${CBEWSL_SITE_NAME}/change-password`);
                   handleClose();
-                }}>
+                }}
+              >
                 Change Password
               </MenuItem>
             </Menu>
 
             <IconButton
               id="button"
-              aria-controls={open ? 'menu' : undefined}
+              aria-controls={open ? "menu" : undefined}
               aria-haspopup="true"
-              aria-expanded={open ? 'true' : undefined}
+              aria-expanded={open ? "true" : undefined}
               onClick={handleClick}
-              sx={{p: 2, mt: 4}}>
-              <MenuIcon alt="Menu" style={{color: '#16526D'}} />
+              sx={{ p: 2, mt: 4 }}
+            >
+              <MenuIcon alt="Menu" style={{ color: "#16526D" }} />
             </IconButton>
             <Menu
               id="menu"
@@ -330,20 +349,24 @@ const MarirongHeader = () => {
               open={open}
               onClose={handleClose}
               MenuListProps={{
-                'aria-labelledby': 'button',
-              }}>
+                "aria-labelledby": "button",
+              }}
+            >
               <MenuItem
                 onClick={() => {
-                  navigate('/feedback');
+                  navigate(`${CBEWSL_SITE_NAME}/feedback`);
                   handleClose();
-                }}>
+                }}
+              >
                 Feedback
               </MenuItem>
-              <MenuItem 
+              <MenuItem
                 onClick={() => {
-                  localStorage.removeItem('credentials')
-                  (window.location = '/')
-                }}>
+                  localStorage.removeItem("credentials")(
+                    (window.location = `/${CBEWSL_SITE_NAME}`)
+                  );
+                }}
+              >
                 Logout
               </MenuItem>
             </Menu>
@@ -353,25 +376,27 @@ const MarirongHeader = () => {
           item
           xs={12}
           style={{
-            justifyContent: 'center',
-            alignItems: 'center',
-            textAlign: 'center',
-            width: '100%',
-          }}>
+            justifyContent: "center",
+            alignItems: "center",
+            textAlign: "center",
+            width: "100%",
+          }}
+        >
           <AppBar position="static" color="inherit">
-            <Grid container style={{backgroundColor: 'green'}}>
+            <Grid container style={{ backgroundColor: "green" }}>
               <Grid item md={10}>
-                <Toolbar style={{justifyContent: 'center'}}>
+                <Toolbar style={{ justifyContent: "center" }}>
                   <Tabs
                     value={value}
                     onChange={handleChange}
                     TabIndicatorProps={{
-                      style: {background: 'white'}
+                      style: { background: "white" },
                     }}
-                      aria-label="basic tabs example">
+                    aria-label="basic tabs example"
+                  >
                     <Tab
-                        label={
-                        <span style={{color: 'white', fontWeight: 'bold'}}>
+                      label={
+                        <span style={{ color: "white", fontWeight: "bold" }}>
                           DASHBOARD
                         </span>
                       }
@@ -379,51 +404,51 @@ const MarirongHeader = () => {
                     />
                     <Tab
                       label={
-                        <span style={{color: 'white', fontWeight: 'bold'}}>
+                        <span style={{ color: "white", fontWeight: "bold" }}>
                           COMMUNITY RISK ASSESSMENT
                         </span>
                       }
-                      onClick={e => {
+                      onClick={(e) => {
                         handleClickCRA(e);
                         preventDefault(e);
                       }}
                     />
                     <Tab
-                        label={
-                        <span style={{color: 'white', fontWeight: 'bold'}}>
+                      label={
+                        <span style={{ color: "white", fontWeight: "bold" }}>
                           DATA ANALYSIS
                         </span>
                       }
-                      onClick={e => {
+                      onClick={(e) => {
                         handleClickAnalysis(e);
                         preventDefault(e);
                       }}
                     />
                     <Tab
-                        label={
-                        <span style={{color: 'white', fontWeight: 'bold'}}>
+                      label={
+                        <span style={{ color: "white", fontWeight: "bold" }}>
                           GROUND DATA
                         </span>
                       }
-                      onClick={e => {
+                      onClick={(e) => {
                         handleClickGroundData(e);
                         preventDefault(e);
                       }}
                     />
                     <Tab
-                        label={
-                        <span style={{color: 'white', fontWeight: 'bold'}}>
+                      label={
+                        <span style={{ color: "white", fontWeight: "bold" }}>
                           SCHEDULE
                         </span>
                       }
                       {...a11yProps(1)}
                     />
-                    <Tab style={{display: 'none'}} {...a11yProps(2)}/>
+                    <Tab style={{ display: "none" }} {...a11yProps(2)} />
                   </Tabs>
                 </Toolbar>
               </Grid>
-              <Grid item md={2} style={{ alignSelf: 'center' }}>
-                <Typography variant="body1" style={{color: 'white'}}>
+              <Grid item md={2} style={{ alignSelf: "center" }}>
+                <Typography variant="body1" style={{ color: "white" }}>
                   {server_time.toUpperCase()}
                 </Typography>
               </Grid>
@@ -438,20 +463,23 @@ const MarirongHeader = () => {
           open={openCRA}
           onClose={handleClose}
           MenuListProps={{
-            'aria-labelledby': 'button',
-          }}>
+            "aria-labelledby": "button",
+          }}
+        >
           <MenuItem
             onClick={() => {
               handleOpen();
               handleClose();
-            }}>
+            }}
+          >
             Hazard Map
           </MenuItem>
           <MenuItem
             onClick={() => {
-              navigate('/cav');
+              navigate(`${CBEWSL_SITE_NAME}/cav`);
               handleClose();
-            }}>
+            }}
+          >
             Household Data
           </MenuItem>
         </Menu>
@@ -463,41 +491,47 @@ const MarirongHeader = () => {
           open={openAnalysis}
           onClose={handleClose}
           MenuListProps={{
-            'aria-labelledby': 'button',
-          }}>
+            "aria-labelledby": "button",
+          }}
+        >
           <MenuItem
             onClick={() => {
-              navigate('/analysis');
+              navigate(`${CBEWSL_SITE_NAME}/analysis`);
               handleClose();
-            }}>
+            }}
+          >
             Summary
           </MenuItem>
           <MenuItem
             onClick={() => {
-              navigate('/rainfall');
+              navigate(`${CBEWSL_SITE_NAME}/rainfall`);
               handleClose();
-            }}>
+            }}
+          >
             Rainfall Plot
           </MenuItem>
           <MenuItem
             onClick={() => {
-              navigate('/surficial');
+              navigate(`${CBEWSL_SITE_NAME}/surficial`);
               handleClose();
-            }}>
+            }}
+          >
             Surficial Plot
           </MenuItem>
           <MenuItem
             onClick={() => {
-              navigate('/subsurface');
+              navigate(`${CBEWSL_SITE_NAME}/subsurface`);
               handleClose();
-            }}>
+            }}
+          >
             Subsurface Plot
           </MenuItem>
           <MenuItem
             onClick={() => {
-              navigate('/earthquake');
+              navigate(`${CBEWSL_SITE_NAME}/earthquake`);
               handleClose();
-            }}>
+            }}
+          >
             Earthquake Data
           </MenuItem>
         </Menu>
@@ -507,20 +541,23 @@ const MarirongHeader = () => {
           open={openGroundData}
           onClose={handleClose}
           MenuListProps={{
-            'aria-labelledby': 'button',
-          }}>
+            "aria-labelledby": "button",
+          }}
+        >
           <MenuItem
             onClick={() => {
-              navigate('/surficial_markers');
+              navigate(`${CBEWSL_SITE_NAME}/surficial_markers`);
               handleClose();
-            }}>
+            }}
+          >
             Surficial Markers
           </MenuItem>
           <MenuItem
             onClick={() => {
-              navigate('/moms');
+              navigate(`${CBEWSL_SITE_NAME}/moms`);
               handleClose();
-            }}>
+            }}
+          >
             Manifestations of movement
           </MenuItem>
         </Menu>
