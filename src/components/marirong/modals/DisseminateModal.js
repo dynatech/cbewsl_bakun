@@ -12,7 +12,7 @@ import {
 import React, { Fragment, useState, useEffect } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import moment from "moment";
-import { CBEWSL_SITE_LOCATION } from "../../../host";
+import { CBEWSL_SITE_LOCATION, CBEWSL_SITE_NAME } from "../../../host";
 
 function DisseminateModal(props) {
   const {
@@ -191,7 +191,7 @@ function DisseminateModal(props) {
 
   const renderBulletin = () => {
     console.log(message);
-    navigate("/bulletin", {
+    navigate(`/${CBEWSL_SITE_NAME}/bulletin`, {
       state: {
         alertLevel: alertLevel,
         siteLocation: siteLocation,
