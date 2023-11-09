@@ -61,6 +61,17 @@ const eq_ev_tbl_columns = [
 const eq_al_tbl_columns = [
     { name: "Timestamp" },
     { name: "Magnitude" },
+    {
+        name: "eq_id",
+        options: {
+            display: false,
+            viewColumns: false,
+            filter: false
+        }
+    },
+    {
+        name: "Sites",
+    }
     // {
     //     name: "Sites",
     //     options: {
@@ -95,8 +106,8 @@ function EarthquakeMap(props) {
     const { eqEvents } = props;
     const sites = require("./../data/sites.json")
     const state = {
-        lat: 11.154057,
-        lng: 122.483825,
+        lat: 16.790700,
+        lng: 120.661600,
         zoom: 9
     };
 
@@ -120,11 +131,13 @@ function EarthquakeMap(props) {
     const rule = /\.0*$|(?<=\.[0-9]{0,2147483646})0*$/;
 
     return (
-        <LeafletMap style={{ height: "71vh", width: "100%" }} center={position} zoom={zoom}>
+        <LeafletMap style={{ height: "80vh", width: "100%" }} center={position} zoom={zoom}>
             <TileLayer
                 attribution='&copy; <a href="https://www.mapbox.com/about/maps/">Mapbox</a> © <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a> <strong><a href="https://www.mapbox.com/map-feedback/" target="_blank">Improve this map</a></strong>'
                 id="mapbox.streets"
-                url="https://api.mapbox.com/styles/v1/mapbox/streets-v11/tiles/{z}/{x}/{y}?access_token=pk.eyJ1IjoibWFwYm94IiwiYSI6ImNpejY4NXVycTA2emYycXBndHRqcmZ3N3gifQ.rJcFIG214AriISLbB6B5aw"
+                // url="https://api.mapbox.com/styles/v1/mapbox/streets-v11/tiles/{z}/{x}/{y}?access_token=pk.eyJ1IjoibWFwYm94IiwiYSI6ImNpejY4NXVycTA2emYycXBndHRqcmZ3N3gifQ.rJcFIG214AriISLbB6B5aw"
+                // url="https://api.mapbox.com/styles/v1/mapbox/streets-v11/tiles/{z}/{x}/{y}?access_token=pk.eyJ1Ijoic29mdHdhcmVpbmZyYSIsImEiOiJjbGcxcWljeDIxN2szM2ltc3l2MmJsaXkxIn0.HTsbc1QBdQMRamVWR5_ujw"  //MIA map
+                url="https://tile.openstreetmap.org/{z}/{x}/{y}.png"
             />
             {
                 eqEvents.map((event, i) => {
@@ -134,6 +147,11 @@ function EarthquakeMap(props) {
                     } = event;
                     const center = [latitude, longitude];
                     const distance = critical_distance === null ? 0 : parseFloat(critical_distance);
+                    
+                    const depthNotNull = () => {
+                    if (depth !== null) {depth.replace(rule, "")}
+                    else {depth("")}
+                    }
 
                     return (
                         <Fragment key={eq_id}>
@@ -141,7 +159,8 @@ function EarthquakeMap(props) {
                             <Marker icon={marker} position={center} ref={is_one ? ref : createRef()}>
                                 <Popup>
                                     Magnitude: <strong>{magnitude.replace(rule, "")}</strong> <br />
-                                    Depth: <strong>{depth.replace(rule, "")}</strong> <br />
+                                    {/* Depth: <strong>{depth.replace(rule, "")}</strong> <br /> */}
+                                    Depth: <strong>{depthNotNull}</strong> <br />
                                     Critical Distance: <strong>{distance} km</strong> <br />
                                     Processed: <strong>{processed ? "Yes" : "No"}</strong>
                                 </Popup>
@@ -235,7 +254,7 @@ function EarthquakeChart(props) {
             }
         },
         selectableRows: "none",
-        rowsPerPage: 5,
+        rowsPerPage: 10,
         rowsPerPageOptions: [],
         print: false,
         download: false,
@@ -256,7 +275,7 @@ function EarthquakeChart(props) {
         },
         selectableRows: "none",
         count: eqAlertsPagination.count,
-        rowsPerPage: 3,
+        rowsPerPage: 10,
         rowsPerPageOptions: [],
         print: false,
         download: false,
@@ -279,14 +298,17 @@ function EarthquakeChart(props) {
                     <EarthquakeMap eqEvents={eqEvents} />
                 </Grid>
                 <Grid item md={6} container>
-                    <AppBar position="static">
+                    <AppBar position="static" style={{backgroundColor:"#dddddd"}}>
                         <Tabs
                             value={tab_value}
                             onChange={change_tab_value}
                             variant="fullWidth"
+                            TabIndicatorProps={{
+                                style: {background: '#ffd400'}
+                              }}
                         >
-                            <Tab style={{ color: "white" }} label="EQ Events" />
-                            <Tab style={{ color: "white" }} label="EQ Alerts" />
+                            <Tab style={{ color: "white", backgroundColor: "green"}} label="EQ Events" />
+                            <Tab style={{ color: "white", backgroundColor: "green" }} label="EQ Alerts" />
                         </Tabs>
                         {
                             tab_value === 0 && (
@@ -319,14 +341,14 @@ function EarthquakeChart(props) {
             <Grid item md={12} container align="right">
                 <Grid container>
                     <Grid item md={12} align="right" style={{paddingTop: 20}}>
-                        <Button
+                        {/* <Button
                             variant="contained"
-                            sx={{float: 'right', mx: 1}}
+                            sx={{float: 'right', mx: 1, backgroundColor: '#ffd400', color: "black"}}
                             onClick={e => {
 
                             }}>
                             Download CSV
-                        </Button>
+                        </Button> */}
                     </Grid>
                 </Grid>
             </Grid>
