@@ -180,7 +180,7 @@ function HeaderAlertInformation(props) {
   const [latest_triggers, setLatestTriggers] = useState([]);
   const [responses, setResponses] = useState({
     barangay_response: "",
-    community_response: "",
+    commmunity_response: "",
     munisipyo_response: "",
   });
   const [validity, setValidity] = useState(null);
@@ -280,7 +280,7 @@ function HeaderAlertInformation(props) {
                             )}
                         </h2>
                         <h3>
-                            Responde (Komunidad): {responses.community_response ? responses.community_response : "N/A"}
+                            Responde (Komunidad): {responses.commmunity_response ? responses.commmunity_response : "N/A"}
                         </h3>
                         <h3>
                             Responde (LEWC at Barangay): {responses.barangay_response ? responses.barangay_response: "N/A"}

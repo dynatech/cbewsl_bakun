@@ -2,16 +2,20 @@ import { Box, Grid, Typography, Button } from '@mui/material';
 import { useLocation } from 'react-router-dom';
 import React, { Fragment, createRef, useState } from 'react';
 import letter_header from '../../assets/phivolcs-letter-head.png';
-import ldrrmc_logo from '../../assets/ldrrmc.png';
+import mdrrmc_logo from '../../assets/bakun_municipal_seal.png';
 import leon_logo from '../../assets/leon_municipal_seal.png';
 import letter_footer from '../../assets/phivolcs-letter-footer.png';
 import Pdf from "react-to-pdf";
 import moment from 'moment';
+import {CBEWSL_SITE_NAME} from "../../host"
 
 const Bulletin = () => {
     const location = useLocation();
     const ref = createRef();
     const [isRendering, setIsRendering] = useState(false);
+    const currentYear = moment().format('YYYY');
+    const siteName = CBEWSL_SITE_NAME.toUpperCase()
+
     return (
         <Fragment>
             <Grid container justifyContent='center' alignItems='flex-start'>
@@ -26,12 +30,12 @@ const Bulletin = () => {
                     <Grid item xs={12} md={12} lg={12} style={{marginBottom: 10}}>
                         <Grid container spacing={0} alignItems="center" justifyContent="center">
                             <Grid item xs={3}>
-                                <img src={ldrrmc_logo}
+                                <img src={mdrrmc_logo}
                                     alt='letter-header'
                                     style={{
                                         objectFit: 'contain',
-                                        width: 250,
-                                        height: 200
+                                        width: 120,
+                                        height: 120
                                     }} />
                             </Grid>
                             <Grid item xs={5} style={{textAlign: 'center'}}>
@@ -39,10 +43,10 @@ const Bulletin = () => {
                                     <b>Republic of the Phillipines</b>
                                 </Typography>
                                 <Typography variant='h5'>
-                                    <b>Province of Iloilo </b>
+                                    <b>Province of Benguet </b>
                                 </Typography>
                                 <Typography variant='h5'>
-                                    <b>Municipality of Leon</b>
+                                    <b>Municipality of Bakun</b>
                                 </Typography>
                                 <Typography variant='h5'>
                                     <b>Community-Based Early Warning </b>
@@ -51,7 +55,7 @@ const Bulletin = () => {
                                     <b>Systems for Landslides</b>
                                 </Typography>     
                             </Grid>
-                            <Grid item xs={3}>
+                            {/* <Grid item xs={3}>
                                 <img src={leon_logo}
                                     alt='letter-header'
                                     style={{
@@ -59,12 +63,12 @@ const Bulletin = () => {
                                         width: 120,
                                         height: 120
                                     }} />
-                            </Grid>
+                            </Grid> */}
                         </Grid>
                     </Grid>
                     <Grid item xs={12} md={12} lg={12} style={{marginBottom: 20}}>
                         <Typography variant='h4'>
-                            <b>CBEWS-L ALERT LEVEL INFORMATION: MAR-2023</b>
+                            <b>CBEWS-L ALERT LEVEL INFORMATION: {siteName}-{currentYear}</b>
                         </Typography>
                     </Grid>
                 </Grid>
@@ -95,7 +99,7 @@ const Bulletin = () => {
                         }
                         
                         <Typography variant='h6'><b>ELEMENTS AT RISK</b></Typography>
-                        <Typography variant='subtitle1' style={{marginLeft: 20}}>46 households (237 residents), barangay hall, daycare center, chapel, basketball court</Typography>
+                        <Typography variant='subtitle1' style={{marginLeft: 20}}>Atleast 31 households, Roman Catholic Church</Typography>
                         <Typography variant='h6'><b><u>OTHER RECOMMENDATIONS:</u></b></Typography>
                         {
                             location.state.lewcRP != "" ? <Typography variant='subtitle1'><b>For the Landslide Early Warning Committee (LEWC):</b> {location.state.lewcRP}</Typography> : "N/A"
@@ -106,7 +110,7 @@ const Bulletin = () => {
                         {
                             location.state.barangayRP != "" ? <Typography variant='subtitle1'><b>For the Barangay:</b> {location.state.barangayRP}</Typography> : "N/A"
                         }
-                        <Typography variant='subtitle1'><b>NOTE:</b> This bulletin contains the official alert level and recommended response of the Leon MDRRMO for Brgy. Marirong and will hold true until a new bulletin is released.</Typography>
+                        <Typography variant='subtitle1'><b>NOTE:</b> This bulletin contains the official alert level and recommended response of the Bakun MDRRMO for Brgy. Poblacion and will hold true until a new bulletin is released.</Typography>
                     </Grid>
                 </Grid>
                 <Grid container justifyContent='center' alignItems='flex-start' textAlign='center'>
