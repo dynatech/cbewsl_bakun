@@ -1,13 +1,13 @@
 import axios from "axios";
 // import { host } from "../components/host";
 import { API_URL } from "../config";
-import { CBEWSL_SITE } from "../host";
+import { CBEWSL_SITE_CODE, CBEWSL_SITE } from "../host";
 
 export function getSurficialPlotData(input, callback, is_end_of_shift = false) {
   const { site_code, start, end } = input;
   let api_link =
     `${API_URL}/api/surficial/get_surficial_plot_data/` +
-    `${CBEWSL_SITE}/${start}/${end}`;
+    `${CBEWSL_SITE_CODE}/${start}/${end}`;
 
   if (is_end_of_shift) api_link += "?is_end_of_shift=true";
 
@@ -88,7 +88,8 @@ export function insertMarkerEvent(input, callback) {
 
 export function getRainfallPlotData(input, callback) {
   const { site_code, ts_end, days_diff } = input;
-  const api_link = `${API_URL}/api/rainfall/get_rainfall_plot_data/${CBEWSL_SITE}/${ts_end}/${days_diff}`;
+  // const api_link = `${API_URL}/api/rainfall/get_rainfall_plot_data/${CBEWSL_SITE}/${ts_end}/${days_diff}`;
+  const api_link = `http://192.168.150.110:5000//api/rainfall/get_rainfall_plot_data/${CBEWSL_SITE_CODE}/${ts_end}/${days_diff}`;
 
   axios
     .get(api_link)
@@ -222,7 +223,7 @@ export function getMOMsAlertSummary(callback) {
 }
 
 export function getMOMsInstances(site_code, callback) {
-  const api_link = `${API_URL}/api/manifestations_of_movement/get_moms_instances/${CBEWSL_SITE}`;
+  const api_link = `${API_URL}/api/manifestations_of_movement/get_moms_instances/${CBEWSL_SITE_CODE}`;
 
   axios
     .get(api_link)
@@ -237,7 +238,7 @@ export function getMOMsInstances(site_code, callback) {
 }
 
 export function getSiteSubsurfaceColumns(site_code, callback) {
-  const api_link = `${API_URL}/api/subsurface/get_site_subsurface_columns/${CBEWSL_SITE}`;
+  const api_link = `${API_URL}/api/subsurface/get_site_subsurface_columns/${CBEWSL_SITE_CODE}`;
 
   axios
     .get(api_link)
