@@ -2,7 +2,7 @@ import { API_URL } from '../config'
 import axios from 'axios'
 
 export const saveFeedback = (input, callback) => {
-  const api_link = `${API_URL}/api/feedback/save_feedback`;
+  const api_link = `${API_URL}/api/bug_report/add`;
   axios
     .post(api_link, input)
     .then(response => {

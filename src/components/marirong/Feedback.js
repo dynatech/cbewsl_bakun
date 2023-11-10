@@ -20,8 +20,8 @@ import PromptModal from './modals/PromptModal';
 import { saveFeedback } from '../../apis/Misc';
 
 function Feedback() {
-  const [issue, setIssue] = useState('');
-  const [othersConcern, setOthersConcern] = useState('');
+  // const [issue, setIssue] = useState('');
+  // const [othersConcern, setOthersConcern] = useState('');
   const [concern, setConcern] = useState('');
   const [selectedImage, setSelectedImage] = useState(null);
   const [imageUrl, setImageUrl] = useState(null);
@@ -33,35 +33,34 @@ function Feedback() {
   const [designation, setDesignation] = useState(null);
   const [openBackdrop, setOpenBackdrop] = useState(false);
 
-  const handleValidation = messsage => {
-    setNotifMessage(messsage);
+  const handleValidation = message => {
+    setNotifMessage(message);
     setIsOpenPromptModal(true);
   };
 
-  const handleChange = event => {
-    setIssue(event.target.value);
-  };
+  // const handleChange = event => {
+  //   setIssue(event.target.value);
+  // };
 
   const resetValues = () => {
-    setIssue('');
-    setOthersConcern('');
+    // setIssue('');
+    // setOthersConcern('');
     setConcern('');
     setSelectedImage('');
   };
 
   const handleSend = () => {
     setOpenBackdrop(!openBackdrop);
-    const feedback_id = 0;
-    const form_data = new FormData();
-    form_data.append('feedback_id', feedback_id);
-    form_data.append('file', selectedImage);
-    form_data.append('issue', issue);
-    form_data.append('concern', concern);
-    form_data.append('other_concern', othersConcern);
-    console.log('FORM DATA', form_data);
-    saveFeedback(form_data, data => {
-      const {status, feedback} = data;
-      handleValidation(feedback);
+
+    const feedbackData ={
+      id: 0,
+      file_path: selectedImage,
+      description: concern,
+    };
+
+    saveFeedback(feedbackData, data => {
+      const {status, message} = data;
+      handleValidation(message);
       if (status === true) {
         resetValues();
       }
@@ -88,20 +87,20 @@ function Feedback() {
   }, [selectedImage]);
 
   useEffect(() => {
-    if (issue === '' || concern === '') {
+    if (concern === '') {
       setSendButtonState(true);
     } else {
       setSendButtonState(false);
     }
     return;
-  }, [sendButtonState, issue, concern]);
+  }, [sendButtonState, concern]);
 
   return (
     <Grid container sx={{padding: 8}}>
       <Grid item xs={12}>
         <Box elevato="true">
           <Typography variant="h4" sx={{marginBottom: 4}}>
-            Feedback
+            Feedback / Bug Report
           </Typography>
         </Box>
       </Grid>
@@ -119,8 +118,9 @@ function Feedback() {
                   <Typography style={{fontWeight: 'bold', display: 'inline-flex', paddingLeft: 5}}>{designation}</Typography>
                 </Typography>
               </Grid>
-              <Grid item xs={4}>
-                <FormControl fullWidth>
+              <Grid item xs={10}>
+                <Typography style={{fontWeight: 'bold', display: 'inline-flex'}}>CBEWS-L Web app (concerns with the app, bugs, errors)</Typography>
+                {/* <FormControl fullWidth>
                   <InputLabel id="demo-simple-select-label">Subject</InputLabel>
                   <Select
                     labelId="demo-simple-select-label"
@@ -142,9 +142,9 @@ function Feedback() {
                     </MenuItem>
                     <MenuItem value={'Others'}>Others</MenuItem>
                   </Select>
-                </FormControl>
+                </FormControl> */}
               </Grid>
-              {issue === 'Others' && (
+              {/* {issue === 'Others' && (
                 <Grid item xs={6}>
                   <TextField
                     id="standard-multiline-static"
@@ -156,8 +156,8 @@ function Feedback() {
                     onChange={e => setOthersConcern(e.target.value)}
                   />
                 </Grid>
-              )}
-              <Grid item xs={2} style={{alignSelf: 'center'}}>
+              )} */}
+              <Grid item xs={2} justifyContent='flex-end' alignItems='flex-end'>
                 <Fragment>
                   <input
                     accept="image/*"
@@ -209,7 +209,7 @@ function Feedback() {
             <Button
               size="small"
               variant="contained"
-              style={{backgroundColor: "#ffd400", color: "black"}}
+              sx={{backgroundColor: "#ffd400", color: "black"}}
               onClick={() => handleSend()}
               disabled={sendButtonState}>
               Submit Feedback
