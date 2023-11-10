@@ -608,16 +608,17 @@ function RainfallGraph(props) {
 
   return (
     <Fragment>
-      <div>
-        <Grid container spacing={4}>
-          <Grid container item xs justifyContent="flex-end">
+      <div style={{ marginTop: 16 }}>
+        <Grid container spacing={1} justifyContent="flex-end">
+          <div style={{ marginBottom: 16 }}>
             <DateRangeSelector
               selectedRangeInfo={selected_range_info}
               setSelectedRangeInfo={setSelectedRangeInfo}
               disableAll
             />
-          </Grid>
-          <Grid item xs={12} md={12}>
+          </div>
+        </Grid>
+        <Grid item xs={12} md={12}>
             {/* <TextField
                             label="Start Date"
                             id="outlined-size-small"
@@ -630,7 +631,9 @@ function RainfallGraph(props) {
                             size="small"
                             type="number"
                         /> */}
-          </Grid>
+        </Grid>
+
+        <Grid container spacing={4}>
           {rainfall_data.length > 0 ? (
             chartRefs.current.map((ref, i) => {
               let opt = { ...default_options };

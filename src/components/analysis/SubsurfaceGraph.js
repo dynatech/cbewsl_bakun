@@ -15,6 +15,8 @@ import * as moment from "moment";
 import { useParams } from "react-router-dom";
 import Chroma from "chroma-js";
 import Skeleton from '@mui/material/Skeleton';
+import { CBEWSL_SITE_CODE } from "../../host";
+import DateRangeSelector from "./DateRangeSelector";
 
 import { isWidthDown } from "@material-ui/core/withWidth";
 import {
@@ -722,14 +724,14 @@ function SubsurfaceGraphContainer(props) {
   const [subsurface_columns, setSubsurfaceColumns] = useState([])
 
   useEffect(() => {
-    getSiteSubsurfaceColumns("mar", data => {
+    getSiteSubsurfaceColumns(CBEWSL_SITE_CODE, data => {
       const temp = [];
       data.forEach((row) => {
         const { tsm_name } = row;
         console.log(row);
         const input = {
           tsm_name,
-          site_code: "mar"
+          site_code: CBEWSL_SITE_CODE
         }
         temp.push(input);
       })
@@ -830,10 +832,20 @@ function SubsurfaceGraph(props) {
 
   return (
     <Fragment>
-
       <div style={{ marginTop: 16 }}>
+        <Grid container spacing={1} justifyContent="flex-end">
+          <div style={{ marginBottom: 16 }}>
+            <DateRangeSelector
+              isSubsurface
+              selectedRangeInfo={selected_range_info}
+              setSelectedRangeInfo={setSelectedRangeInfo}
+              selectedHourInterval={selected_hour_interval}
+              setSelectedHourInterval={setSelectedHourInterval}
+            />
+          </div>
+        </Grid>
+      
         <Grid container spacing={4}>
-
           {
             processed_data.length > 0 ? (options.map((option, i) => {
               const chart_update = true;
