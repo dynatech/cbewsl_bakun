@@ -323,7 +323,7 @@ const Signin = () => {
                 textAlign: "center",
                 height: "auto",
                 width: "auto",
-                padding: 10,
+                // padding: 10,
               }}
             >
               <img
@@ -331,8 +331,8 @@ const Signin = () => {
                 alt="phivolcs-seal-png"
                 style={{
                   objectFit: "contain",
-                  height: 150,
-                  width: 150,
+                  height: 140,
+                  width: 200,
                   marginRight: 20,
                 }}
               />

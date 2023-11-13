@@ -18,39 +18,24 @@ import Select from '@mui/material/Select';
 import AddPhotoAlternateIcon from '@mui/icons-material/AddPhotoAlternate';
 import PromptModal from './modals/PromptModal';
 import { saveFeedback } from '../../apis/Misc';
+import Swal from 'sweetalert2'
 
 function Feedback() {
-  // const [issue, setIssue] = useState('');
-  // const [othersConcern, setOthersConcern] = useState('');
   const [concern, setConcern] = useState('');
   const [selectedImage, setSelectedImage] = useState(null);
   const [imageUrl, setImageUrl] = useState(null);
   const [sendButtonState, setSendButtonState] = useState(true);
-  const [notif_message, setNotifMessage] = useState('');
-  const [is_open_prompt_modal, setIsOpenPromptModal] = useState(false);
   const [currentUser, setCurrentUser] = useState(null);
   const [currentUserLast, setCurrentUserLast] = useState(null);
   const [designation, setDesignation] = useState(null);
-  const [openBackdrop, setOpenBackdrop] = useState(false);
-
-  const handleValidation = message => {
-    setNotifMessage(message);
-    setIsOpenPromptModal(true);
-  };
-
-  // const handleChange = event => {
-  //   setIssue(event.target.value);
-  // };
+ 
 
   const resetValues = () => {
-    // setIssue('');
-    // setOthersConcern('');
     setConcern('');
     setSelectedImage('');
   };
 
   const handleSend = () => {
-    setOpenBackdrop(!openBackdrop);
 
     const feedbackData ={
       id: 0,
@@ -60,11 +45,14 @@ function Feedback() {
 
     saveFeedback(feedbackData, data => {
       const {status, message} = data;
-      handleValidation(message);
       if (status === true) {
         resetValues();
+        Swal.fire({
+          icon: 'success',
+          title: 'Success!',
+          text: message
+      })
       }
-      setOpenBackdrop(false);
     });
   };
 
@@ -120,43 +108,7 @@ function Feedback() {
               </Grid>
               <Grid item xs={10}>
                 <Typography style={{fontWeight: 'bold', display: 'inline-flex'}}>CBEWS-L Web app (concerns with the app, bugs, errors)</Typography>
-                {/* <FormControl fullWidth>
-                  <InputLabel id="demo-simple-select-label">Subject</InputLabel>
-                  <Select
-                    labelId="demo-simple-select-label"
-                    id="demo-simple-select"
-                    value={issue}
-                    required
-                    label="Subject"
-                    onChange={handleChange}>
-                    <MenuItem value={''}>''</MenuItem>
-                    <MenuItem value={'CBEWS-L Web app'}>
-                      CBEWS-L Web app (concerns with the app, bugs, errors)
-                    </MenuItem>
-                    <MenuItem value={'Monitoring Operations'}>
-                      Monitoring Operations (concerns with monitoring protocols)
-                    </MenuItem>
-                    <MenuItem value={'Suggestions'}>
-                      Suggestions (user interface suggestions, feature requests
-                      and edits)
-                    </MenuItem>
-                    <MenuItem value={'Others'}>Others</MenuItem>
-                  </Select>
-                </FormControl> */}
               </Grid>
-              {/* {issue === 'Others' && (
-                <Grid item xs={6}>
-                  <TextField
-                    id="standard-multiline-static"
-                    multiline
-                    placeholder="E.G. general question/s about CBEWS-L app"
-                    variant="outlined"
-                    style={{width: '100%'}}
-                    value={othersConcern}
-                    onChange={e => setOthersConcern(e.target.value)}
-                  />
-                </Grid>
-              )} */}
               <Grid item xs={2} justifyContent='flex-end' alignItems='flex-end'>
                 <Fragment>
                   <input
@@ -216,19 +168,6 @@ function Feedback() {
             </Button>
           </CardActions>
         </Card>
-      </Grid>
-      <PromptModal
-        isOpen={is_open_prompt_modal}
-        setOpenModal={setIsOpenPromptModal}
-        handleValidation={handleValidation}
-        notifMessage={notif_message}
-      />
-      <Grid>
-        <Backdrop
-          sx={{color: '#fff', zIndex: theme => theme.zIndex.drawer + 9999}}
-          open={openBackdrop}>
-          <CircularProgress color="inherit" />
-        </Backdrop>
       </Grid>
     </Grid>
   );

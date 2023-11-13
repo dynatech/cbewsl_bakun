@@ -133,27 +133,28 @@ const MarirongHeader = () => {
 
   const handleCurrentTab = () => {
     const path_name = window.location.pathname;
-    if (path_name === `${CBEWSL_SITE_NAME}/opcen`) {
+    console.log(path_name)
+    if (path_name === `/${CBEWSL_SITE_NAME}/opcen`) {
       setValue(0);
     } else if (
       // path_name === '/hazard_mapping' ||
-      path_name === `${CBEWSL_SITE_NAME}/cav`
+      path_name === `/${CBEWSL_SITE_NAME}/cav`
     ) {
       setValue(1);
     } else if (
-      path_name === `${CBEWSL_SITE_NAME}/analysis` ||
-      path_name === `${CBEWSL_SITE_NAME}/rainfall` ||
-      path_name === `${CBEWSL_SITE_NAME}/surficial` ||
-      path_name === `${CBEWSL_SITE_NAME}/subsurface` ||
-      path_name === `${CBEWSL_SITE_NAME}/earthquake`
+      path_name === `/${CBEWSL_SITE_NAME}/analysis` ||
+      path_name === `/${CBEWSL_SITE_NAME}/rainfall` ||
+      path_name === `/${CBEWSL_SITE_NAME}/surficial` ||
+      path_name === `/${CBEWSL_SITE_NAME}/subsurface` ||
+      path_name === `/${CBEWSL_SITE_NAME}/earthquake`
     ) {
       setValue(2);
     } else if (
-      path_name === `${CBEWSL_SITE_NAME}/surficial_markers` ||
-      path_name === `${CBEWSL_SITE_NAME}/moms`
+      path_name === `/${CBEWSL_SITE_NAME}/surficial_markers` ||
+      path_name === `/${CBEWSL_SITE_NAME}/moms`
     ) {
       setValue(3);
-    } else if (path_name === `${CBEWSL_SITE_NAME}/events`) {
+    } else if (path_name === `/${CBEWSL_SITE_NAME}/events`) {
       setValue(4);
     } else {
       setValue(5);
