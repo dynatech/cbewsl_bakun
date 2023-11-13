@@ -1,35 +1,46 @@
-import React, { useState, useEffect } from 'react';
-import { Grid, Container, Button, Typography, FormControl } from '@mui/material';
-import FabMuiTable from '../utils/MuiTable';
-import TextField from '@mui/material/TextField';
-import Dialog from '@mui/material/Dialog';
-import DialogActions from '@mui/material/DialogActions';
-import DialogContent from '@mui/material/DialogContent';
-import DialogTitle from '@mui/material/DialogTitle';
-import Select from '@mui/material/Select';
-import MenuItem from '@mui/material/MenuItem';
-import InputLabel from '@mui/material/InputLabel';
-import Box from '@mui/material/Box';
-import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
-import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
-import { DateTimePicker } from '@mui/x-date-pickers/DateTimePicker';
-import { uploadMomsResources, getFilesFromFolder } from '../../apis/Misc';
-import { getFeatures, getInstances, insertMomsEntry, getMomsInstances, getMomsFeatures, getStaffs } from '../../apis/MoMs';
-import moment from 'moment';
-import PromptModal from './modals/PromptModal';
+import React, { useState, useEffect } from "react";
+import {
+  Grid,
+  Container,
+  Button,
+  Typography,
+  FormControl,
+} from "@mui/material";
+import FabMuiTable from "../utils/MuiTable";
+import TextField from "@mui/material/TextField";
+import Dialog from "@mui/material/Dialog";
+import DialogActions from "@mui/material/DialogActions";
+import DialogContent from "@mui/material/DialogContent";
+import DialogTitle from "@mui/material/DialogTitle";
+import Select from "@mui/material/Select";
+import MenuItem from "@mui/material/MenuItem";
+import InputLabel from "@mui/material/InputLabel";
+import Box from "@mui/material/Box";
+import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
+import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
+import { DateTimePicker } from "@mui/x-date-pickers/DateTimePicker";
+import { uploadMomsResources, getFilesFromFolder } from "../../apis/Misc";
+import {
+  getFeatures,
+  getInstances,
+  insertMomsEntry,
+  getStaffs,
+} from "../../apis/MoMs";
+import moment from "moment";
+import PromptModal from "./modals/PromptModal";
 import { makeStyles } from "@material-ui/core/styles";
-import MomsTable from './MomsTable';
-import ListItemText from '@mui/material/ListItemText';
+import MomsTable from "./MomsTable";
+import ListItemText from "@mui/material/ListItemText";
 
-const useStyles = makeStyles(theme => ({
+const useStyles = makeStyles((theme) => ({
   root: {
     "& .MuiTextField-root": {
-      margin: theme.spacing(1)
-    }
+      margin: theme.spacing(1),
+    },
   },
   textarea: {
-    resize: "both"
-  }
+    resize: "both",
+  },
 }));
 
 const MenuProps = {
@@ -45,47 +56,47 @@ const Moms = (props) => {
   const classes = useStyles();
 
   const [open, setOpen] = useState(false);
-  const [feature, setFeature] = useState('');
+  const [feature, setFeature] = useState("");
 
   const [datetimestamp, setDateTimestamp] = useState(new Date());
   const [selectedFeatureIndex, setSelectedFeatureIndex] = useState(null);
   const [selectedFeatureName, setSelectedFeatureName] = useState("");
   const [selectedAlertLevel, setSelectedAlertLevel] = useState(0);
-  const [narrative, setNarrative] = useState("")
-  const [featureDetails, setFeatureDetails] = useState("")
+  const [narrative, setNarrative] = useState("");
+  const [featureDetails, setFeatureDetails] = useState("");
   const [featureLocation, setFeatureLocation] = useState("");
   const [reporter, setReporter] = useState({
     user_id: "",
     first_name: "",
-    last_name: ""
+    last_name: "",
   });
   const [featureName, setFeatureName] = useState({
     name: "",
-    instance_id: 0
-  })
+    instance_id: 0,
+  });
   const [featureNames, setFeatureNames] = useState([
     {
       name: "New Instance",
-      instance_id: 0
-    }
-  ])
+      instance_id: 0,
+    },
+  ]);
 
-  const [instances, setInstances] = useState([])
+  const [instances, setInstances] = useState([]);
   const [instanceID, setInstanceID] = useState(null);
-  const [staffs, setStaffs] = useState([])
+  const [staffs, setStaffs] = useState([]);
 
-  const [existingFeatureName, setExistingFeatureName] = useState(false)
+  const [existingFeatureName, setExistingFeatureName] = useState(false);
   const [userId, setUserId] = useState(null);
 
   useEffect(() => {
-    let credentials = JSON.parse(localStorage.getItem('credentials'));
-    setUserId(credentials.user.user_id)
+    let credentials = JSON.parse(localStorage.getItem("credentials"));
+    setUserId(credentials.user.user_id);
   }, []);
 
   useEffect(() => {
-    let check = featureNames.find((o) => o.name === featureName.name)
-    if (check) setExistingFeatureName(true)
-    else setExistingFeatureName(false)
+    let check = featureNames.find((o) => o.name === featureName.name);
+    if (check) setExistingFeatureName(true);
+    else setExistingFeatureName(false);
   }, [featureName]);
 
   // useEffect(() => {
@@ -108,148 +119,146 @@ const Moms = (props) => {
   const feature_list = [
     {
       feature_id: 1,
-      feature: 'Crack',
+      feature: "Crack",
       details:
-        'Ilang crack ang nakita?: ' +
-        '\nGaano kahaba?: ' +
-        '\nGaano kalapad?: ' +
-        '\nAno ang lalim nito?: ' +
-        '\nAno ang oryentasyon o direksyon?: ' +
-        '\nGaano kalaki ang pagbabago? (Kung luma): '
+        "Ilang crack ang nakita?: " +
+        "\nGaano kahaba?: " +
+        "\nGaano kalapad?: " +
+        "\nAno ang lalim nito?: " +
+        "\nAno ang oryentasyon o direksyon?: " +
+        "\nGaano kalaki ang pagbabago? (Kung luma): ",
     },
     {
       feature_id: 2,
-      feature: 'Scarp',
+      feature: "Scarp",
       details:
-        'Ilang scarp ang nakita?: ' +
-        '\nGaano kahaba?: ' +
-        '\nGaano kalapad?: ' +
-        '\nAno ang taas nito?: ' +
-        '\nAno ang oryentasyon o direksyon?: ' +
-        '\nGaano kalaki ang pagbabago?(Kung luma): '
-
+        "Ilang scarp ang nakita?: " +
+        "\nGaano kahaba?: " +
+        "\nGaano kalapad?: " +
+        "\nAno ang taas nito?: " +
+        "\nAno ang oryentasyon o direksyon?: " +
+        "\nGaano kalaki ang pagbabago?(Kung luma): ",
     },
     {
       feature_id: 3,
-      feature: 'Seepage',
+      feature: "Seepage",
       details:
-        'Gaano kabilis/kalakas ang daloy ng tubig?: ' +
-        '\nGaano karami ang tubig na umaagos?: ' +
-        '\nAno ang kulay ng tubig?: ' +
-        '\nBagong seepage o dati na?: '
+        "Gaano kabilis/kalakas ang daloy ng tubig?: " +
+        "\nGaano karami ang tubig na umaagos?: " +
+        "\nAno ang kulay ng tubig?: " +
+        "\nBagong seepage o dati na?: ",
     },
     {
       feature_id: 4,
-      feature: 'Ponding',
+      feature: "Ponding",
       details:
-        'Gaano kalaki ang ponding?: ' +
-        '\nMayroon bang kalapit na iba pang landslide feature?: ' +
-        '\nBagong ponding o dati pa?: '
+        "Gaano kalaki ang ponding?: " +
+        "\nMayroon bang kalapit na iba pang landslide feature?: " +
+        "\nBagong ponding o dati pa?: ",
     },
     {
       feature_id: 5,
-      feature: 'Tilted/Split Trees',
+      feature: "Tilted/Split Trees",
       details:
-        'Saang direksyon nakatagilid/nakatabingi/nahati ang puno?: ' +
-        '\nPara sa split trees, gaano kalaki ang hati?: '
+        "Saang direksyon nakatagilid/nakatabingi/nahati ang puno?: " +
+        "\nPara sa split trees, gaano kalaki ang hati?: ",
     },
     {
       feature_id: 6,
-      feature: 'Damaged Structures',
+      feature: "Damaged Structures",
       details:
-        'Mayroon bang mga paglubong sa sahig o pagtagilid nng mga dingding?: ' +
-        '\nSaan nakita ang crack at ano ang oryentasyon nito?: '
+        "Mayroon bang mga paglubong sa sahig o pagtagilid nng mga dingding?: " +
+        "\nSaan nakita ang crack at ano ang oryentasyon nito?: ",
     },
     {
       feature_id: 7,
-      feature: 'Slope Failure',
+      feature: "Slope Failure",
       details:
-        'Saang bahagi ng slope ito na-obserbahan?: ' +
-        '\nGaano kalayo ang narating ng pagguho ng lupa?: ' +
-        '\nMayroon bang mga naapektuhang istruktura?: ' +
-        '\nGaano ito kataas at kalapad?: '
+        "Saang bahagi ng slope ito na-obserbahan?: " +
+        "\nGaano kalayo ang narating ng pagguho ng lupa?: " +
+        "\nMayroon bang mga naapektuhang istruktura?: " +
+        "\nGaano ito kataas at kalapad?: ",
     },
     {
       feature_id: 8,
-      feature: 'Bulging/Depression',
+      feature: "Bulging/Depression",
       details:
-        'Ilan ang nakitang pag-umbok o paglubog ng lupa?: ' +
-        '\nGaano ito kalaki?: ' +
-        '\nMayroon bang kalapit na iba pang landslide feature?: '
+        "Ilan ang nakitang pag-umbok o paglubog ng lupa?: " +
+        "\nGaano ito kalaki?: " +
+        "\nMayroon bang kalapit na iba pang landslide feature?: ",
     },
   ];
 
   useEffect(() => {
-    setFeatureName("")
+    setFeatureName("");
 
     getFeatures((response) => {
       let tempData = response.data;
 
-      tempData.map(feature => {
+      tempData.map((feature) => {
         if (feature.feature_id == selectedFeatureIndex) {
           let tempFeatureNames = [
             {
               name: "New Instance",
-              instance_id: 0
-            }
-          ]
+              instance_id: 0,
+            },
+          ];
 
-          console.log("feature:", feature)
+          console.log("feature:", feature);
           if (feature.instances.length > 0) {
-            feature.instances.map(instance => {
+            feature.instances.map((instance) => {
               tempFeatureNames.push({
                 instance_id: instance.instance_id,
-                name: instance.feature_name
-              })
-            })
+                name: instance.feature_name,
+              });
+            });
           }
 
-          setFeatureNames(tempFeatureNames)
+          setFeatureNames(tempFeatureNames);
         }
       });
-    })
+    });
 
-    setFeatureDetails(selectedFeatureIndex != null ? (feature_list.find((o) => o.feature_id == selectedFeatureIndex)).details : "")
-
+    setFeatureDetails(
+      selectedFeatureIndex != null
+        ? feature_list.find((o) => o.feature_id == selectedFeatureIndex).details
+        : ""
+    );
   }, [selectedFeatureIndex]);
 
   useEffect(() => {
-    reloadTable()
-
-  }, [props])
-
+    reloadTable();
+  }, [props]);
 
   const reloadTable = () => {
     getInstances((response) => {
       if (response) {
-        setInstances(response)
+        setInstances(response);
       }
-    })
-    getStaffs((response)=>{
-      setStaffs(response.data)
-    })
-  }
+    });
+    getStaffs((response) => {
+      setStaffs(response.data);
+    });
+  };
 
   const handleUpload = (uploadImage) => {
     const formData = new FormData();
-    formData.append('file', uploadImage);
-    formData.append('folder', 'moms_images');
+    formData.append("file", uploadImage);
+    formData.append("folder", "moms_images");
 
-    uploadMomsResources(formData, data => {
-        const { status, message } = data;
-        if (status) {
-            getFilesFromFolder('moms_images', (response) => {
-                // setFiles(response)
-            });
-        } else {
-            console.log("Error upload", message)
-        }
-    })
+    uploadMomsResources(formData, (data) => {
+      const { status, message } = data;
+      if (status) {
+        getFilesFromFolder("moms_images", (response) => {
+          // setFiles(response)
+        });
+      } else {
+        console.log("Error upload", message);
+      }
+    });
+  };
 
-
-}
-
-  const handleChange = event => {
+  const handleChange = (event) => {
     setFeature(event.target.value);
   };
 
@@ -258,35 +267,34 @@ const Moms = (props) => {
   };
 
   const handleClose = () => {
-    initialize()
+    initialize();
     setOpen(false);
   };
 
   const initialize = () => {
-    setDateTimestamp(new Date())
-    setSelectedFeatureIndex(null)
-    setSelectedFeatureName("")
-    setSelectedAlertLevel(0)
-    setFeatureDetails("")
-    setNarrative("")
-    setFeatureLocation("")
+    setDateTimestamp(new Date());
+    setSelectedFeatureIndex(null);
+    setSelectedFeatureName("");
+    setSelectedAlertLevel(0);
+    setFeatureDetails("");
+    setNarrative("");
+    setFeatureLocation("");
     setReporter({
       user_id: "",
       first_name: "",
-      last_name: ""
-    })
+      last_name: "",
+    });
     setFeatureName({
       name: "",
-      instance_id: 0
-    })
+      instance_id: 0,
+    });
     setFeatureNames([
       {
         name: "New Instance",
-        instance_id: 0
-      }
-    ])
-
-  }
+        instance_id: 0,
+      },
+    ]);
+  };
 
   const handleSubmit = () => {
     let moms_entry = {
@@ -296,50 +304,50 @@ const Moms = (props) => {
           alert_level: selectedAlertLevel,
           instance_id: featureName.instance_id,
           feature_name: featureName.name,
-          feature_type: (feature_list.find((o) => o.feature_id == selectedFeatureIndex)).feature,
+          feature_type: feature_list.find(
+            (o) => o.feature_id == selectedFeatureIndex
+          ).feature,
           report_narrative: featureDetails,
           observance_ts: moment(datetimestamp).format("YYYY-MM-DD HH:mm:ss"),
           remarks: narrative,
-          reporter_id: reporter.user_id,
+          reporter_id: 1, //default muna
           validator_id: userId,
           location: featureLocation,
           iomp: userId,
-          file_name: ""
-        }
+          file_name: "",
+        },
       ],
-      uploads: []
+      uploads: [],
     };
 
     insertMomsEntry(moms_entry, (response) => {
       if (response.status == true) {
-        initialize()
-        setOpenPrompt(true)
-        setErrorPrompt(false)
-        setPromptTitle("Success")
-        setNotifMessage(response.message)
+        initialize();
+        setOpenPrompt(true);
+        setErrorPrompt(false);
+        setPromptTitle("Success");
+        setNotifMessage(response.message);
         setOpen(false);
-      }
-      else {
-        setOpenPrompt(true)
-        setErrorPrompt(true)
-        setPromptTitle("Fail")
-        setNotifMessage(response.message)
+      } else {
+        setOpenPrompt(true);
+        setErrorPrompt(true);
+        setPromptTitle("Fail");
+        setNotifMessage(response.message);
       }
     });
-  }
+  };
 
-  const [openPrompt, setOpenPrompt] = useState(false)
-  const [promptTitle, setPromptTitle] = useState("")
-  const [notifMessage, setNotifMessage] = useState("")
-  const [errorPrompt, setErrorPrompt] = useState(false)
+  const [openPrompt, setOpenPrompt] = useState(false);
+  const [promptTitle, setPromptTitle] = useState("");
+  const [notifMessage, setNotifMessage] = useState("");
+  const [errorPrompt, setErrorPrompt] = useState(false);
 
   useEffect(() => {
-    reloadTable()
-  }, [openPrompt])
+    reloadTable();
+  }, [openPrompt]);
 
   return (
     <Container>
-
       <PromptModal
         isOpen={openPrompt}
         error={errorPrompt}
@@ -349,9 +357,7 @@ const Moms = (props) => {
       />
 
       <Dialog open={open} onClose={handleClose} fullWidth>
-        <DialogTitle>
-          Enter new manifestation of movement
-        </DialogTitle>
+        <DialogTitle>Enter new manifestation of movement</DialogTitle>
         <DialogContent>
           <Grid item xs={12} style={{ paddingTop: 10 }}>
             <LocalizationProvider dateAdapter={AdapterDayjs}>
@@ -361,82 +367,103 @@ const Moms = (props) => {
                 onChange={(e) => {
                   setDateTimestamp(e);
                 }}
-                renderInput={(params) => <TextField style={{ width: '100%', paddingBottom: 10 }} {...params} />}
+                renderInput={(params) => (
+                  <TextField
+                    style={{ width: "100%", paddingBottom: 10 }}
+                    {...params}
+                  />
+                )}
               />
             </LocalizationProvider>
           </Grid>
           <Grid item xs={12}>
-            <FormControl fullWidth style={{ width: '100%', paddingBottom: 15 }}
-            >
-              <InputLabel id="demo-simple-select-label">Feature Type</InputLabel>
+            <FormControl fullWidth style={{ width: "100%", paddingBottom: 15 }}>
+              <InputLabel id="demo-simple-select-label">
+                Feature Type
+              </InputLabel>
               <Select
                 labelId="demo-simple-select-label"
                 id="demo-simple-select"
                 label="Feature Type"
                 value={selectedFeatureIndex}
-                onChange={e => {
+                onChange={(e) => {
                   setSelectedFeatureIndex(e.target.value);
-                  setSelectedFeatureName(selectedFeatureIndex != null ? (feature_list.find((o) => o.feature_id == selectedFeatureIndex)).feature : "");
+                  setSelectedFeatureName(
+                    selectedFeatureIndex != null
+                      ? feature_list.find(
+                          (o) => o.feature_id == selectedFeatureIndex
+                        ).feature
+                      : ""
+                  );
                 }}
               >
-                {
-                  feature_list && feature_list.map((row, index) => (
-                    <MenuItem key={index} value={row.feature_id}>{row.feature}</MenuItem>
-                  ))
-                }
+                {feature_list &&
+                  feature_list.map((row, index) => (
+                    <MenuItem key={index} value={row.feature_id}>
+                      {row.feature}
+                    </MenuItem>
+                  ))}
               </Select>
             </FormControl>
-            {selectedFeatureIndex != null &&
-              <FormControl fullWidth style={{ width: '100%', paddingBottom: 15 }}
+            {selectedFeatureIndex != null && (
+              <FormControl
+                fullWidth
+                style={{ width: "100%", paddingBottom: 15 }}
               >
-                <InputLabel id="demo-simple-select-label">Feature Name</InputLabel>
+                <InputLabel id="demo-simple-select-label">
+                  Feature Name
+                </InputLabel>
                 <Select
                   labelId="demo-simple-select-label"
                   id="demo-simple-select"
                   label="Feature Name"
                   value={featureName.name}
-                  onChange={e => {
+                  onChange={(e) => {
                     console.log("e.target.value:", e.target.value);
-                    setFeatureName(e.target.value)
+                    setFeatureName(e.target.value);
                   }}
                 >
-                  {
-                    featureNames.map((row, index) => (
-                      <MenuItem key={index} value={row}>{row.name}</MenuItem>
-                    ))
-                  }
+                  {featureNames.map((row, index) => (
+                    <MenuItem key={index} value={row}>
+                      {row.name}
+                    </MenuItem>
+                  ))}
                 </Select>
               </FormControl>
-            }
+            )}
           </Grid>
 
-          {featureName.instance_id == 0 &&
+          {featureName.instance_id == 0 && (
             <Grid item xs={12}>
               <TextField
                 error={existingFeatureName ? true : false}
-                helperText={existingFeatureName ? `This feature name already exists for the same feature type` : ""}
+                helperText={
+                  existingFeatureName
+                    ? `This feature name already exists for the same feature type`
+                    : ""
+                }
                 id="outlined-required"
                 label="Feature Name"
                 variant="outlined"
-                style={{ width: '100%', paddingBottom: 10 }}
-                onChange={e => {
+                style={{ width: "100%", paddingBottom: 10 }}
+                onChange={(e) => {
                   setFeatureName({
                     name: e.target.value,
-                    instance_id: 0
-                  })
+                    instance_id: 0,
+                  });
                 }}
               />
             </Grid>
-          }
+          )}
           <Grid item xs={12}>
             <TextField
               id="outlined-required"
               label="Landslide Feature Description"
               variant="outlined"
-              style={{ width: '100%', paddingBottom: 10 }}
+              style={{ width: "100%", paddingBottom: 10 }}
               value={featureDetails}
-              onChange={e => {
-                setFeatureDetails(e.target.value)
+              onChange={(e) => {
+                setFeatureDetails(e.target.value);
               }}
               multiline
               rows={6}
@@ -447,10 +474,10 @@ const Moms = (props) => {
               id="outlined-required"
               label="Narratives"
               variant="outlined"
-              style={{ width: '100%', paddingBottom: 10 }}
+              style={{ width: "100%", paddingBottom: 10 }}
               value={narrative}
-              onChange={e => {
-                setNarrative(e.target.value)
+              onChange={(e) => {
+                setNarrative(e.target.value);
               }}
               multiline
               rows={4}
@@ -461,81 +488,84 @@ const Moms = (props) => {
               id="outlined-required"
               label="Location"
               variant="outlined"
-              style={{ width: '100%', paddingBottom: 10 }}
+              style={{ width: "100%", paddingBottom: 10 }}
               value={featureLocation}
-              onChange={e => {
-                setFeatureLocation(e.target.value)
+              onChange={(e) => {
+                setFeatureLocation(e.target.value);
               }}
             />
           </Grid>
-          
-          <Grid item xs={12}>
-            <FormControl fullWidth style={{ width: '100%', paddingBottom: 15 }}
-            >
+
+          {/* <Grid item xs={12}>
+            <FormControl fullWidth style={{ width: "100%", paddingBottom: 15 }}>
               <InputLabel id="demo-simple-select-label">Reporter</InputLabel>
               <Select
                 labelId="demo-simple-select-label"
                 id="demo-simple-select"
                 label="Reporter"
                 value={`${reporter.first_name} ${reporter.last_name}`}
-                onChange={e => {
-                  console.log(e)
-                  setReporter(e.target.value)
+                onChange={(e) => {
+                  console.log(e);
+                  setReporter(e.target.value);
                 }}
                 renderValue={(selected) => selected}
-                MenuProps = {MenuProps}
+                MenuProps={MenuProps}
               >
                 {staffs.map((staff) => (
-                  <MenuItem key={staff.user_id} 
+                  <MenuItem
+                    key={staff.user_id}
                     // value={`${staff.first_name} ${staff.last_name}`}
                     value={staff}
                   >
-                    <ListItemText primary={`${staff.first_name} ${staff.last_name}`} />
+                    <ListItemText
+                      primary={`${staff.first_name} ${staff.last_name}`}
+                    />
                   </MenuItem>
                 ))}
               </Select>
             </FormControl>
-          </Grid>
+          </Grid> */}
 
-          <FormControl fullWidth style={{ width: '100%', paddingBottom: 15 }}
-          >
+          <FormControl fullWidth style={{ width: "100%", paddingBottom: 15 }}>
             <InputLabel id="demo-simple-select-label">Alert Levels</InputLabel>
             <Select
               labelId="demo-simple-select-label"
               id="demo-simple-select"
               label="Alert level"
-              onChange={e => {
+              onChange={(e) => {
                 setSelectedAlertLevel(e.target.value);
               }}
             >
-              <MenuItem key={0} value={0}>Alert level 0</MenuItem>
-              <MenuItem key={2} value={2}>Alert level 2</MenuItem>
-              <MenuItem key={3} value={3}>Alert level 3</MenuItem>
+              <MenuItem key={0} value={0}>
+                Alert level 0
+              </MenuItem>
+              <MenuItem key={2} value={2}>
+                Alert level 2
+              </MenuItem>
+              <MenuItem key={3} value={3}>
+                Alert level 3
+              </MenuItem>
             </Select>
           </FormControl>
-          <FormControl fullWidth style={{ width: '100%', paddingBottom: 15 }}>
+          <FormControl fullWidth style={{ width: "100%", paddingBottom: 15 }}>
             <input
-                accept="image/*"
-                style={{ display: 'none' }}
-                id="raised-button-file"
-                type="file"
-                multiple
-                onChange={e => {
-                  console.log(e.target.files)
-                    // handleUpload(e.target.files[0]);
-                }}
+              accept="image/*"
+              style={{ display: "none" }}
+              id="raised-button-file"
+              type="file"
+              multiple
+              onChange={(e) => {
+                console.log(e.target.files);
+                // handleUpload(e.target.files[0]);
+              }}
             />
 
-            <label htmlFor="raised-button-file" style={{textAlign: 'center'}}>
-                <Button variant="contained"
-                    component="span"
-                    sx={{ mx: 1 }}
-                >
-                    Upload MoMs Images
-                </Button>
+            <label htmlFor="raised-button-file" style={{ textAlign: "center" }}>
+              <Button variant="contained" component="span" sx={{ mx: 1 }}>
+                Upload MoMs Images
+              </Button>
             </label>
           </FormControl>
-
         </DialogContent>
         <DialogActions>
           <Button onClick={handleClose}>Cancel</Button>
@@ -543,23 +573,23 @@ const Moms = (props) => {
         </DialogActions>
       </Dialog>
 
-
-      <Grid container spacing={4} sx={{ mt: 2, mb: 6, padding: '2%' }}>
+      <Grid container spacing={4} sx={{ mt: 2, mb: 6, padding: "2%" }}>
         <Grid item xs={12}>
           <Grid container spacing={2}>
             <Grid item xs={12}>
               <Typography variant="h4">Manifestations of Movement</Typography>
             </Grid>
-            <MomsTable 
-              instances={instances}
-            />
+            <MomsTable instances={instances} />
             <Grid item xs={12}>
               <Grid container align="center">
                 <Grid item xs={12}>
-                  <Button variant="contained" onClick={handleClickOpen} style={{backgroundColor: "#ffd400", color: "black"}}>
+                  <Button
+                    variant="contained"
+                    onClick={handleClickOpen}
+                    style={{ backgroundColor: "#ffd400", color: "black" }}
+                  >
                     Add manifestations of movement
                   </Button>
-
                 </Grid>
               </Grid>
             </Grid>
@@ -569,6 +599,5 @@ const Moms = (props) => {
     </Container>
   );
 };
-
 
 export default Moms;

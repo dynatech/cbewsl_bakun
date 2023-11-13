@@ -215,6 +215,7 @@ const CaV = () => {
     householdMembers.map((member) => {
       tempMembers.push({
         ...member,
+        birthdate: moment(member.birthdate).format("YYYY-MM-DD"),
         pregnant: member.hasOwnProperty("pregnant") ? member.pregnant : false,
         disability: member.disabled
           ? member.disability == "" || member.disability == null
