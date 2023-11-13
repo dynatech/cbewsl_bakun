@@ -28,6 +28,7 @@ import { addEvent } from '../../apis/EventsManagement'
 import PromptModal from './modals/PromptModal';
 import { SentimentDissatisfied } from '@mui/icons-material';
 import AddPhotoAlternateIcon from '@mui/icons-material/AddPhotoAlternate';
+import Swal from 'sweetalert2'
 
 const localizer = momentLocalizer(moment);
 const AddActivity = (props) => {
@@ -116,19 +117,30 @@ const AddActivity = (props) => {
         addEvent(formData, (response) => {
             if(response.status){
                 console.log(formData)
-                setOpenPrompt(true)
-                setPromptTitle("Success")
-                setErrorPrompt(false)
-                setNotifMessage(response.feedback)
-                setOpenModal(false);
+                // setOpenPrompt(true)
+                // setPromptTitle("Success")
+                // setErrorPrompt(false)
+                // setNotifMessage(response.feedback)
+                
                 getAllEvents()
                 setEditElement(null)
+                Swal.fire({
+                    icon:'success',
+                    title:'Success!',
+                    text: response.feedback
+                })
+                setOpenModal(false);
             }
             else{
-                setOpenPrompt(true)
-                setErrorPrompt(true)
-                setPromptTitle("Error!")
-                setNotifMessage(response.feedback)
+                // setOpenPrompt(true)
+                // setErrorPrompt(true)
+                // setPromptTitle("Error!")
+                // setNotifMessage(response.feedback)
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Error!',
+                    text: response.feedback
+                })
                 setOpenModal(false);
                 setEditElement(null)
             }
