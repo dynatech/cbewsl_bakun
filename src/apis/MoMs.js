@@ -1,11 +1,11 @@
 import { API_URL } from "../config";
 import axios from "axios";
-import { CBEWSL_SITE } from "../host";
+import { CBEWSL_SITE, CBEWSL_SITE_CODE } from "../host";
 
 export const getFeatures = (callback) => {
   axios
     .get(
-      `${API_URL}/api/manifestations_of_movement/get_moms_features/${CBEWSL_SITE}`
+      `${API_URL}/api/manifestations_of_movement/get_moms_features/${CBEWSL_SITE_CODE}`
     )
     .then((response) => {
       callback(response.data);
@@ -17,7 +17,7 @@ export const getInstances = (callback) => {
   let temp = "http://192.168.150.110:5000";
   axios
     .get(
-      `${API_URL}/api/manifestations_of_movement/get_moms_instances/${CBEWSL_SITE}`
+      `${API_URL}/api/manifestations_of_movement/get_moms_instances/${CBEWSL_SITE_CODE}`
     )
     .then((response) => {
       callback(response.data);

@@ -86,11 +86,19 @@ const SurficialMarkers = (props) => {
     fetchAll();
   }, []);
 
-  // useEffect(() => {
-  //   setInterval(() => {
-  //     fetchAll();
-  //   }, 10000);
-  // }, []);
+  useEffect(() => {
+    setInterval(() => {
+      fetchAll();
+    }, 10000);
+  }, []);
+
+  const initialize = () => {
+    setMeasurement({
+      date: new Date(),
+      time: new Date(),
+      reporter: [],
+    });
+  };
 
   const fetchAll = () => {
     let endDate = moment(new Date("2022-10-25")).format("YYYY-MM-DD HH:mm:00");
@@ -105,11 +113,6 @@ const SurficialMarkers = (props) => {
 
     getTableSurficial(submitData, (response) => {
       if (response.status) {
-        // let tempColumns = [
-        //   { accessorKey: "date", header: "Date" },
-        //   { accessorKey: "time", header: "Time" },
-        //   { accessorKey: "measurer", header: "Measurer" },
-        // ];
         let tempColumns = [
           { name: "date", label: "Date" },
           { name: "time", label: "Time" },
@@ -117,8 +120,6 @@ const SurficialMarkers = (props) => {
 
         response.data.markers.map((col) => {
           tempColumns.push({
-            // accessorKey: col,
-            // header: `${col.toUpperCase()} (CM)`,
             name: col,
             label: `${col.toUpperCase()} (CM)`,
           });
@@ -143,7 +144,6 @@ const SurficialMarkers = (props) => {
     });
 
     getStaffs((response) => {
-      console.log("staaaaffa", response);
       if (response.status) {
         setStaffs(response.data);
       }
@@ -171,13 +171,8 @@ const SurficialMarkers = (props) => {
   };
 
   const reporterCheck = () => {
-    // let valid = true
-    // if(measurement.hasOwnProperty("reporter") && measurement.reporter != ""){
-
-    // }else if (measurement.hasOwnProperty("re"))
-
     return measurement.hasOwnProperty("reporter")
-      ? measurement.reporter != ""
+      ? measurement.reporter.length > 0
         ? true
         : false
       : measurement.hasOwnProperty("reporterOther")
@@ -195,6 +190,7 @@ const SurficialMarkers = (props) => {
     console.log("measurement", measurement);
     let valid = checkRequired() && reporterCheck();
 
+    console.log("wwww", measurement.reporter);
     console.log("reporter", reporterCheck());
     console.log("checkRequired", checkRequired());
     console.log("valid", valid);
@@ -218,41 +214,42 @@ const SurficialMarkers = (props) => {
       };
 
       console.log("submit", submitData);
-      // if (isUpdate) {
-      //   deletePrevMeasurement(selectedMoId, (response) => {
-      //     sendMeasurement(submitData, (response) => {
-      //       if (response.status == true) {
-      //         setOpen(false);
-      //         setOpenPrompt(true);
-      //         setErrorPrompt(false);
-      //         setPromptTitle("Success");
-      //         setNotifMessage("Ground measurements succesfully saved!");
-      //         fetchAll();
-      //       } else {
-      //         setOpenPrompt(true);
-      //         setErrorPrompt(true);
-      //         setPromptTitle("Fail");
-      //         setNotifMessage("Failed to save ground measurement.");
-      //       }
-      //     });
-      //   });
-      // } else {
-      //   sendMeasurement(submitData, (response) => {
-      //     if (response.status == true) {
-      //       setOpen(false);
-      //       setOpenPrompt(true);
-      //       setErrorPrompt(false);
-      //       setPromptTitle("Success");
-      //       setNotifMessage("Ground measurements succesfully sent!");
-      //       fetchAll();
-      //     } else {
-      //       setOpenPrompt(true);
-      //       setErrorPrompt(true);
-      //       setPromptTitle("Fail");
-      //       setNotifMessage("Ground measurements sending failed!");
-      //     }
-      //   });
-      // }
+      if (isUpdate) {
+        deletePrevMeasurement(selectedMoId, (response) => {
+          sendMeasurement(submitData, (response) => {
+            if (response.status == true) {
+              setOpen(false);
+              setOpenPrompt(true);
+              setErrorPrompt(false);
+              setPromptTitle("Success");
+              setNotifMessage("Ground measurements succesfully saved!");
+              fetchAll();
+            } else {
+              setOpenPrompt(true);
+              setErrorPrompt(true);
+              setPromptTitle("Fail");
+              setNotifMessage("Failed to save ground measurement.");
+            }
+          });
+        });
+      } else {
+        sendMeasurement(submitData, (response) => {
+          if (response.status == true) {
+            setOpen(false);
+            setOpenPrompt(true);
+            setErrorPrompt(false);
+            setPromptTitle("Success");
+            setNotifMessage("Ground measurements succesfully sent!");
+            fetchAll();
+            initialize();
+          } else {
+            setOpenPrompt(true);
+            setErrorPrompt(true);
+            setPromptTitle("Fail");
+            setNotifMessage("Ground measurements sending failed!");
+          }
+        });
+      }
     } else {
       setIncomplete(true);
     }
@@ -265,10 +262,7 @@ const SurficialMarkers = (props) => {
   const handleClose = () => {
     setOpen(false);
     setIsUpdate(false);
-    setMeasurement({
-      date: new Date(),
-      time: new Date(),
-    });
+    initialize();
   };
 
   // const handleRowClick = (r, i) => {
@@ -506,7 +500,7 @@ const SurficialMarkers = (props) => {
             <Select
               error={
                 incomplete &&
-                (measurement.reporter == "" ||
+                (measurement.reporter.length <= 0 ||
                   measurement.reporter == undefined) &&
                 (measurement.reporterOther == "" ||
                   measurement.reporterOther == undefined)
@@ -515,7 +509,7 @@ const SurficialMarkers = (props) => {
               }
               helperText={
                 incomplete &&
-                (measurement.reporter == "" ||
+                (measurement.reporter <= 0 ||
                   measurement.reporter == undefined) &&
                 (measurement.reporterOther == "" ||
                   measurement.reporterOther == undefined)
@@ -528,10 +522,6 @@ const SurficialMarkers = (props) => {
               multiple
               value={measurement.reporter}
               onChange={(e) => {
-                // setMeasurement({
-                //   ...measurement,
-                //   reporter: e.target.value,
-                // });
                 const {
                   target: { value },
                 } = e;
@@ -542,14 +532,12 @@ const SurficialMarkers = (props) => {
                     typeof value === "string" ? value.split(", ") : value,
                 });
               }}
-              // renderValue={(selected) => selected.join(", ")}
               MenuProps={MenuProps}
             >
               {staffs.map((staff) => (
                 <MenuItem
                   key={staff.user_id}
                   value={`${staff.first_name} ${staff.last_name}`}
-                  // value={staff.user_id}
                 >
                   {`${staff.first_name} ${staff.last_name}`}
                 </MenuItem>
@@ -633,7 +621,11 @@ const SurficialMarkers = (props) => {
             <Grid item xs={12}>
               <Grid container align="center">
                 <Grid item xs={12}>
-                  <Button variant="contained" onClick={handleClickOpen} style={{backgroundColor: "#ffd400", color: "black"}}>
+                  <Button
+                    variant="contained"
+                    onClick={handleClickOpen}
+                    style={{ backgroundColor: "#ffd400", color: "black" }}
+                  >
                     Add surficial marker measurement
                   </Button>
                 </Grid>
