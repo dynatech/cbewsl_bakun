@@ -7,14 +7,14 @@ import leon_logo from '../../assets/leon_municipal_seal.png';
 import letter_footer from '../../assets/phivolcs-letter-footer.png';
 import Pdf from "react-to-pdf";
 import moment from 'moment';
-import {CBEWSL_SITE_NAME} from "../../host"
+import {CBEWSL_SITE_CODE} from "../../host"
 
 const Bulletin = () => {
     const location = useLocation();
     const ref = createRef();
     const [isRendering, setIsRendering] = useState(false);
     const currentYear = moment().format('YYYY');
-    const siteName = CBEWSL_SITE_NAME.toUpperCase()
+    const siteName = CBEWSL_SITE_CODE.toUpperCase()
 
     return (
         <Fragment>
@@ -27,9 +27,9 @@ const Bulletin = () => {
                 border: '2px solid black'
             }}>
                 <Grid container justifyContent='center' alignItems='flex-start' textAlign='center'>
-                    <Grid item xs={12} md={12} lg={12} style={{marginBottom: 10}}>
-                        <Grid container spacing={0} alignItems="center" justifyContent="center">
-                            <Grid item xs={3}>
+                    {/* <Grid item xs={12} md={12} lg={12} style={{marginBottom: 10}}> */}
+                        <Grid container spacing={0} alignItems="center" justifyContent="flex-start">
+                            <Grid item xs={4}>
                                 <img src={mdrrmc_logo}
                                     alt='letter-header'
                                     style={{
@@ -38,20 +38,20 @@ const Bulletin = () => {
                                         height: 120
                                     }} />
                             </Grid>
-                            <Grid item xs={5} style={{textAlign: 'center'}}>
-                                <Typography variant='h6'>
+                            <Grid item xs={4} style={{textAlign: 'center'}}>
+                                <Typography variant='h5'>
                                     <b>Republic of the Phillipines</b>
                                 </Typography>
-                                <Typography variant='h5'>
+                                <Typography variant='h6'>
                                     <b>Province of Benguet </b>
                                 </Typography>
-                                <Typography variant='h5'>
+                                <Typography variant='h6'>
                                     <b>Municipality of Bakun</b>
                                 </Typography>
-                                <Typography variant='h5'>
+                                <Typography variant='h6'>
                                     <b>Community-Based Early Warning </b>
                                 </Typography>
-                                <Typography variant='h5'>
+                                <Typography variant='h6'>
                                     <b>Systems for Landslides</b>
                                 </Typography>     
                             </Grid>
@@ -64,7 +64,7 @@ const Bulletin = () => {
                                         height: 120
                                     }} />
                             </Grid> */}
-                        </Grid>
+                        {/* </Grid> */}
                     </Grid>
                     <Grid item xs={12} md={12} lg={12} style={{marginBottom: 20}}>
                         <Typography variant='h4'>
