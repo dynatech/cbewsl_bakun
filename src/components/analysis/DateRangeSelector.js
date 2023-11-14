@@ -80,7 +80,12 @@ function DateRangeSelector(props) {
             aria-controls="simple-menu"
             aria-haspopup="true"
             onClick={hourIntervalHandleClick}
-            style={{ marginRight: 6 }}
+            style={{
+              marginRight: 6,
+              float: "right",
+              backgroundColor: "#ffd400",
+              color: "black",
+            }}
             endIcon={<ArrowDropDown />}
           >
             {default_label}

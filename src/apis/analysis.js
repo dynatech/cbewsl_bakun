@@ -89,7 +89,7 @@ export function insertMarkerEvent(input, callback) {
 export function getRainfallPlotData(input, callback) {
   const { site_code, ts_end, days_diff } = input;
   // const api_link = `${API_URL}/api/rainfall/get_rainfall_plot_data/${CBEWSL_SITE}/${ts_end}/${days_diff}`;
-  const api_link = `http://192.168.150.110:5000//api/rainfall/get_rainfall_plot_data/${CBEWSL_SITE_CODE}/${ts_end}/${days_diff}`;
+  const api_link = `http://192.168.150.110:5000/api/rainfall/get_rainfall_plot_data/${CBEWSL_SITE_CODE}/${ts_end}/${days_diff}`;
 
   axios
     .get(api_link)
@@ -113,7 +113,8 @@ export function getSubsurfacePlotData(input, callback) {
   } = input;
 
   const api_link =
-    `${API_URL}/api/subsurface/get_subsurface_plot_data/` +
+    // `${API_URL}/api/subsurface/get_subsurface_plot_data/` +
+    `http://192.168.150.110:5000/api/subsurface/get_subsurface_plot_data/` +
     `${subsurface_column}/${ts_end}/${ts_start}/${hour_value}` +
     `?include_comms_health=${include_comms_health}`;
 
@@ -148,7 +149,8 @@ export function getSurfaceNodeHealth(input, callback) {
 export function getSubsurfaceNodeLevel(input, callback) {
   const { subsurface_column, ts_end, ts_start, node_id } = input;
   console.log("node level input", input);
-  const api_link = `${API_URL}/api/subsurface/get_subsurface_node_level/${subsurface_column}/${ts_end}/${ts_start}/${node_id}`;
+  // const api_link = `${API_URL}/api/subsurface/get_subsurface_node_level/${subsurface_column}/${ts_end}/${ts_start}/${node_id}`;
+  const api_link = `http://192.168.150.110:5000/api/subsurface/get_subsurface_node_level/${subsurface_column}/${ts_end}/${ts_start}/${node_id}`;
 
   axios
     .get(api_link)
@@ -238,7 +240,8 @@ export function getMOMsInstances(site_code, callback) {
 }
 
 export function getSiteSubsurfaceColumns(site_code, callback) {
-  const api_link = `${API_URL}/api/subsurface/get_site_subsurface_columns/${CBEWSL_SITE_CODE}`;
+  // const api_link = `${API_URL}/api/subsurface/get_site_subsurface_columns/${CBEWSL_SITE_CODE}`;
+  const api_link = `http://192.168.150.110:5000/api/subsurface/get_site_subsurface_columns/${CBEWSL_SITE_CODE}`;
 
   axios
     .get(api_link)
