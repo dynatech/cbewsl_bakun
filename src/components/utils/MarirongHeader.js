@@ -9,6 +9,10 @@ import {
   Toolbar,
   Tooltip,
   Avatar,
+  Badge,
+  Popover,
+  Card,
+  CardContent
 } from "@mui/material";
 import DostSeal from "../../assets/phivolcs_seal.png";
 import DynaslopeSealMini from "../../assets/dynaslope_seal_mini.png";
@@ -19,7 +23,7 @@ import bakun_lewc_seal from "../../assets/bak_lewc_seal.png";
 import HazardMap from "../../assets/hazard_map.jpg";
 import male_icon from "../../assets/male_icon.png";
 import female_icon from "../../assets/female_icon.png";
-
+import CloseIcon from '@mui/icons-material/Close';
 import MenuIcon from "@mui/icons-material/Menu";
 import Menu from "@mui/material/Menu";
 import MenuItem from "@mui/material/MenuItem";
@@ -35,6 +39,34 @@ const MarirongHeader = () => {
   const [value, setValue] = useState(0);
   const [server_time, setServerTime] = useState("");
   const [profileIcon, setProfileIcon] = useState(null);
+
+  const [notifs, setNotifs] = useState([]);
+  const [openNotification, setOpenNotification] = useState(false);
+  const [notifColor, setNotifColor] = useState(false);
+  const [color, setColor] = useState('#0492C2');
+
+  const handleOpenNotifs = () => {
+    setOpenNotification(true);
+    setNotifColor(true);
+    if (notifColor === true) {
+      setColor('white');
+    }
+  };
+
+  const handleCloseNotifs = () => {
+    setOpenNotification(false);
+  };
+
+  const handleReadNotifs = notification_id => {
+    // readNotifications(notification_id, data => {
+    //   const { status } = data;
+    //   if (status === true) {
+    //     getNotifications(currentUser, response => {
+    //       setNotifs(response.data);
+    //     });
+    //   }
+    // });
+  };
 
   const handleChange = (event, newValue) => {
     setValue(newValue);
@@ -277,13 +309,57 @@ const MarirongHeader = () => {
         <Grid item xs={12} md={12} lg={2}>
           <div style={{ textAlign: "end" }}>
             <Tooltip title="Notification">
-              <IconButton onClick={() => {}} sx={{ p: 2, mt: 4 }}>
-                <NotificationsNoneIcon
-                  alt="Notification"
-                  style={{ color: "#16526D" }}
-                />
+              <IconButton onClick={handleOpenNotifs} sx={{ p: 2, mt: 4 }}>
+                <Badge badgeContent={notifs.filter(x => x.is_read === false).length} color="error">
+                  <NotificationsNoneIcon
+                    alt="Notification"
+                    style={{ color: "#16526D" }}
+                  />
+                </Badge>
               </IconButton>
             </Tooltip>
+            <Popover
+              open={openNotification}
+              anchorEl={notifs}
+              onClose={handleCloseNotifs}
+              anchorOrigin={{
+                vertical:'top',
+                horizontal: 'right'
+              }}>
+                {notifs.map(notif => {
+                  const {notification_id, is_read} = notif;
+                  return (
+                    is_read === false && (
+                      <Card
+                        sx={{
+                          maxWidth: 400,
+                          maxHeight: 'auto',
+                          borderBottom: 1,
+                          cursor: 'pointer'
+                        }}>
+                        <div style={{ backgroundColor: color }}>
+                          <div style={{ marginLeft: 350 }}>
+                            <IconButton
+                              onClick={event =>
+                                handleReadNotifs(notification_id)
+                              }
+                            >
+                              <CloseIcon />
+                            </IconButton>
+                          </div>
+                          <CardContent>{notif.message}</CardContent>
+                          <div style={{ marginLeft: 250 }}>
+                            <Typography fontSize={14} color="#636363">
+                              {moment(notif.ts).format('YYYY-MM-DD hh:mm a')}
+                            </Typography>
+                          </div>
+                        </div>
+                      </Card>
+                    )
+                  );
+                })}
+            </Popover>
+
             <Tooltip title="Open settings">
               <IconButton
                 onClick={(e) => {
