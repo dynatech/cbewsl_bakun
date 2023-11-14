@@ -103,7 +103,7 @@ function prepareSiteAddress(site_details, include_site_code = true, position = "
 }
 
 function EarthquakeMap(props) {
-    const { eqEvents } = props;
+    const { eqEvents, zoomIn } = props;
     const sites = require("./../data/sites.json")
     const state = {
         lat: 16.790700,
@@ -114,6 +114,12 @@ function EarthquakeMap(props) {
 
     let position = [state.lat, state.lng];
     let { zoom } = state;
+    if (zoomIn) {
+        const { latitude, longitude } = eqEvents[0];
+        position = [latitude, longitude];
+        zoom = 10;
+    }
+
     const ref = useRef();
     const is_one = eqEvents.length === 1;
     const [show_popup, setShowPopUp] = useState(false);
@@ -295,7 +301,8 @@ function EarthquakeChart(props) {
         <Fragment>
             <Grid container spacing={2} style={{ marginTop: 30 }}>
                 <Grid item md={6} container>
-                    <EarthquakeMap eqEvents={eqEvents} />
+                    {/* <EarthquakeMap eqEvents={eqEvents} /> */}
+                    <EarthquakeMap eqEvents={chosen_events} zoomIn={chosen_events.length === 1}/>
                 </Grid>
                 <Grid item md={6} container>
                     <AppBar position="static" style={{backgroundColor:"#dddddd"}}>
