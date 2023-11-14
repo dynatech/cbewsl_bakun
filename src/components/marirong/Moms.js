@@ -5,6 +5,7 @@ import {
   Button,
   Typography,
   FormControl,
+  FormHelperText,
 } from "@mui/material";
 import FabMuiTable from "../utils/MuiTable";
 import TextField from "@mui/material/TextField";
@@ -31,6 +32,7 @@ import PromptModal from "./modals/PromptModal";
 import { makeStyles } from "@material-ui/core/styles";
 import MomsTable from "./MomsTable";
 import ListItemText from "@mui/material/ListItemText";
+import { CBEWSL_SITE_CODE } from "../../host";
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -56,36 +58,32 @@ const Moms = (props) => {
   const classes = useStyles();
 
   const [open, setOpen] = useState(false);
-  const [feature, setFeature] = useState("");
 
   const [datetimestamp, setDateTimestamp] = useState(new Date());
   const [selectedFeatureIndex, setSelectedFeatureIndex] = useState(null);
-  const [selectedFeatureName, setSelectedFeatureName] = useState("");
-  const [selectedAlertLevel, setSelectedAlertLevel] = useState(0);
+  // const [selectedFeatureName, setSelectedFeatureName] = useState("");
+  const [selectedAlertLevel, setSelectedAlertLevel] = useState(null);
   const [narrative, setNarrative] = useState("");
   const [featureDetails, setFeatureDetails] = useState("");
   const [featureLocation, setFeatureLocation] = useState("");
-  const [reporter, setReporter] = useState({
-    user_id: "",
-    first_name: "",
-    last_name: "",
-  });
-  const [featureName, setFeatureName] = useState({
-    name: "",
-    instance_id: 0,
-  });
+  // const [reporter, setReporter] = useState({
+  //   user_id: "",
+  //   first_name: "",
+  //   last_name: "",
+  // });
+  const [featureName, setFeatureName] = useState({});
   const [featureNames, setFeatureNames] = useState([
     {
       name: "New Instance",
-      instance_id: 0,
+      instance_id: null,
     },
   ]);
 
   const [instances, setInstances] = useState([]);
-  const [instanceID, setInstanceID] = useState(null);
+  // const [instanceID, setInstanceID] = useState(null);
   const [staffs, setStaffs] = useState([]);
 
-  const [existingFeatureName, setExistingFeatureName] = useState(false);
+  // const [existingFeatureName, setExistingFeatureName] = useState(false);
   const [userId, setUserId] = useState(null);
 
   useEffect(() => {
@@ -93,11 +91,11 @@ const Moms = (props) => {
     setUserId(credentials.user.user_id);
   }, []);
 
-  useEffect(() => {
-    let check = featureNames.find((o) => o.name === featureName.name);
-    if (check) setExistingFeatureName(true);
-    else setExistingFeatureName(false);
-  }, [featureName]);
+  // useEffect(() => {
+  //   let check = featureNames.find((o) => o.name === featureName.name);
+  //   if (check) setExistingFeatureName(true);
+  //   else setExistingFeatureName(false);
+  // }, [featureName]);
 
   // useEffect(() => {
   //   setFeatureDetails(selectedFeatureIndex != null ? (feature_list.find((o) => o.feature_id == selectedFeatureIndex)).details : "")
@@ -193,30 +191,32 @@ const Moms = (props) => {
     setFeatureName("");
 
     getFeatures((response) => {
-      let tempData = response.data;
+      if (response.status) {
+        let tempData = response.data;
 
-      tempData.map((feature) => {
-        if (feature.feature_id == selectedFeatureIndex) {
-          let tempFeatureNames = [
-            {
-              name: "New Instance",
-              instance_id: 0,
-            },
-          ];
+        tempData.map((feature) => {
+          if (feature.feature_id == selectedFeatureIndex) {
+            let tempFeatureNames = [
+              {
+                name: "New Instance",
+                instance_id: null,
+              },
+            ];
 
-          console.log("feature:", feature);
-          if (feature.instances.length > 0) {
-            feature.instances.map((instance) => {
-              tempFeatureNames.push({
-                instance_id: instance.instance_id,
-                name: instance.feature_name,
+            console.log("feature:", feature);
+            if (feature.instances.length > 0) {
+              feature.instances.map((instance) => {
+                tempFeatureNames.push({
+                  instance_id: instance.instance_id,
+                  name: instance.feature_name,
+                });
               });
-            });
-          }
+            }
 
-          setFeatureNames(tempFeatureNames);
-        }
-      });
+            setFeatureNames(tempFeatureNames);
+          }
+        });
+      }
     });
 
     setFeatureDetails(
@@ -236,6 +236,7 @@ const Moms = (props) => {
         setInstances(response);
       }
     });
+
     getStaffs((response) => {
       setStaffs(response.data);
     });
@@ -258,10 +259,6 @@ const Moms = (props) => {
     });
   };
 
-  const handleChange = (event) => {
-    setFeature(event.target.value);
-  };
-
   const handleClickOpen = () => {
     setOpen(true);
   };
@@ -274,67 +271,83 @@ const Moms = (props) => {
   const initialize = () => {
     setDateTimestamp(new Date());
     setSelectedFeatureIndex(null);
-    setSelectedFeatureName("");
-    setSelectedAlertLevel(0);
+    // setSelectedFeatureName("");
+    setSelectedAlertLevel(null);
     setFeatureDetails("");
     setNarrative("");
     setFeatureLocation("");
-    setReporter({
-      user_id: "",
-      first_name: "",
-      last_name: "",
-    });
-    setFeatureName({
-      name: "",
-      instance_id: 0,
-    });
+    // setReporter({
+    //   user_id: "",
+    //   first_name: "",
+    //   last_name: "",
+    // });
+    setFeatureName({});
     setFeatureNames([
       {
         name: "New Instance",
-        instance_id: 0,
+        instance_id: null,
       },
     ]);
+    setIncomplete(false);
+  };
+
+  const [incomplete, setIncomplete] = useState(false);
+  const checkRequired = () => {
+    if (selectedAlertLevel == null || selectedFeatureIndex == null)
+      return false;
+    else if (featureName.instance_id == null && featureLocation == "")
+      return false;
+    else if (!featureName.hasOwnProperty("instance_id")) return false;
+    else return true;
   };
 
   const handleSubmit = () => {
-    let moms_entry = {
-      site_code: "mar",
-      moms_list: [
-        {
-          alert_level: selectedAlertLevel,
-          instance_id: featureName.instance_id,
-          feature_name: featureName.name,
-          feature_type: feature_list.find(
-            (o) => o.feature_id == selectedFeatureIndex
-          ).feature,
-          report_narrative: featureDetails,
-          observance_ts: moment(datetimestamp).format("YYYY-MM-DD HH:mm:ss"),
-          remarks: narrative,
-          reporter_id: 1, //default muna
-          validator_id: userId,
-          location: featureLocation,
-          iomp: userId,
-          file_name: "",
-        },
-      ],
-      uploads: [],
-    };
+    let valid = checkRequired();
 
-    insertMomsEntry(moms_entry, (response) => {
-      if (response.status == true) {
-        initialize();
-        setOpenPrompt(true);
-        setErrorPrompt(false);
-        setPromptTitle("Success");
-        setNotifMessage(response.message);
-        setOpen(false);
-      } else {
-        setOpenPrompt(true);
-        setErrorPrompt(true);
-        setPromptTitle("Fail");
-        setNotifMessage(response.message);
-      }
-    });
+    console.log("valid", valid);
+    if (valid) {
+      let moms_entry = {
+        site_code: CBEWSL_SITE_CODE,
+        moms_list: [
+          {
+            alert_level: selectedAlertLevel,
+            instance_id: featureName.instance_id,
+            feature_name:
+              featureName.instance_id == null ? null : featureName.name,
+            feature_type: feature_list.find(
+              (o) => o.feature_id == selectedFeatureIndex
+            ).feature,
+            report_narrative: featureDetails,
+            observance_ts: moment(datetimestamp).format("YYYY-MM-DD HH:mm:ss"),
+            remarks: narrative,
+            reporter_id: 1, //default muna
+            validator_id: userId,
+            location: featureLocation,
+            iomp: userId,
+            file_name: "",
+          },
+        ],
+        uploads: [],
+      };
+
+      insertMomsEntry(moms_entry, (response) => {
+        if (response.status == true) {
+          initialize();
+          setOpenPrompt(true);
+          setErrorPrompt(false);
+          setPromptTitle("Success");
+          setNotifMessage(response.message);
+          setOpen(false);
+        } else {
+          setOpenPrompt(true);
+          setErrorPrompt(true);
+          setPromptTitle("Fail");
+          setNotifMessage(response.message);
+        }
+      });
+    } else {
+      setIncomplete(true);
+    }
   };
 
   const [openPrompt, setOpenPrompt] = useState(false);
@@ -377,24 +390,29 @@ const Moms = (props) => {
             </LocalizationProvider>
           </Grid>
           <Grid item xs={12}>
-            <FormControl fullWidth style={{ width: "100%", paddingBottom: 15 }}>
+            <FormControl
+              fullWidth
+              style={{ width: "100%", paddingBottom: 15 }}
+              error={incomplete && selectedFeatureIndex == null}
+            >
               <InputLabel id="demo-simple-select-label">
                 Feature Type
               </InputLabel>
               <Select
+                error={incomplete && selectedFeatureIndex == null}
                 labelId="demo-simple-select-label"
                 id="demo-simple-select"
                 label="Feature Type"
                 value={selectedFeatureIndex}
                 onChange={(e) => {
                   setSelectedFeatureIndex(e.target.value);
-                  setSelectedFeatureName(
-                    selectedFeatureIndex != null
-                      ? feature_list.find(
-                          (o) => o.feature_id == selectedFeatureIndex
-                        ).feature
-                      : ""
-                  );
+                  // setSelectedFeatureName(
+                  //   selectedFeatureIndex != null
+                  //     ? feature_list.find(
+                  //         (o) => o.feature_id == selectedFeatureIndex
+                  //       ).feature
+                  //     : ""
+                  // );
                 }}
               >
                 {feature_list &&
@@ -404,11 +422,15 @@ const Moms = (props) => {
                     </MenuItem>
                   ))}
               </Select>
+              <FormHelperText>
+                {incomplete && selectedFeatureIndex == null && "required"}
+              </FormHelperText>
             </FormControl>
             {selectedFeatureIndex != null && (
               <FormControl
                 fullWidth
                 style={{ width: "100%", paddingBottom: 15 }}
+                error={incomplete && !featureName.hasOwnProperty("instance_id")}
               >
                 <InputLabel id="demo-simple-select-label">
                   Feature Name
@@ -429,11 +451,16 @@ const Moms = (props) => {
                     </MenuItem>
                   ))}
                 </Select>
+                <FormHelperText>
+                  {incomplete &&
+                    !featureName.hasOwnProperty("instance_id") &&
+                    "required"}
+                </FormHelperText>
               </FormControl>
             )}
           </Grid>
 
-          {featureName.instance_id == 0 && (
+          {/* {featureName.instance_id == 0 && (
             <Grid item xs={12}>
               <TextField
                 error={existingFeatureName ? true : false}
@@ -454,7 +481,7 @@ const Moms = (props) => {
                 }}
               />
             </Grid>
-          )}
+          )} */}
           <Grid item xs={12}>
             <TextField
               id="outlined-required"
@@ -483,18 +510,23 @@ const Moms = (props) => {
               rows={4}
             />
           </Grid>
-          <Grid item xs={12}>
-            <TextField
-              id="outlined-required"
-              label="Location"
-              variant="outlined"
-              style={{ width: "100%", paddingBottom: 10 }}
-              value={featureLocation}
-              onChange={(e) => {
-                setFeatureLocation(e.target.value);
-              }}
-            />
-          </Grid>
+          {featureName.hasOwnProperty("instance_id") &&
+            featureName.instance_id == null && (
+              <Grid item xs={12}>
+                <TextField
+                  error={incomplete && featureLocation == ""}
+                  helperText={incomplete && featureLocation == "" && "required"}
+                  id="outlined-required"
+                  label="Location"
+                  variant="outlined"
+                  style={{ width: "100%", paddingBottom: 10 }}
+                  value={featureLocation}
+                  onChange={(e) => {
+                    setFeatureLocation(e.target.value);
+                  }}
+                />
+              </Grid>
+            )}
 
           {/* <Grid item xs={12}>
             <FormControl fullWidth style={{ width: "100%", paddingBottom: 15 }}>
@@ -526,9 +558,14 @@ const Moms = (props) => {
             </FormControl>
           </Grid> */}
 
-          <FormControl fullWidth style={{ width: "100%", paddingBottom: 15 }}>
+          <FormControl
+            fullWidth
+            style={{ width: "100%", paddingBottom: 15 }}
+            error={incomplete && selectedAlertLevel == null}
+          >
             <InputLabel id="demo-simple-select-label">Alert Levels</InputLabel>
             <Select
+              error={incomplete && selectedAlertLevel == null}
               labelId="demo-simple-select-label"
               id="demo-simple-select"
               label="Alert level"
@@ -546,6 +583,9 @@ const Moms = (props) => {
                 Alert level 3
               </MenuItem>
             </Select>
+            <FormHelperText>
+              {incomplete && selectedAlertLevel == null && "required"}
+            </FormHelperText>
           </FormControl>
           <FormControl fullWidth style={{ width: "100%", paddingBottom: 15 }}>
             <input
