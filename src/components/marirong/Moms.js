@@ -33,6 +33,7 @@ import { makeStyles } from "@material-ui/core/styles";
 import MomsTable from "./MomsTable";
 import ListItemText from "@mui/material/ListItemText";
 import { CBEWSL_SITE_CODE } from "../../host";
+import Swal from 'sweetalert2'
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -333,16 +334,26 @@ const Moms = (props) => {
       insertMomsEntry(moms_entry, (response) => {
         if (response.status == true) {
           initialize();
-          setOpenPrompt(true);
-          setErrorPrompt(false);
-          setPromptTitle("Success");
-          setNotifMessage(response.message);
+          // setOpenPrompt(true);
+          // setErrorPrompt(false);
+          // setPromptTitle("Success");
+          // setNotifMessage(response.message);
+          Swal.fire({
+            icon:'success',
+            title:'Success!',
+            text: 'Successfully saved manifestations of movement'
+          })
           setOpen(false);
         } else {
-          setOpenPrompt(true);
-          setErrorPrompt(true);
-          setPromptTitle("Fail");
-          setNotifMessage(response.message);
+          // setOpenPrompt(true);
+          // setErrorPrompt(true);
+          // setPromptTitle("Fail");
+          // setNotifMessage(response.message);
+          Swal.fire({
+            icon: 'error',
+            title: 'Error!',
+            text: 'Error on saving manifestations of movement, please contact developers'
+          })
         }
       });
     } else {
