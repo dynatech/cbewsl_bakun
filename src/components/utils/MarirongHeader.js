@@ -34,9 +34,7 @@ const MarirongHeader = () => {
   let navigate = useNavigate();
   const [value, setValue] = useState(0);
   const [server_time, setServerTime] = useState("");
-  // const [profilePicture] = useState(null);
   const [profileIcon, setProfileIcon] = useState(null);
-  // const [imageUrl, setImageUrl] = useState(null);
 
   const handleChange = (event, newValue) => {
     setValue(newValue);
@@ -74,17 +72,7 @@ const MarirongHeader = () => {
     } else {
       setProfileIcon(female_icon);
     }
-
-    // const profile_picture = parse_data.profile.pic_path !== "" ? `${STORAGE_URL}/${parse_data.profile.pic_path}` : "";
-    // setImageUrl(profile_picture)
   }, []);
-
-  // useEffect(() => {
-  //   if (profilePicture) {
-  //     const file = URL.createObjectURL(profilePicture);
-  //     setImageUrl(file);
-  //   }
-  // }, [profilePicture]);
 
   const a11yProps = (index) => {
     return {
