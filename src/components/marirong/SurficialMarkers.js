@@ -41,6 +41,7 @@ import ListItemText from "@mui/material/ListItemText";
 import Checkbox from "@mui/material/Checkbox";
 
 import { useSnackbar } from "notistack";
+import Swal from "sweetalert2";
 
 const MenuProps = {
   PaperProps: {
@@ -89,7 +90,10 @@ const SurficialMarkers = (props) => {
   useEffect(() => {
     setInterval(() => {
       fetchAll();
-    }, 10000);
+    }, 10000); // setOpenPrompt(true);
+    // setErrorPrompt(true);
+    // setPromptTitle("Fail");
+    // setNotifMessage("Failed to save ground measurement.");
   }, []);
 
   const initialize = () => {
@@ -219,16 +223,26 @@ const SurficialMarkers = (props) => {
           sendMeasurement(submitData, (response) => {
             if (response.status == true) {
               setOpen(false);
-              setOpenPrompt(true);
-              setErrorPrompt(false);
-              setPromptTitle("Success");
-              setNotifMessage("Ground measurements succesfully saved!");
+              // setOpenPrompt(true);
+              // setErrorPrompt(false);
+              // setPromptTitle("Success");
+              // setNotifMessage("Ground measurements succesfully saved!");
+              Swal.fire({
+                icon:'success',
+                title:'Success!',
+                text: 'Successfully saved ground measurements'
+              })
               fetchAll();
             } else {
-              setOpenPrompt(true);
-              setErrorPrompt(true);
-              setPromptTitle("Fail");
-              setNotifMessage("Failed to save ground measurement.");
+              // setOpenPrompt(true);
+              // setErrorPrompt(true);
+              // setPromptTitle("Fail");
+              // setNotifMessage("Failed to save ground measurement.");
+              Swal.fire({
+                icon:'error',
+                title:'Error!',
+                text: 'Error saving ground measurements. Please contact developers'
+              })
             }
           });
         });
@@ -236,17 +250,27 @@ const SurficialMarkers = (props) => {
         sendMeasurement(submitData, (response) => {
           if (response.status == true) {
             setOpen(false);
-            setOpenPrompt(true);
-            setErrorPrompt(false);
-            setPromptTitle("Success");
-            setNotifMessage("Ground measurements succesfully sent!");
+            // setOpenPrompt(true);
+            // setErrorPrompt(false);
+            // setPromptTitle("Success");
+            // setNotifMessage("Ground measurements succesfully sent!");
+            Swal.fire({
+              icon:'success',
+              title:'Success!',
+              text: 'Successfully sent ground measurements'
+            })
             fetchAll();
             initialize();
           } else {
-            setOpenPrompt(true);
-            setErrorPrompt(true);
-            setPromptTitle("Fail");
-            setNotifMessage("Ground measurements sending failed!");
+            // setOpenPrompt(true);
+            // setErrorPrompt(true);
+            // setPromptTitle("Fail");
+            // setNotifMessage("Ground measurements sending failed!");
+            Swal.fire({
+              icon:'error',
+              title:'Error!',
+              text: 'Error sending ground measurements. Please contact developers'
+            })
           }
         });
       }

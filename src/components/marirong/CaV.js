@@ -46,6 +46,7 @@ import {
 import PromptModal from "./modals/PromptModal";
 
 import { CBEWSL_SITE } from "../../host";
+import Swal from "sweetalert2";
 
 const CaV = () => {
   const [householdData, setHouseholdData] = useState([]);
@@ -255,16 +256,26 @@ const CaV = () => {
         if (response.status == true) {
           initialize();
           setOpenModal(false);
-          setOpenPrompt(true);
-          setErrorPrompt(false);
-          setPromptTitle("Success");
-          setNotifMessage(response.message);
+          // setOpenPrompt(true);
+          // setErrorPrompt(false);
+          // setPromptTitle("Success");
+          // setNotifMessage(response.message);
+          Swal.fire({
+            icon:'success',
+            title:'Success!',
+            text: 'Successfully added household data'
+          })
           fetchAll();
         } else {
-          setOpenPrompt(true);
-          setErrorPrompt(true);
-          setPromptTitle("Fail");
-          setNotifMessage(response.message);
+          // setOpenPrompt(true);
+          // setErrorPrompt(true);
+          // setPromptTitle("Fail");
+          // setNotifMessage(response.message);
+          Swal.fire({
+            icon:'error',
+            title:'Error!',
+            text: 'Error adding household data. Please contact developers'
+          })
         }
       });
     } else if (action == "edit") {
@@ -272,16 +283,26 @@ const CaV = () => {
         if (response.status == true) {
           initialize();
           setOpenModal(false);
-          setOpenPrompt(true);
-          setErrorPrompt(false);
-          setPromptTitle("Success");
-          setNotifMessage(response.message);
+          // setOpenPrompt(true);
+          // setErrorPrompt(false);
+          // setPromptTitle("Success");
+          // setNotifMessage(response.message);
+          Swal.fire({
+            icon:'success',
+            title:'Success!',
+            text: 'Successfully edited household data'
+          })
           fetchAll();
         } else {
-          setOpenPrompt(true);
-          setErrorPrompt(true);
-          setPromptTitle("Fail");
-          setNotifMessage(response.message);
+          // setOpenPrompt(true);
+          // setErrorPrompt(true);
+          // setPromptTitle("Fail");
+          // setNotifMessage(response.message);
+          Swal.fire({
+            icon:'error',
+            title:'Error!',
+            text: 'Error editing household data. Please contact developers'
+          })
         }
       });
     }
