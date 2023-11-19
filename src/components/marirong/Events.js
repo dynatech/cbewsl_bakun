@@ -37,6 +37,7 @@ import AddActivity from './AddActivity';
 import PromptModal from './modals/PromptModal';
 import { getEvents, deleteEvent } from '../../apis/EventsManagement'
 import { STORAGE_URL } from '../../config';
+import Swal from 'sweetalert2';
 
 const localizer = momentLocalizer(moment);
 
@@ -135,26 +136,35 @@ const Events = (props) => {
       if(response.status == true){
         if (passedId != null) {
           setErrorPrompt(false)
-          setPromptTitle("Success")
-          setNotifMessage("Activity successfully deleted!", response.feedback)
           setConfirmation(false)
+          Swal.fire({
+            icon:'success',
+            title:'Success!',
+            text: "Activity successfully deleted!"
+          })
         }
         getAllEvents()
         setDeleteID(null)
-        setOpenPrompt(true);
+        // setOpenPrompt(true);
         setErrorPrompt(false)
-        setPromptTitle("Success")
-        setNotifMessage("Activity successfully deleted!", response.feedback)
+        Swal.fire({
+          icon:'success',
+          title:'Success!',
+          text: "Activity successfully deleted!"
+        })
         setConfirmation(false)
         setCalendarEvent({});
         
       }
       else{
         if (passedId != null) {
-          setOpenPrompt(true)
+          // setOpenPrompt(true)
           setErrorPrompt(true)
-          setPromptTitle("Fail")
-          setNotifMessage(response.feedback)
+          Swal.fire({
+            icon: 'error',
+            title: 'Error!',
+            text: response.feedback
+          })
           setConfirmation(false)
           setDeleteID(null)
         }

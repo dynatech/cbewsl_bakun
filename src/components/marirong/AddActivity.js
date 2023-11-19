@@ -1,32 +1,26 @@
-import React, {useMemo, div, useState, useEffect} from 'react';
+import React, {useMemo, div, useState, useEffect, Fragment} from 'react';
 import {Calendar, momentLocalizer, Views} from 'react-big-calendar';
 import moment from 'moment';
 import 'react-big-calendar/lib/css/react-big-calendar.css';
 import {
-  Grid,
   Box,
-  Card,
-  CardActions,
-  CardContent,
   Button,
   Typography,
-  Container,
   Divider,
-  Modal,
   Stack,
   TextField,
-  TextareaAutosize,
   IconButton,
   Tooltip,
+  DialogContent,
 } from '@mui/material';
 import DoNotDisturbIcon from '@mui/icons-material/DoNotDisturb';
+import Dialog from "@mui/material/Dialog";
 import AddCircleOutlined from '@mui/icons-material/AddCircleOutlined';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 import { DateTimePicker } from '@mui/x-date-pickers/DateTimePicker';
 import { addEvent } from '../../apis/EventsManagement'
 import PromptModal from './modals/PromptModal';
-import { SentimentDissatisfied } from '@mui/icons-material';
 import AddPhotoAlternateIcon from '@mui/icons-material/AddPhotoAlternate';
 import Swal from 'sweetalert2'
 
@@ -44,7 +38,6 @@ const AddActivity = (props) => {
     const [selectedImage, setSelectedImage] = useState(null)
     const [imageUrl, setImageUrl] = useState(null)
       
-    // const [openModal, setOpenModal] = useState(false);
     const [isConfirm, setIsConfirm] = useState(false);
 
     const [openPrompt, setOpenPrompt] = useState(false)
@@ -116,12 +109,6 @@ const AddActivity = (props) => {
 
         addEvent(formData, (response) => {
             if(response.status){
-                console.log(formData)
-                // setOpenPrompt(true)
-                // setPromptTitle("Success")
-                // setErrorPrompt(false)
-                // setNotifMessage(response.feedback)
-                
                 getAllEvents()
                 setEditElement(null)
                 Swal.fire({
@@ -132,10 +119,6 @@ const AddActivity = (props) => {
                 setOpenModal(false);
             }
             else{
-                // setOpenPrompt(true)
-                // setErrorPrompt(true)
-                // setPromptTitle("Error!")
-                // setNotifMessage(response.feedback)
                 Swal.fire({
                     icon: 'error',
                     title: 'Error!',
@@ -149,7 +132,7 @@ const AddActivity = (props) => {
     };
 
     return (
-        <Card sx={{mb: 1}}>
+        <Fragment>
             <PromptModal
                 isOpen={openPrompt}
                 error={errorPrompt}
@@ -158,178 +141,166 @@ const AddActivity = (props) => {
                 notifMessage={notifMessage}
             />
             
-            <Modal
+            <Dialog
                 open={openModal}
                 onClose={handleClose}
                 aria-labelledby="title"
                 aria-describedby="description">
                 {!isConfirm ? (
                     <div>
-                    <Box sx={modalStyle}>
-                        <Stack
+                        <DialogContent>
+                            <Stack
+                                direction="row"
+                                spacing={20}>
+                                <Typography
+                                    id="title"
+                                    variant="h5"
+                                    component="h4">
+                                    Activity for {action === "add" ? moment(slotInfo.start).format('LL')
+                                            : moment(calendarEvent.start).format('LL')}
+                                </Typography>
+                                <input
+                                    accept="image/*"
+                                    type="file"
+                                    id="select-image"
+                                    style={{display: 'none'}}
+                                    onChange={e => setSelectedImage(e.target.files[0])}
+                                />
+                                    <Tooltip title="Add a photo">
+                                        <IconButton color="primary">
+                                            <label htmlFor="select-image">
+                                                <AddPhotoAlternateIcon fontSize='medium'/>
+                                            </label> 
+                                        </IconButton>
+                                    </Tooltip>
+                            </Stack>
+                            <Divider />
+                            <Stack spacing={1} paddingTop={2}>
+                            <LocalizationProvider dateAdapter={AdapterDayjs}>
+                                <Box flexDirection={"row"} style={{paddingTop: 10}}>
+                                <DateTimePicker
+                                    label="Event Start"
+                                    value={eventStartDate}
+                                    onChange={(e) => {
+                                        setEventStartDate(moment(new Date(e)).format("YYYY-MM-DD hh:mm A"))
+                                    }}
+                                    renderInput={(params) => <TextField style={{width: '49%', marginRight: '2%'}} {...params} />}
+                                />
+                                <DateTimePicker
+                                    label="Event End"
+                                    value={eventEndDate}
+                                    onChange={(e) => {
+                                        setEventEndDate(moment(new Date(e)).format("YYYY-MM-DD hh:mm A"))
+                                    }}
+                                    renderInput={(params) => <TextField style={{width: '49%'}} {...params} />}
+                                />
+                                </Box>
+                            </LocalizationProvider>
+                            <TextField
+                                id="outlined-required"
+                                placeholder="Ex: CBEWS-L Seminar"
+                                label="Name of Activity"
+                                variant="outlined"
+                                value={eventName}
+                                // style={{width: '100%', paddingBottom: 10}}
+                                onChange={e => {
+                                e.preventDefault()
+                                setEventName(e.target.value)
+                                }}
+                            />
+                            <TextField
+                                id="outlined-required"
+                                placeholder="Ex: Brgy. Hall"
+                                label="Place of Activity"
+                                variant="outlined"
+                                value={eventPlace}
+                                // style={{width: '100%', paddingBottom: 10}}
+                                onChange={e => {
+                                setEventPlace(e.target.value)
+                                }}
+                            />
+                            <TextField
+                                id="outlined-required"
+                                placeholder="**additional info**"
+                                label="Description"
+                                variant="outlined"
+                                value={eventNote}
+                                multiline
+                                rows = {3}
+                                // style={{width: '100%', paddingBottom: 10}}
+                                onChange={e => {
+                                setEventNote(e.target.value)
+                                }}
+                            />
+                            </Stack>
+                            <Stack
                             direction="row"
-                            spacing={7}>
-                            <Typography
-                                id="title"
-                                variant="h5"
-                                component="h4">
-                                Activity for {action === "add" ? moment(slotInfo.start).format('LL')
-                                        : moment(calendarEvent.start).format('LL')}
-                            </Typography>
-                            <input
-                                accept="image/*"
-                                type="file"
-                                id="select-image"
-                                style={{display: 'none'}}
-                                onChange={e => setSelectedImage(e.target.files[0])}
-                            />
-                                <Tooltip title="Add a photo">
-                                    <IconButton color="primary">
-                                        <label htmlFor="select-image">
-                                            <AddPhotoAlternateIcon fontSize='medium'/>
-                                        </label> 
-                                    </IconButton>
-                                </Tooltip>
-                        </Stack>
-                        <Divider />
-                        <Stack spacing={1} paddingTop={2}>
-                        <LocalizationProvider dateAdapter={AdapterDayjs}>
-                            <Box flexDirection={"row"} style={{paddingTop: 10}}>
-                            <DateTimePicker
-                                label="Event Start"
-                                value={eventStartDate}
-                                onChange={(e) => {
-                                    setEventStartDate(moment(new Date(e)).format("YYYY-MM-DD hh:mm A"))
-                                }}
-                                renderInput={(params) => <TextField style={{width: '49%', marginRight: '2%'}} {...params} />}
-                            />
-                            <DateTimePicker
-                                label="Event End"
-                                value={eventEndDate}
-                                onChange={(e) => {
-                                    setEventEndDate(moment(new Date(e)).format("YYYY-MM-DD hh:mm A"))
-                                }}
-                                renderInput={(params) => <TextField style={{width: '49%'}} {...params} />}
-                            />
-                            </Box>
-                        </LocalizationProvider>
-                        <TextField
-                            id="outlined-required"
-                            placeholder="Ex: CBEWS-L Seminar"
-                            label="Name of Activity"
-                            variant="outlined"
-                            value={eventName}
-                            // style={{width: '100%', paddingBottom: 10}}
-                            onChange={e => {
-                            e.preventDefault()
-                            setEventName(e.target.value)
-                            }}
-                        />
-                        <TextField
-                            id="outlined-required"
-                            placeholder="Ex: Brgy. Hall"
-                            label="Place of Activity"
-                            variant="outlined"
-                            value={eventPlace}
-                            // style={{width: '100%', paddingBottom: 10}}
-                            onChange={e => {
-                            setEventPlace(e.target.value)
-                            }}
-                        />
-                        <TextField
-                            id="outlined-required"
-                            placeholder="**additional info**"
-                            label="Description"
-                            variant="outlined"
-                            value={eventNote}
-                            multiline
-                            rows = {3}
-                            // style={{width: '100%', paddingBottom: 10}}
-                            onChange={e => {
-                            setEventNote(e.target.value)
-                            }}
-                        />
-                        </Stack>
-                        <Stack
-                        direction="row"
-                        spacing={2}
-                        justifyContent="flex-end"
-                        paddingTop={5}>
-                        <Button
-                            variant="text"
-                            color="error"
-                            startIcon={<DoNotDisturbIcon />}
-                            onClick={handleClose}>
-                            Cancel
-                        </Button>
-                        <Button
-                            variant="contained"
-                            endIcon={<AddCircleOutlined />}
-                            onClick={handleSubmit}>
-                            {action=="add" ? "Add Activity" : "Edit Activity"}
-                        </Button>
-                        </Stack>
-                    
-                    <Divider sx={{marginTop: 2, marginBottom: 2}}/>
-                    {imageUrl && selectedImage && (
-                        <Box mt={2} textAlign="center">
-                            <div style={{marginBottom: 10}}>Preview:</div>
-                            <img
-                            src={imageUrl}
-                            alt={selectedImage.name}
-                            height="auto"
-                            width="50%"
-                            />
-                        </Box>
-                    )}
-                    </Box>
+                            spacing={2}
+                            justifyContent="flex-end"
+                            paddingTop={5}>
+                            <Button
+                                variant="text"
+                                color="error"
+                                startIcon={<DoNotDisturbIcon />}
+                                onClick={handleClose}>
+                                Cancel
+                            </Button>
+                            <Button
+                                variant="contained"
+                                endIcon={<AddCircleOutlined />}
+                                onClick={handleSubmit}>
+                                {action=="add" ? "Add Activity" : "Edit Activity"}
+                            </Button>
+                            </Stack>
+                            {imageUrl && selectedImage && (
+                                <div>
+                                    <Divider sx={{marginTop: 2, marginBottom: 2}}/>
+                                    <div style={{marginBottom: 10}}>Attached Image:</div>
+                                    <Box mt={2} textAlign="center">
+                                        <img
+                                        src={imageUrl}
+                                        alt={selectedImage.name}
+                                        height="auto"
+                                        width="50%"
+                                        />
+                                    </Box>
+                                </div>
+                            )}
+                        </DialogContent>
+                        
                     </div>
                 ) : (
-                    <div style={{overflowWrap: 'anywhere'}}>
-                    <Box sx={modalStyle}>
-                        <h1>Are you sure?</h1>
-                        <Divider />
-                        <h3>Start Date and Time: </h3>
-                        {`${moment(eventStartDate).format("LL h:mm A")}`} 
-                        <h3>End Date and Time: </h3>
-                        {`${moment(eventEndDate).format("LL h:mm A")}`}
-                        <h3>Activity Name: </h3>
-                        {eventName}
-                        <h3>Activity Place: </h3>
-                        {eventPlace}
-                        <h3>Activity Description:</h3>
-                        <Typography variant="body1" gutterBottom>
-                        {eventNote}
-                        </Typography>
-                        <Divider />
-                        <Stack
-                        direction="row"
-                        spacing={2}
-                        justifyContent="flex-end"
-                        paddingTop={2}>
-                        <Button onClick={()=>{handleActivity()}}>Yes</Button>
-                        <Button onClick={()=>{handleSubmit()}}>No</Button>
-                        </Stack>
-                    </Box>
+                    <div style={{overflowWrap: 'anywhere', width: 500}}>
+                        <DialogContent>
+                            <h1>Are you sure?</h1>
+                            <Divider />
+                            <h3>Start Date and Time: </h3>
+                            {`${moment(eventStartDate).format("LL h:mm A")}`} 
+                            <h3>End Date and Time: </h3>
+                            {`${moment(eventEndDate).format("LL h:mm A")}`}
+                            <h3>Activity Name: </h3>
+                            {eventName}
+                            <h3>Activity Place: </h3>
+                            {eventPlace}
+                            <h3>Activity Description:</h3>
+                            <Typography variant="body1" gutterBottom>
+                            {eventNote}
+                            </Typography>
+                            <Divider />
+                            <Stack
+                            direction="row"
+                            spacing={2}
+                            justifyContent="flex-end"
+                            paddingTop={2}>
+                            <Button onClick={()=>{handleActivity()}}>Yes</Button>
+                            <Button onClick={()=>{handleSubmit()}}>No</Button>
+                            </Stack>
+                        </DialogContent>
                     </div>
                 )}
-            </Modal>
-        </Card>
+            </Dialog>
+        </Fragment>
     );
 };
 
 export default AddActivity;
-
-
-const modalStyle = {
-    position: 'absolute',
-    top: '50%',
-    left: '50%',
-    transform: 'translate(-50%, -50%)',
-    width: 500,
-    bgcolor: 'background.paper',
-    border: '2px solid #000',
-    boxShadow: 24,
-    p: 4,
-    maxWidth: 500,
-};
