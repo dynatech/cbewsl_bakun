@@ -2,13 +2,10 @@ import {
     Dialog,
     DialogTitle,
     DialogContent,
-    DialogContentText,
     DialogActions,
     Button,
-    Typography,
     TextField,
-    Grid,
-    Select, MenuItem, InputLabel, FormControl, Box
+    Select, MenuItem, InputLabel, FormControl, Box, FormHelperText
   } from '@mui/material';
 
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
@@ -16,10 +13,9 @@ import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 import { DatePicker } from '@mui/x-date-pickers/DatePicker';
 import React, {Fragment, useState, useEffect} from 'react';
 import moment from 'moment';
-import axios from 'axios';
 import {signUp} from '../../../apis/UserManagement'
 import PromptModal from './PromptModal';
-import { CompressOutlined } from '@mui/icons-material';
+import Swal from 'sweetalert2';
 
 function UserProfileModal(props){
   const isOpen = props.isOpen
@@ -57,20 +53,13 @@ function UserProfileModal(props){
     else setPasswordMatched(true)
   }
 
-  const [filledRequired, setFilledRequired] = useState()
-
-  const checkRequired = () => {
+   const checkRequired = () => {
     if(firstName != "" && lastName != "" && gender != "" && birthday != "" && designation != "" && mobileNo != "" && username != ""){
-      console.log("qwe")
-      // setFilledRequired(true)
       return true
     }
     else {
-      console.log("yo")
-      // setFilledRequired(false)
       return false
     }
-    console.log("dbbfefu",filledRequired)
   }
 
   const handleSubmit = () => {
@@ -92,29 +81,35 @@ function UserProfileModal(props){
     console.log(submitData)
     
     let filled = checkRequired()
-    console.log("dbbfefu",filledRequired)
 
     if(filled){
       signUp(submitData, (response) => {
         if(response.status == true){
-          setOpenPrompt(true)
           setErrorPrompt(false)
-          setNotifMessage("Account succesfully created")
+          Swal.fire({
+            icon:'success',
+            title:'Success!',
+            text: 'Account successfully created'
+        })
           setIsOpen(false)
         }
         else if(response.status == false){
-          setOpenPrompt(true)
           setErrorPrompt(true)
-          setNotifMessage(response.message)
+          Swal.fire({
+            icon:'error',
+            title: 'Error!',
+            text: response.message,
+        })
         }
-        console.log(response)
       })
     }else{
-      setOpenPrompt(true)
-      setNotifMessage("Please fill all required fields.")
       setErrorPrompt(true)
+      Swal.fire({
+        icon:'error',
+        title: 'Error!',
+        text: "Please fill all required fields",
+    })
     }
-    
   }
   
   return(
@@ -128,10 +123,9 @@ function UserProfileModal(props){
       <Dialog
           fullWidth
           fullScreen={false}
-          // maxWidth='xs'
           open={isOpen}
           aria-labelledby="form-dialog-title"
-
+          style={{zIndex: 1059}}
       >
         <DialogTitle id="form-dialog-title">Create Account</DialogTitle>
         <DialogContent style={{paddingTop: 10}}>
@@ -141,7 +135,7 @@ function UserProfileModal(props){
             helperText={(errorPrompt && firstName == "") ? "First Name required" : ""}
             id="outlined-required"
             placeholder="Ex: Juan"
-            label="First Name"
+            label="First Name (required)"
             variant="outlined"
             style={{width: '100%', paddingBottom: 10}}
             onChange={e => {
@@ -154,7 +148,7 @@ function UserProfileModal(props){
             helperText={(errorPrompt && lastName == "") ? "Last Name required" : ""}
             id="outlined-required"
             placeholder="Ex: Dela Cruz"
-            label="Last Name"
+            label="Last Name (required)"
             variant="outlined"
             style={{width: '100%', paddingBottom: 10}}
             onChange={e => {
@@ -187,23 +181,28 @@ function UserProfileModal(props){
           <Box flexDirection={'row'}>
             <LocalizationProvider dateAdapter={AdapterDayjs}>
               <DatePicker
-                label="Birthday"
+                label="Birthday (required)"
                 value={birthday}
                 onChange={(e) => {
                   setBirthday(e);
                 }}
-                renderInput={(params) => <TextField style={{width: '49.2%', paddingBottom: 10, marginRight: '1.6%'}} {...params} />}
+                renderInput={(params) => <TextField style={{width: '40%', paddingBottom: 10, marginRight: '2%'}} {...params} />}
               />
             </LocalizationProvider>
 
-            <FormControl fullWidth style={{width: '49.2%', paddingBottom: 10}}>
-              <InputLabel id="demo-simple-select-label">Gender</InputLabel>
+            <FormControl fullWidth style={{width: '58%', paddingBottom: 10}}>
+              <InputLabel id="demo-simple-select-label-designation"
+                style={{
+                  color: (errorPrompt && gender == "") ? '#D84848' : "-moz-initial"
+                }}
+              >
+                Gender (required)</InputLabel>
               <Select
                 error={(errorPrompt && gender == "") ? true : false}
                 helperText={(errorPrompt && gender == "") ? "Gender required" : ""}
                 labelId="demo-simple-select-label"
                 id="demo-simple-select"
-                label="Gender"
+                label="Gender (required)"
                 onChange={e => {
                   setGender(e.target.value)
                 }}
@@ -211,6 +210,10 @@ function UserProfileModal(props){
                 <MenuItem value={"Female"}>Female</MenuItem>
                 <MenuItem value={"Male"}>Male</MenuItem>
               </Select>
+              {errorPrompt && gender == "" ?
+              <FormHelperText style={{color: '#D84848'}}>Gender required</FormHelperText>
+              : ""
+              }
             </FormControl>
           </Box>
 
@@ -241,7 +244,7 @@ function UserProfileModal(props){
             helperText={(errorPrompt && username == "") ? "Username required" : ""}
             id="outlined-required"
             placeholder="Ex: DelaCruz1234"
-            label="Username"
+            label="Username (required)"
             variant="outlined"
             style={{width: '100%', paddingBottom: 10}}
             onChange={e => {
@@ -254,7 +257,7 @@ function UserProfileModal(props){
             helperText={(errorPrompt && mobileNo == "") ? "Mobile Number required" : ""}
             id="outlined-required"
             placeholder="Ex: 09xxxxxxxxx"
-            label="Mobile Number"
+            label="Mobile Number (required)"
             variant="outlined"
             style={{width: '100%', paddingBottom: 10}}
             onChange={e => {
@@ -263,12 +266,10 @@ function UserProfileModal(props){
           />
 
           <TextField
-            // error={passwordMatched ? false : true}
-            // helperText={passwordMatched ? " " : "Password does not match"}
             id="outlined-required"
             placeholder="XXXX"
             type="password"
-            label = "Password"
+            label = "Password (required)"
             variant="outlined"
             style={{width: '100%', paddingBottom: 10}}
             onChange={e => {
@@ -282,7 +283,7 @@ function UserProfileModal(props){
             id="outlined-required"
             placeholder="XXXX"
             type="password"
-            label="Confirm Password"
+            label="Confirm Password (required)"
             variant="outlined"
             style={{width: '100%', paddingBottom: 10}}
             onChange={e => {
@@ -291,13 +292,17 @@ function UserProfileModal(props){
           />
 
           <FormControl fullWidth style={{width: '100%', paddingBottom: 10}}>
-            <InputLabel id="demo-simple-select-label-designation">Designation</InputLabel>
+            <InputLabel id="demo-simple-select-label-designation"
+              style={{
+                color: (errorPrompt && designation == "") ? '#D84848' : "-moz-initial"
+              }}
+            >
+              Designation (required)</InputLabel>
             <Select
               error={(errorPrompt && designation == "") ? true : false}
-              helperText={(errorPrompt && designation == "") ? "Designation required" : ""}
               labelId="demo-simple-select-label-designation"
               id="demo-simple-select-designation"
-              label="Designation"
+              label="Designation (required)"
               onChange={e => {
                 setDesignation(e.target.value)
               }}
@@ -308,6 +313,10 @@ function UserProfileModal(props){
               <MenuItem value={4}>PLGU</MenuItem>
               <MenuItem value={5}>Community</MenuItem>
             </Select>
+            {errorPrompt && designation == "" ?
+            <FormHelperText style={{color: '#D84848'}}>Designation required</FormHelperText>
+            : ""
+            }
           </FormControl>
 
         </DialogContent>

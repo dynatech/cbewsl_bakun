@@ -3,18 +3,13 @@ import {
   Dialog,
   DialogTitle,
   DialogContent,
-  DialogContentText,
   DialogActions,
   Button,
   Typography,
   TextField,
-  Divider,
   Grid,
 } from "@mui/material";
-import { useNavigate } from "react-router-dom";
-import { makeStyles } from "@material-ui/core/styles";
-import { Paper, Link, Box } from "@material-ui/core";
-import { SignInLogo } from "../../components/utils/SignInLogo";
+import { Link } from "@material-ui/core";
 import UserProfileModal from "../marirong/modals/UserProfileModal";
 import PromptModal from "../marirong/modals/PromptModal";
 import { signIn, forgotPassword, verifyOTP } from "../../apis/UserManagement";
@@ -24,41 +19,12 @@ import phivolcs_seal from "../../assets/phivolcs_seal.png";
 import dynaslope_seal from "../../assets/dynaslope_seal.png";
 import province_seal from "../../assets/benguet_province_seal.png";
 import municipality_seal from "../../assets/bakun_municipal_seal.png";
-import barangay_seal from "../../assets/brgy_seal.png";
+import barangay_seal from "../../assets/bakun_barangay_seal.png";
 import lewc_seal from "../../assets/bak_lewc_seal.png";
-// import backdrop from '../../assets/signinbackdrop.png';
 
 import { CBEWSL_SITE_NAME } from "../../host";
 
-const imageDivider = makeStyles((theme) => ({
-  animated_divider: {
-    display: "none",
-    "@media (min-width:600px)": {
-      fontSize: "none",
-    },
-    [theme.breakpoints.up("md")]: {
-      display: "initial",
-    },
-  },
-}));
-
-function Copyright() {
-  return (
-    <Typography variant="body2" color="textSecondary" align="center">
-      {"Copyright © "}
-      <Link color="inherit" href="/">
-        CBEWS-L
-      </Link>{" "}
-      {new Date().getFullYear()}
-      {"."}
-    </Typography>
-  );
-}
-
 const Signin = () => {
-  const imageDiv = imageDivider();
-
-  let navigate = useNavigate();
 
   const [openModal, setOpenModal] = useState(false);
   const [inputOTPModal, setInputOTPModal] = useState(false);
@@ -142,12 +108,10 @@ const Signin = () => {
           <TextField
             id="filled-helperText"
             placeholder="E.g. JuanDelacruz"
-            // inputProps={{min: 0, style: {textAlign: 'center'}}}
             helperText={
               <Typography
                 variant="caption"
                 display="block"
-                // style={{textAlign: 'center'}}
               >
                 Username or Mobile Number
               </Typography>
@@ -228,8 +192,6 @@ const Signin = () => {
           />
 
           <TextField
-            // error={passwordMatched ? false : true}
-            // helperText={passwordMatched ? " " : "Password does not match"}
             id="outlined-required"
             placeholder="XXXX"
             type="password"
@@ -306,12 +268,7 @@ const Signin = () => {
       />
 
       <Fragment>
-        <Grid
-          container
-          // style={{backgroundImage:`url(${backdrop})`, backgroundSize: 'cover',
-          // backgroundPosition: 'center',
-          // height: '97.8vh',}}
-        >
+        <Grid container>
           <Grid
             item
             xs={12}
@@ -323,7 +280,6 @@ const Signin = () => {
                 textAlign: "center",
                 height: "auto",
                 width: "auto",
-                // padding: 10,
               }}
             >
               <img
@@ -332,7 +288,7 @@ const Signin = () => {
                 style={{
                   objectFit: "contain",
                   height: 140,
-                  width: 200,
+                  width: 190,
                   marginRight: 20,
                 }}
               />
@@ -351,8 +307,8 @@ const Signin = () => {
                 alt="province-seal-png"
                 style={{
                   objectFit: "contain",
-                  height: 150,
-                  width: 150,
+                  height: 155,
+                  width: 155,
                   marginRight: 20,
                 }}
               />
@@ -371,8 +327,8 @@ const Signin = () => {
                 alt="barangay-seal-png"
                 style={{
                   objectFit: "contain",
-                  height: 150,
-                  width: 150,
+                  height: 155,
+                  width: 155,
                   marginRight: 20,
                 }}
               />
@@ -404,7 +360,6 @@ const Signin = () => {
               fontWeight="fontWeightBold"
               sx={{
                 backgroundColor: "#f89422",
-                // backgroundImage: `linear-gradient(45deg, #ffac4d, #f89422)`,
                 backgroundSize: "100%",
                 backgroundRepeat: "repeat",
                 backgroundClip: "text",
@@ -422,7 +377,6 @@ const Signin = () => {
               fontWeight="fontWeightBold"
               sx={{
                 backgroundColor: "#16526D",
-                // backgroundImage: `linear-gradient(45deg, #16526d, #16526d)`,
                 backgroundSize: "100%",
                 backgroundRepeat: "repeat",
                 backgroundClip: "text",
