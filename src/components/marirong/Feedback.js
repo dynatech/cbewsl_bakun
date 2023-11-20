@@ -5,18 +5,14 @@ import {
   Button,
   Box,
   TextField,
-  FormControl,
-  Backdrop,
-  CircularProgress,
+  IconButton,
+  Tooltip
 } from '@mui/material';
 import Card from '@mui/material/Card';
 import CardActions from '@mui/material/CardActions';
 import CardContent from '@mui/material/CardContent';
-import InputLabel from '@mui/material/InputLabel';
-import MenuItem from '@mui/material/MenuItem';
-import Select from '@mui/material/Select';
 import AddPhotoAlternateIcon from '@mui/icons-material/AddPhotoAlternate';
-import PromptModal from './modals/PromptModal';
+import CloseIcon from '@mui/icons-material/Close';
 import { saveFeedback } from '../../apis/Misc';
 import Swal from 'sweetalert2'
 
@@ -25,9 +21,6 @@ function Feedback() {
   const [selectedImage, setSelectedImage] = useState(null);
   const [imageUrl, setImageUrl] = useState(null);
   const [sendButtonState, setSendButtonState] = useState(true);
-  const [currentUser, setCurrentUser] = useState(null);
-  const [currentUserLast, setCurrentUserLast] = useState(null);
-  const [designation, setDesignation] = useState(null);
  
 
   const resetValues = () => {
@@ -56,16 +49,6 @@ function Feedback() {
     });
   };
 
-  useEffect(() => {
-    const data = localStorage.getItem('credentials');
-    const parse_data = JSON.parse(data);
-    const first_name = parse_data.user.first_name;
-    const last_name = parse_data.user.last_name;
-    const designation = parse_data.profile.designation_details.designation;
-    setCurrentUser(first_name);
-    setCurrentUserLast(last_name);
-    setDesignation(designation);
-  }, []);
 
   useEffect(() => {
     if (selectedImage) {
@@ -97,38 +80,6 @@ function Feedback() {
           <CardContent>
             <Grid container spacing={2}>
               <Grid item xs={12}>
-                <Typography>
-                  Reporter:
-                    <Typography style={{fontWeight: 'bold', display: 'inline-flex', paddingLeft: 5}}> {`${currentUser} ${currentUserLast}`}</Typography>
-                </Typography>
-                <Typography>
-                  Stakeholder's Group:
-                  <Typography style={{fontWeight: 'bold', display: 'inline-flex', paddingLeft: 5}}>{designation}</Typography>
-                </Typography>
-              </Grid>
-              <Grid item xs={10}>
-                <Typography style={{fontWeight: 'bold', display: 'inline-flex'}}>CBEWS-L Web app (concerns with the app, bugs, errors)</Typography>
-              </Grid>
-              <Grid item xs={2} justifyContent='flex-end' alignItems='flex-end'>
-                <Fragment>
-                  <input
-                    accept="image/*"
-                    type="file"
-                    id="select-image"
-                    style={{display: 'none'}}
-                    onChange={e => setSelectedImage(e.target.files[0])}
-                  />
-                  <label htmlFor="select-image">
-                    <Button
-                      variant="outlined"
-                      component="span"
-                      endIcon={<AddPhotoAlternateIcon />}>
-                      Attach Image
-                    </Button>
-                  </label>
-                </Fragment>
-              </Grid>
-              <Grid item xs={12}>
                 <TextField
                   id="standard-multiline-static"
                   label="Please describe/elaborate concern"
@@ -144,20 +95,52 @@ function Feedback() {
               </Grid>
               <Grid item xs={12}>
                 {imageUrl && selectedImage && (
-                  <Box mt={2} textAlign="center">
-                    <div style={{marginBottom: 10}}>Preview:</div>
-                    <img
-                      src={imageUrl}
-                      alt={selectedImage.name}
-                      height="auto"
-                      width="30%"
-                    />
-                  </Box>
+                  <div>
+                    <Grid container sx={{marginBottom: 5}}>
+                      <Grid item xs={11}>Attached Image:</Grid>
+                      <Grid item xs={1}>
+                        <Tooltip title="Remove attached image">
+                          <IconButton
+                            onClick={event =>
+                              setSelectedImage(null)
+                            }
+                          >
+                            <CloseIcon/>
+                          </IconButton>
+                        </Tooltip>
+                      </Grid>
+                    </Grid>
+                    <Box mt={2} textAlign="center">
+                      <img
+                        src={imageUrl}
+                        alt={selectedImage.name}
+                        height="auto"
+                        width="30%"
+                      />
+                    </Box>
+                  </div>
                 )}
               </Grid>
             </Grid>
           </CardContent>
           <CardActions sx={{justifyContent: 'flex-end'}}>
+            <input
+              accept="image/*"
+              type="file"
+              id="select-image"
+              style={{display: 'none'}}
+              onChange={e => setSelectedImage(e.target.files[0])}
+            />
+            <label htmlFor="select-image">
+              <Button
+                variant="outlined"
+                size='small'
+                component="span"
+                sx={{marginRight: 2}}
+                endIcon={<AddPhotoAlternateIcon />}>
+                Attach Image
+              </Button>
+            </label>
             <Button
               size="small"
               variant="contained"
