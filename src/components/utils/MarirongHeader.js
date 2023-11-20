@@ -12,7 +12,7 @@ import {
   Badge,
   Popover,
   Card,
-  CardContent
+  CardContent,
 } from "@mui/material";
 import DostSeal from "../../assets/phivolcs_seal.png";
 import DynaslopeSealMini from "../../assets/dynaslope_seal_mini.png";
@@ -23,7 +23,7 @@ import bakun_lewc_seal from "../../assets/bak_lewc_seal.png";
 import HazardMap from "../../assets/hazard_map.jpg";
 import male_icon from "../../assets/male_icon.png";
 import female_icon from "../../assets/female_icon.png";
-import CloseIcon from '@mui/icons-material/Close';
+import CloseIcon from "@mui/icons-material/Close";
 import MenuIcon from "@mui/icons-material/Menu";
 import Menu from "@mui/material/Menu";
 import MenuItem from "@mui/material/MenuItem";
@@ -43,13 +43,13 @@ const MarirongHeader = () => {
   const [notifs, setNotifs] = useState([]);
   const [openNotification, setOpenNotification] = useState(false);
   const [notifColor, setNotifColor] = useState(false);
-  const [color, setColor] = useState('#0492C2');
+  const [color, setColor] = useState("#0492C2");
 
   const handleOpenNotifs = () => {
     setOpenNotification(true);
     setNotifColor(true);
     if (notifColor === true) {
-      setColor('white');
+      setColor("white");
     }
   };
 
@@ -57,7 +57,7 @@ const MarirongHeader = () => {
     setOpenNotification(false);
   };
 
-  const handleReadNotifs = notification_id => {
+  const handleReadNotifs = (notification_id) => {
     // readNotifications(notification_id, data => {
     //   const { status } = data;
     //   if (status === true) {
@@ -153,7 +153,6 @@ const MarirongHeader = () => {
 
   const handleCurrentTab = () => {
     const path_name = window.location.pathname;
-    console.log(path_name)
     if (path_name === `/${CBEWSL_SITE_NAME}/opcen`) {
       setValue(0);
     } else if (
@@ -310,7 +309,12 @@ const MarirongHeader = () => {
           <div style={{ textAlign: "end" }}>
             <Tooltip title="Notification">
               <IconButton onClick={handleOpenNotifs} sx={{ p: 2, mt: 4 }}>
-                <Badge badgeContent={notifs.filter(x => x.is_read === false).length} color="error">
+                <Badge
+                  badgeContent={
+                    notifs.filter((x) => x.is_read === false).length
+                  }
+                  color="error"
+                >
                   <NotificationsNoneIcon
                     alt="Notification"
                     style={{ color: "#16526D" }}
@@ -323,41 +327,43 @@ const MarirongHeader = () => {
               anchorEl={notifs}
               onClose={handleCloseNotifs}
               anchorOrigin={{
-                vertical:'top',
-                horizontal: 'right'
-              }}>
-                {notifs.map(notif => {
-                  const {notification_id, is_read} = notif;
-                  return (
-                    is_read === false && (
-                      <Card
-                        sx={{
-                          maxWidth: 400,
-                          maxHeight: 'auto',
-                          borderBottom: 1,
-                          cursor: 'pointer'
-                        }}>
-                        <div style={{ backgroundColor: color }}>
-                          <div style={{ marginLeft: 350 }}>
-                            <IconButton
-                              onClick={event =>
-                                handleReadNotifs(notification_id)
-                              }
-                            >
-                              <CloseIcon />
-                            </IconButton>
-                          </div>
-                          <CardContent>{notif.message}</CardContent>
-                          <div style={{ marginLeft: 250 }}>
-                            <Typography fontSize={14} color="#636363">
-                              {moment(notif.ts).format('YYYY-MM-DD hh:mm a')}
-                            </Typography>
-                          </div>
+                vertical: "top",
+                horizontal: "right",
+              }}
+            >
+              {notifs.map((notif) => {
+                const { notification_id, is_read } = notif;
+                return (
+                  is_read === false && (
+                    <Card
+                      sx={{
+                        maxWidth: 400,
+                        maxHeight: "auto",
+                        borderBottom: 1,
+                        cursor: "pointer",
+                      }}
+                    >
+                      <div style={{ backgroundColor: color }}>
+                        <div style={{ marginLeft: 350 }}>
+                          <IconButton
+                            onClick={(event) =>
+                              handleReadNotifs(notification_id)
+                            }
+                          >
+                            <CloseIcon />
+                          </IconButton>
                         </div>
-                      </Card>
-                    )
-                  );
-                })}
+                        <CardContent>{notif.message}</CardContent>
+                        <div style={{ marginLeft: 250 }}>
+                          <Typography fontSize={14} color="#636363">
+                            {moment(notif.ts).format("YYYY-MM-DD hh:mm a")}
+                          </Typography>
+                        </div>
+                      </div>
+                    </Card>
+                  )
+                );
+              })}
             </Popover>
 
             <Tooltip title="Open settings">

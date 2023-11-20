@@ -33,7 +33,7 @@ import { makeStyles } from "@material-ui/core/styles";
 import MomsTable from "./MomsTable";
 import ListItemText from "@mui/material/ListItemText";
 import { CBEWSL_SITE_CODE } from "../../host";
-import Swal from 'sweetalert2'
+import Swal from "sweetalert2";
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -302,60 +302,81 @@ const Moms = (props) => {
     else return true;
   };
 
+  const submitMoms = () => {
+    let moms_entry = {
+      site_code: CBEWSL_SITE_CODE,
+      moms_list: [
+        {
+          alert_level: selectedAlertLevel,
+          instance_id: featureName.instance_id,
+          feature_name:
+            featureName.instance_id == null ? null : featureName.name,
+          feature_type: feature_list.find(
+            (o) => o.feature_id == selectedFeatureIndex
+          ).feature,
+          report_narrative: featureDetails,
+          observance_ts: moment(datetimestamp).format("YYYY-MM-DD HH:mm:ss"),
+          remarks: narrative,
+          reporter_id: 1, //default muna
+          validator_id: userId,
+          location: featureLocation,
+          iomp: userId,
+          file_name: "",
+        },
+      ],
+      uploads: [],
+    };
+
+    insertMomsEntry(moms_entry, (response) => {
+      if (response.status == true) {
+        initialize();
+        // setOpenPrompt(true);
+        // setErrorPrompt(false);
+        // setPromptTitle("Success");
+        // setNotifMessage(response.message);
+        Swal.fire({
+          icon: "success",
+          title: "Success!",
+          text: "Successfully saved manifestations of movement",
+        });
+        setOpen(false);
+      } else {
+        // setOpenPrompt(true);
+        // setErrorPrompt(true);
+        // setPromptTitle("Fail");
+        // setNotifMessage(response.message);
+        Swal.fire({
+          icon: "error",
+          title: "Error!",
+          text: "Error on saving manifestations of movement, please contact developers",
+        });
+      }
+    });
+  };
+
   const handleSubmit = () => {
     let valid = checkRequired();
 
     console.log("valid", valid);
     if (valid) {
-      let moms_entry = {
-        site_code: CBEWSL_SITE_CODE,
-        moms_list: [
-          {
-            alert_level: selectedAlertLevel,
-            instance_id: featureName.instance_id,
-            feature_name:
-              featureName.instance_id == null ? null : featureName.name,
-            feature_type: feature_list.find(
-              (o) => o.feature_id == selectedFeatureIndex
-            ).feature,
-            report_narrative: featureDetails,
-            observance_ts: moment(datetimestamp).format("YYYY-MM-DD HH:mm:ss"),
-            remarks: narrative,
-            reporter_id: 1, //default muna
-            validator_id: userId,
-            location: featureLocation,
-            iomp: userId,
-            file_name: "",
-          },
-        ],
-        uploads: [],
-      };
+      let promptMsg = `Date: ${moment(datetimestamp).format(
+        "YYYY-MM-DD HH:mm:ss"
+      )}\n`;
+      promptMsg += `Feature Type: ${
+        feature_list.find((o) => o.feature_id == selectedFeatureIndex).feature
+      }\n`;
+      if (featureName.instance_id != null)
+        promptMsg += `Feature Name: ${featureName.name}\n`;
+      promptMsg += `Description: ${featureDetails}\n`;
+      promptMsg += `Narratives: ${narrative}\n`;
+      promptMsg += `Alert Level: ${selectedAlertLevel}`;
 
-      insertMomsEntry(moms_entry, (response) => {
-        if (response.status == true) {
-          initialize();
-          // setOpenPrompt(true);
-          // setErrorPrompt(false);
-          // setPromptTitle("Success");
-          // setNotifMessage(response.message);
-          Swal.fire({
-            icon:'success',
-            title:'Success!',
-            text: 'Successfully saved manifestations of movement'
-          })
-          setOpen(false);
-        } else {
-          // setOpenPrompt(true);
-          // setErrorPrompt(true);
-          // setPromptTitle("Fail");
-          // setNotifMessage(response.message);
-          Swal.fire({
-            icon: 'error',
-            title: 'Error!',
-            text: 'Error on saving manifestations of movement, please contact developers'
-          })
-        }
-      });
+      setConfirmation(true);
+      // setOpen(false);
+      setOpenPrompt(true);
+      setErrorPrompt(false);
+      setPromptTitle("Please confirm inputs: ");
+      setNotifMessage(promptMsg);
     } else {
       setIncomplete(true);
     }
@@ -365,10 +386,7 @@ const Moms = (props) => {
   const [promptTitle, setPromptTitle] = useState("");
   const [notifMessage, setNotifMessage] = useState("");
   const [errorPrompt, setErrorPrompt] = useState(false);
-
-  useEffect(() => {
-    reloadTable();
-  }, [openPrompt]);
+  const [confirmation, setConfirmation] = useState(false);
 
   return (
     <Container>
@@ -378,6 +396,13 @@ const Moms = (props) => {
         title={promptTitle}
         setOpenModal={setOpenPrompt}
         notifMessage={notifMessage}
+        confirmation={confirmation}
+        callback={(response) => {
+          if (response) {
+            submitMoms();
+          }
+          console.log("callback", response);
+        }}
       />
 
       <Dialog open={open} onClose={handleClose} fullWidth>
@@ -620,7 +645,9 @@ const Moms = (props) => {
         </DialogContent>
         <DialogActions>
           <Button onClick={handleClose}>Cancel</Button>
-          <Button onClick={handleSubmit}>Submit</Button>
+          <Button onClick={handleSubmit} variant="contained">
+            Submit
+          </Button>
         </DialogActions>
       </Dialog>
 

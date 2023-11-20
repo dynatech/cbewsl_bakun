@@ -90,10 +90,7 @@ const SurficialMarkers = (props) => {
   useEffect(() => {
     setInterval(() => {
       fetchAll();
-    }, 10000); // setOpenPrompt(true);
-    // setErrorPrompt(true);
-    // setPromptTitle("Fail");
-    // setNotifMessage("Failed to save ground measurement.");
+    }, 60000);
   }, []);
 
   const initialize = () => {
@@ -102,6 +99,7 @@ const SurficialMarkers = (props) => {
       time: new Date(),
       reporter: [],
     });
+    setConfirmation(false);
   };
 
   const fetchAll = () => {
@@ -155,6 +153,18 @@ const SurficialMarkers = (props) => {
   };
 
   const [incomplete, setIncomplete] = useState(false);
+  const [atleastOne, setAtleastOne] = useState(true);
+
+  const checkAtleastOne = () => {
+    let valid = false;
+
+    markers.forEach((marker) => {
+      if (measurement.hasOwnProperty(marker) && measurement[marker] != "")
+        valid = true;
+    });
+    return valid;
+  };
+
   const checkRequired = () => {
     let valid = true;
     if (
@@ -164,11 +174,12 @@ const SurficialMarkers = (props) => {
         ? measurement.weather != ""
         : false)
     ) {
-      markers.forEach((marker) => {
-        if (!measurement.hasOwnProperty(marker) || measurement[marker] == "") {
-          valid = false;
-        }
-      });
+      // markers.forEach((marker) => {
+      //   if (!measurement.hasOwnProperty(marker) || measurement[marker] == "") {
+      //     valid = false;
+      //   }
+      // });
+      valid = checkAtleastOne();
     } else valid = false;
 
     return valid;
@@ -178,16 +189,105 @@ const SurficialMarkers = (props) => {
     return measurement.hasOwnProperty("reporter")
       ? measurement.reporter.length > 0
         ? true
+        : measurement.hasOwnProperty("reporterOther")
+        ? measurement.reporterOther != ""
+          ? true
+          : false
         : false
       : measurement.hasOwnProperty("reporterOther")
       ? measurement.reporterOther != ""
-        ? isAlpha(measurement.reporterOther)
+        ? true
         : false
       : false;
   };
 
   const isAlpha = (str) => {
     return /^[a-zA-Z ]*$/.test(str);
+  };
+
+  const submitMeasurements = () => {
+    let tempMarkers = {};
+    let reporterStr = measurement.reporter.join(" ");
+    if (measurement.reporterOther != undefined) {
+      reporterStr += measurement.reporterOther;
+    }
+
+    markers.map((marker) => {
+      tempMarkers[marker.toUpperCase()] = measurement[marker];
+    });
+
+    let dateString = `${moment(measurement.date).format("LL")} ${moment(
+      new Date(measurement.time)
+    ).format("hh:mm A")}`;
+    let submitData = {
+      date: dateString,
+      marker: tempMarkers,
+      panahon: measurement.weather,
+      reporter: reporterStr.toUpperCase(),
+      type: "EVENT",
+    };
+
+    console.log("submit", submitData);
+    if (isUpdate) {
+      deletePrevMeasurement(selectedMoId, (response) => {
+        sendMeasurement(submitData, (response) => {
+          if (response.status == true) {
+            setOpen(false);
+            // setOpenPrompt(true);
+            // setErrorPrompt(false);
+            // setPromptTitle("Success");
+            // setNotifMessage("Ground measurements succesfully saved!");
+            Swal.fire({
+              icon: "success",
+              title: "Success!",
+              text: "Successfully saved ground measurements",
+            });
+            fetchAll();
+          } else {
+            // setOpenPrompt(true);
+            // setErrorPrompt(true);
+            // setPromptTitle("Fail");
+            // setNotifMessage("Failed to save ground measurement.");
+            Swal.fire({
+              icon: "error",
+              title: "Error!",
+              text: "Error saving ground measurements. Please contact developers",
+            });
+          }
+        });
+      });
+    } else {
+      sendMeasurement(submitData, (response) => {
+        console.log("checkiiiiing", response);
+        if (response.status == true) {
+          setOpen(false);
+          // setOpenPrompt(true);
+          // setErrorPrompt(false);
+          // setPromptTitle("Success");
+          // setNotifMessage("Ground measurements succesfully sent!");
+          Swal.fire({
+            icon: "success",
+            title: "Success!",
+            text: "Successfully sent ground measurements",
+          });
+          fetchAll();
+          initialize();
+        } else {
+          console.log("??????");
+          initialize();
+          setOpen(false);
+          // setOpenPrompt(true);
+          // setErrorPrompt(true);
+          // setPromptTitle("Fail");
+          // setNotifMessage("Ground measurements sending failed!");
+          Swal.fire({
+            icon: "error",
+            title: "Error!",
+            text: "Error sending ground measurements. Please contact developers",
+          });
+        }
+      });
+    }
   };
 
   const handleSubmit = () => {
@@ -197,87 +297,40 @@ const SurficialMarkers = (props) => {
     console.log("wwww", measurement.reporter);
     console.log("reporter", reporterCheck());
     console.log("checkRequired", checkRequired());
+    console.log("atleast one", checkAtleastOne());
     console.log("valid", valid);
     if (valid) {
-      let tempMarkers = {};
+      let promptMsg = `Date ${moment(measurement.date).format("LL")}`;
+      promptMsg += `Time ${moment(new Date(measurement.time)).format(
+        "hh:mm A"
+      )}\n`;
+      promptMsg += "Measurements:\n";
+
       markers.map((marker) => {
-        tempMarkers[marker.toUpperCase()] = measurement[marker];
+        if (measurement.hasOwnProperty(marker) && measurement[marker] != "")
+          promptMsg += `${marker.toUpperCase()}: ${measurement[marker]}\n`;
       });
-
-      let dateString = `${moment(measurement.date).format("LL")} ${moment(
-        new Date(measurement.time)
-      ).format("hh:mm A")}`;
-      let submitData = {
-        date: dateString,
-        marker: tempMarkers,
-        panahon: measurement.weather,
-        reporter: `${measurement.reporter.join(" ")} ${
-          measurement.reporterOther
-        }`.toUpperCase(),
-        type: "EVENT",
-      };
-
-      console.log("submit", submitData);
-      if (isUpdate) {
-        deletePrevMeasurement(selectedMoId, (response) => {
-          sendMeasurement(submitData, (response) => {
-            if (response.status == true) {
-              setOpen(false);
-              // setOpenPrompt(true);
-              // setErrorPrompt(false);
-              // setPromptTitle("Success");
-              // setNotifMessage("Ground measurements succesfully saved!");
-              Swal.fire({
-                icon:'success',
-                title:'Success!',
-                text: 'Successfully saved ground measurements'
-              })
-              fetchAll();
-            } else {
-              // setOpenPrompt(true);
-              // setErrorPrompt(true);
-              // setPromptTitle("Fail");
-              // setNotifMessage("Failed to save ground measurement.");
-              Swal.fire({
-                icon:'error',
-                title:'Error!',
-                text: 'Error saving ground measurements. Please contact developers'
-              })
-            }
-          });
-        });
-      } else {
-        sendMeasurement(submitData, (response) => {
-          if (response.status == true) {
-            setOpen(false);
-            // setOpenPrompt(true);
-            // setErrorPrompt(false);
-            // setPromptTitle("Success");
-            // setNotifMessage("Ground measurements succesfully sent!");
-            Swal.fire({
-              icon:'success',
-              title:'Success!',
-              text: 'Successfully sent ground measurements'
-            })
-            fetchAll();
-            initialize();
-          } else {
-            // setOpenPrompt(true);
-            // setErrorPrompt(true);
-            // setPromptTitle("Fail");
-            // setNotifMessage("Ground measurements sending failed!");
-            Swal.fire({
-              icon:'error',
-              title:'Error!',
-              text: 'Error sending ground measurements. Please contact developers'
-            })
-          }
-        });
+      promptMsg += `Weather: ${measurement.weather}\n`;
+      promptMsg += `Reporter: ${measurement.reporter.join(" ")} `;
+      if (measurement.reporterOther != undefined) {
+        promptMsg += measurement.reporterOther;
       }
+
+      setConfirmation(true);
+      // setOpen(false);
+      setOpenPrompt(true);
+      setErrorPrompt(false);
+      setPromptTitle("Please confirm ground measurement inputs: ");
+      setNotifMessage(promptMsg);
     } else {
       setIncomplete(true);
+      setAtleastOne(checkAtleastOne());
     }
   };
+
+  useEffect(() => {
+    if (incomplete) setAtleastOne(checkAtleastOne());
+  }, [measurement]);
 
   const handleClickOpen = () => {
     setOpen(true);
@@ -326,7 +379,7 @@ const SurficialMarkers = (props) => {
   };
 
   return (
-    <Container>
+    <Grid sx={{ mx: 10 }}>
       <PromptModal
         isOpen={openPrompt}
         error={errorPrompt}
@@ -334,7 +387,12 @@ const SurficialMarkers = (props) => {
         setOpenModal={setOpenPrompt}
         notifMessage={notifMessage}
         confirmation={confirmation}
-        callback={(response) => {}}
+        callback={(response) => {
+          if (response) {
+            submitMeasurements();
+          }
+          console.log("callback", response);
+        }}
       />
       <Dialog
         open={open}
@@ -397,7 +455,7 @@ const SurficialMarkers = (props) => {
                 )}
               />
               <TimePicker
-                label="Time"
+                label="Time of measurement"
                 value={measurement.time}
                 onChange={(e) => {
                   setMeasurement({
@@ -411,8 +469,20 @@ const SurficialMarkers = (props) => {
               />
             </Box>
           </LocalizationProvider>
-          <Typography style={{ paddingTop: 15 }}>
-            Marker measurements:
+          <Typography
+            style={{ paddingTop: 15, color: atleastOne ? "black" : "red" }}
+          >
+            Marker measurements:{" "}
+            <Typography
+              style={{
+                fontStyle: "italic",
+                color: atleastOne ? "gray" : "red",
+                margin: 0,
+                fontSize: "12px",
+              }}
+            >
+              please input atleast one marker measurement
+            </Typography>
           </Typography>
           <Box
             container
@@ -425,21 +495,8 @@ const SurficialMarkers = (props) => {
             {markers.map((marker) => (
               <TextField
                 autoFocus
-                error={
-                  incomplete &&
-                  (measurement[marker] == "" ||
-                    measurement[marker] == undefined)
-                    ? true
-                    : false
-                }
-                helperText={
-                  incomplete &&
-                  (measurement[marker] == "" ||
-                    measurement[marker] == undefined)
-                    ? "required"
-                    : ""
-                }
                 label={marker.toUpperCase()}
+                error={incomplete && !atleastOne}
                 variant="outlined"
                 defaultValue={measurement[marker]}
                 style={{ width: "23%", margin: "1%" }}
@@ -476,12 +533,6 @@ const SurficialMarkers = (props) => {
                   ? true
                   : false
               }
-              helperText={
-                incomplete &&
-                (measurement.weather == "" || measurement.weather == undefined)
-                  ? "required"
-                  : ""
-              }
               labelId="demo-simple-select-label"
               id="demo-simple-select"
               label="Weather"
@@ -499,12 +550,7 @@ const SurficialMarkers = (props) => {
               <MenuItem value={"Makulimlim"}>Makulimlim</MenuItem>
               <MenuItem value={"Maambon"}>Maambon</MenuItem>
             </Select>
-            <FormHelperText>
-              {incomplete &&
-              (measurement.weather == "" || measurement.weather == undefined)
-                ? "Required"
-                : ""}
-            </FormHelperText>
+            <FormHelperText>Required</FormHelperText>
           </FormControl>
 
           <FormControl
@@ -530,15 +576,6 @@ const SurficialMarkers = (props) => {
                   measurement.reporterOther == undefined)
                   ? true
                   : false
-              }
-              helperText={
-                incomplete &&
-                (measurement.reporter <= 0 ||
-                  measurement.reporter == undefined) &&
-                (measurement.reporterOther == "" ||
-                  measurement.reporterOther == undefined)
-                  ? "required"
-                  : ""
               }
               labelId="demo-simple-select-label"
               id="demo-simple-select"
@@ -567,15 +604,7 @@ const SurficialMarkers = (props) => {
                 </MenuItem>
               ))}
             </Select>
-            <FormHelperText>
-              {incomplete &&
-              (measurement.reporter == "" ||
-                measurement.reporter == undefined) &&
-              (measurement.reporterOther == "" ||
-                measurement.reporterOther == undefined)
-                ? "Required"
-                : ""}
-            </FormHelperText>
+            <FormHelperText>Required</FormHelperText>
           </FormControl>
 
           <FormControlLabel
@@ -630,8 +659,21 @@ const SurficialMarkers = (props) => {
       <Grid container spacing={4} sx={{ mt: 2, mb: 6, padding: "2%" }}>
         <Grid item xs={12}>
           <Grid container spacing={2}>
-            <Grid item xs={12}>
+            <Grid item xs={6}>
               <Typography variant="h4">Surficial Markers</Typography>
+            </Grid>
+            <Grid item xs={6}>
+              <Button
+                variant="contained"
+                onClick={handleClickOpen}
+                style={{
+                  backgroundColor: "#ffd400",
+                  color: "black",
+                  float: "right",
+                }}
+              >
+                Add surficial marker measurement
+              </Button>
             </Grid>
             <Grid item xs={12}>
               <FabMuiTable
@@ -642,7 +684,7 @@ const SurficialMarkers = (props) => {
                 options={options}
               />
             </Grid>
-            <Grid item xs={12}>
+            {/* <Grid item xs={12}>
               <Grid container align="center">
                 <Grid item xs={12}>
                   <Button
@@ -654,11 +696,11 @@ const SurficialMarkers = (props) => {
                   </Button>
                 </Grid>
               </Grid>
-            </Grid>
+            </Grid> */}
           </Grid>
         </Grid>
       </Grid>
-    </Container>
+    </Grid>
   );
 };
 export default SurficialMarkers;
