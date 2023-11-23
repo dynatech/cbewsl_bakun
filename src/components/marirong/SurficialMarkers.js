@@ -42,6 +42,7 @@ import Checkbox from "@mui/material/Checkbox";
 
 import { useSnackbar } from "notistack";
 import Swal from "sweetalert2";
+import { CBEWSL_SITE_CODE } from "../../host";
 
 const MenuProps = {
   PaperProps: {
@@ -103,7 +104,7 @@ const SurficialMarkers = (props) => {
   };
 
   const fetchAll = () => {
-    let endDate = moment(new Date("2022-10-25")).format("YYYY-MM-DD HH:mm:00");
+    let endDate = moment(new Date()).format("YYYY-MM-DD HH:mm:00");
     let startDate = moment(new Date("2020-10-25")).format(
       "YYYY-MM-DD HH:mm:00"
     );
@@ -225,6 +226,7 @@ const SurficialMarkers = (props) => {
       panahon: measurement.weather,
       reporter: reporterStr.toUpperCase(),
       type: "EVENT",
+      site_code: CBEWSL_SITE_CODE.toLocaleUpperCase(),
     };
 
     console.log("submit", submitData);

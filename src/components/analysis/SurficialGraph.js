@@ -1,13 +1,13 @@
-import React, { useState, useEffect, Fragment, useRef } from 'react';
-import { Route, Link, matchPath } from 'react-router-dom';
+import React, { useState, useEffect, Fragment, useRef } from "react";
+import { Route, Link, matchPath } from "react-router-dom";
 
-import Highcharts from 'highcharts';
-import HC_exporting from 'highcharts/modules/exporting';
-import HighchartsReact from 'highcharts-react-official';
-import MomentUtils from '@date-io/moment';
-import moment from 'moment';
+import Highcharts from "highcharts";
+import HC_exporting from "highcharts/modules/exporting";
+import HighchartsReact from "highcharts-react-official";
+import MomentUtils from "@date-io/moment";
+import moment from "moment";
 // import { useSnackbar } from "notistack";
-import Skeleton from '@mui/material/Skeleton';
+import Skeleton from "@mui/material/Skeleton";
 
 import {
   Button,
@@ -39,9 +39,9 @@ import {
   Menu,
   MenuItem,
   Checkbox,
-} from '@material-ui/core';
-import MUIDataTable from 'mui-datatables';
-import Chroma from 'chroma-js';
+} from "@material-ui/core";
+import MUIDataTable from "mui-datatables";
+import Chroma from "chroma-js";
 import {
   ArrowDropDown,
   Edit,
@@ -49,13 +49,13 @@ import {
   Add,
   LocalOffer,
   GetApp,
-} from '@material-ui/icons';
-import { isWidthDown } from '@material-ui/core/withWidth';
+} from "@material-ui/icons";
+import { isWidthDown } from "@material-ui/core/withWidth";
 import {
   MuiPickersUtilsProvider,
   KeyboardDateTimePicker,
-} from '@material-ui/pickers';
-import { SlideTransition, FadeTransition } from '../utils/TransitionList';
+} from "@material-ui/pickers";
+import { SlideTransition, FadeTransition } from "../utils/TransitionList";
 
 import {
   getSurficialPlotData,
@@ -65,28 +65,29 @@ import {
   insertMarkerEvent,
   saveUnreliableMarkerData,
   downloadMarkerHistoryTags,
-} from '../../apis/analysis';
+} from "../../apis/analysis";
+import { CBEWSL_SITE_LOCATION } from "../../host";
 
 // init the module
 HC_exporting(Highcharts);
-function computeForStartTs(ts, duration = 7, unit = 'days') {
-  if (unit === 'all') {
-    return 'None';
+function computeForStartTs(ts, duration = 7, unit = "days") {
+  if (unit === "all") {
+    return "None";
   }
 
-  const ts_format = 'YYYY-MM-DD HH:mm:ss';
+  const ts_format = "YYYY-MM-DD HH:mm:ss";
   const ts_start = moment(ts).subtract(duration, unit).format(ts_format);
   return ts_start;
 }
 
 function capitalizeFirstLetter(str, every_word = false) {
-  const capitalize = s => s.charAt(0).toUpperCase() + s.slice(1);
+  const capitalize = (s) => s.charAt(0).toUpperCase() + s.slice(1);
 
   if (every_word) {
-    const arr = str.split(' ');
-    const cap_arr = arr.map(s => capitalize(s));
+    const arr = str.split(" ");
+    const cap_arr = arr.map((s) => capitalize(s));
 
-    return cap_arr.join(' ');
+    return cap_arr.join(" ");
   }
 
   return capitalize(str);
@@ -98,7 +99,8 @@ function snackBarActionButton(closeSnackbarFn, key) {
       color="primary"
       onClick={() => {
         closeSnackbarFn(key);
-      }}>
+      }}
+    >
       Dismiss
     </Button>
   );
@@ -109,30 +111,30 @@ function markerFormValidation(
   ts,
   remarks,
   new_marker_name,
-  addNewMarker,
+  addNewMarker
 ) {
   let button_state = null;
   if (addNewMarker) {
-    if (new_marker_name === '' || remarks === '' || ts === '' || ts === null) {
+    if (new_marker_name === "" || remarks === "" || ts === "" || ts === null) {
       button_state = true;
     } else {
       button_state = false;
     }
   } else {
-    if (event === 'rename') {
+    if (event === "rename") {
       if (
-        ts === '' ||
+        ts === "" ||
         ts === null ||
-        remarks === '' ||
+        remarks === "" ||
         remarks === null ||
-        new_marker_name === ''
+        new_marker_name === ""
       ) {
         button_state = true;
       } else {
         button_state = false;
       }
     } else {
-      if (ts === '' || ts === null || remarks === '' || remarks === null) {
+      if (ts === "" || ts === null || remarks === "" || remarks === null) {
         button_state = true;
       } else {
         button_state = false;
@@ -151,13 +153,13 @@ function ExportModal(props) {
 
   useEffect(() => {
     const temp = {};
-    surficialData.forEach(row => {
+    surficialData.forEach((row) => {
       temp[row.marker_id] = false;
     });
     setDataState({ ...data_state, ...temp });
   }, [surficialData]);
 
-  const clickCheckboxHandler = event => {
+  const clickCheckboxHandler = (event) => {
     const {
       target: { checked, value },
     } = event;
@@ -166,20 +168,20 @@ function ExportModal(props) {
 
   const handleSubmit = () => {
     const payload = {
-      ts_start: moment(ts_start).format('YYYY-MM-DD HH:mm:ss'),
-      ts_end: moment(ts_end).format('YYYY-MM-DD HH:mm:ss'),
+      ts_start: moment(ts_start).format("YYYY-MM-DD HH:mm:ss"),
+      ts_end: moment(ts_end).format("YYYY-MM-DD HH:mm:ss"),
       markers: Object.entries(data_state)
-        .filter(x => x[1])
-        .map(y => parseInt(y[0], 10)),
+        .filter((x) => x[1])
+        .map((y) => parseInt(y[0], 10)),
     };
 
-    const file_name = `${siteCode}_${moment().format('MM-DD-YYYY_HH-mm-ss')}`;
+    const file_name = `${siteCode}_${moment().format("MM-DD-YYYY_HH-mm-ss")}`;
 
-    downloadMarkerHistoryTags(payload, ret => {
+    downloadMarkerHistoryTags(payload, (ret) => {
       const url = window.URL.createObjectURL(new Blob([ret]));
-      const link = document.createElement('a');
+      const link = document.createElement("a");
       link.href = url;
-      link.setAttribute('download', file_name);
+      link.setAttribute("download", file_name);
       document.body.appendChild(link);
       link.click();
 
@@ -197,21 +199,23 @@ function ExportModal(props) {
       fullScreen={fullScreen}
       open={open}
       aria-labelledby="form-dialog-title"
-      TransitionComponent={fullScreen ? SlideTransition : FadeTransition}>
+      TransitionComponent={fullScreen ? SlideTransition : FadeTransition}
+    >
       <DialogTitle id="form-dialog-title">
         Export marker history and data tags
       </DialogTitle>
       <DialogContent>
         <DialogContentText>Fill out the necessary fields.</DialogContentText>
 
-        <FormControl component="fieldset" style={{ width: '100%' }}>
-          <FormLabel component="legend" style={{ textAlign: 'center' }}>
+        <FormControl component="fieldset" style={{ width: "100%" }}>
+          <FormLabel component="legend" style={{ textAlign: "center" }}>
             Choose markers to be exported
           </FormLabel>
           <FormGroup
             row
-            style={{ display: 'flex', justifyContent: 'space-evenly' }}>
-            {surficialData.map(row => (
+            style={{ display: "flex", justifyContent: "space-evenly" }}
+          >
+            {surficialData.map((row) => (
               <FormControlLabel
                 key={row.marker_name}
                 control={
@@ -236,7 +240,7 @@ function ExportModal(props) {
                 autoOk
                 label="Timestamp of Sending"
                 value={ts_start}
-                onChange={x => setTsStart(x)}
+                onChange={(x) => setTsStart(x)}
                 ampm={false}
                 placeholder="2010/01/01 00:00"
                 format="YYYY/MM/DD HH:mm"
@@ -253,7 +257,7 @@ function ExportModal(props) {
                 autoOk
                 label="End Timestamp"
                 value={ts_end}
-                onChange={x => setTsEnd(x)}
+                onChange={(x) => setTsEnd(x)}
                 ampm={false}
                 placeholder="2010/01/01 00:00"
                 format="YYYY/MM/DD HH:mm"
@@ -273,8 +277,9 @@ function ExportModal(props) {
           disabled={
             ts_start === null ||
             ts_end === null ||
-            Object.values(data_state).every(x => x === false)
-          }>
+            Object.values(data_state).every((x) => x === false)
+          }
+        >
           Export
         </Button>
         <Button onClick={handleCancel}>Cancel</Button>
@@ -306,54 +311,54 @@ function AddNewHistoryModal(props) {
 
   // const { enqueueSnackbar, closeSnackbar } = useSnackbar();
   // console.log(useSnackbar())
-  const [event, setEvent] = useState('');
+  const [event, setEvent] = useState("");
   const [ts, setTs] = useState(null);
-  const [new_marker_name, setNewMarkerName] = useState('');
-  const [remarks, setRemarks] = useState('');
+  const [new_marker_name, setNewMarkerName] = useState("");
+  const [remarks, setRemarks] = useState("");
   const [save_button_state, setSaveButtonState] = useState(true);
 
   const resetForm = () => {
     setIsOpen(false);
     setTs(null);
-    setNewMarkerName('');
+    setNewMarkerName("");
     setNmmValidation(null);
-    setEvent('');
-    setRemarks('');
+    setEvent("");
+    setRemarks("");
   };
 
-  const handleChange = e => {
+  const handleChange = (e) => {
     setEvent(e.target.value);
     setTs(null);
-    setNewMarkerName('');
+    setNewMarkerName("");
     setNmmValidation(null);
-    setRemarks('');
+    setRemarks("");
   };
 
   const [nmm_validation, setNmmValidation] = useState(null);
   const handleBlur = () => {
-    if (new_marker_name === '') setNmmValidation('Required field');
+    if (new_marker_name === "") setNmmValidation("Required field");
   };
 
   useEffect(() => {
-    if (new_marker_name === '') {
-      setNmmValidation('Required field');
-      if (event === 'rename') {
+    if (new_marker_name === "") {
+      setNmmValidation("Required field");
+      if (event === "rename") {
         setSaveButtonState(true);
       }
       return;
     }
 
     if (/[^a-zA-Z]/.test(new_marker_name)) {
-      setNmmValidation('Enter alphabet characters only.');
-      if (event === 'rename') {
+      setNmmValidation("Enter alphabet characters only.");
+      if (event === "rename") {
         setSaveButtonState(true);
       }
       return;
     }
 
     if (historicalMarkers.includes(new_marker_name)) {
-      setNmmValidation('Marker name already exists.');
-      if (event === 'rename') {
+      setNmmValidation("Marker name already exists.");
+      if (event === "rename") {
         setSaveButtonState(true);
       }
       return;
@@ -364,7 +369,7 @@ function AddNewHistoryModal(props) {
   const [verify_submit, setVerifySubmit] = useState(false);
   const handleSubmit = () => {
     let to_send = true;
-    if (event !== 'reposition' || addNewMarker) {
+    if (event !== "reposition" || addNewMarker) {
       to_send = false;
       if (!verify_submit) setVerifySubmit(true);
       else {
@@ -376,25 +381,25 @@ function AddNewHistoryModal(props) {
     if (to_send) {
       resetForm();
 
-      const temp_event = addNewMarker ? 'add' : event;
+      const temp_event = addNewMarker ? "add" : event;
       const temp_ts = addNewMarker ? (ts == null ? moment() : ts) : ts;
       const input = {
         site_code: siteCode,
         event: temp_event,
         marker_id,
-        ts: moment(temp_ts).format('YYYY-MM-DD HH:mm:00'),
+        ts: moment(temp_ts).format("YYYY-MM-DD HH:mm:00"),
         marker_name: new_marker_name,
-        remarks: remarks === '' ? null : remarks,
+        remarks: remarks === "" ? null : remarks,
       };
 
-      insertMarkerEvent(input, data => {
+      insertMarkerEvent(input, (data) => {
         const { status } = data;
-        let message = 'Error inserting new marker event...';
-        if (addNewMarker) message = 'Error creating new marker...';
+        let message = "Error inserting new marker event...";
+        if (addNewMarker) message = "Error creating new marker...";
 
-        if (status === 'success') {
-          message = 'Inserting new marker event successful!';
-          if (addNewMarker) message = 'Creating new marker successful!';
+        if (status === "success") {
+          message = "Inserting new marker event successful!";
+          if (addNewMarker) message = "Creating new marker successful!";
           setRedrawChart(true);
 
           // if (["add", "rename"].includes(temp_event)) {
@@ -419,7 +424,7 @@ function AddNewHistoryModal(props) {
       ts,
       remarks,
       new_marker_name,
-      addNewMarker,
+      addNewMarker
     );
     setSaveButtonState(button_state);
   }, [event, ts, remarks, new_marker_name]);
@@ -430,9 +435,10 @@ function AddNewHistoryModal(props) {
       fullScreen={fullScreen}
       open={open}
       aria-labelledby="form-dialog-title"
-      TransitionComponent={fullScreen ? SlideTransition : FadeTransition}>
+      TransitionComponent={fullScreen ? SlideTransition : FadeTransition}
+    >
       <DialogTitle id="form-dialog-title">
-        {addNewMarker ? 'Add new marker' : `Add event to Marker ${marker_name}`}
+        {addNewMarker ? "Add new marker" : `Add event to Marker ${marker_name}`}
       </DialogTitle>
       <DialogContent>
         <DialogContentText>
@@ -450,15 +456,16 @@ function AddNewHistoryModal(props) {
           )}
         </DialogContentText>
 
-        <FormControl component="fieldset" style={{ display: 'flex' }}>
+        <FormControl component="fieldset" style={{ display: "flex" }}>
           {!addNewMarker && (
             <RadioGroup
               aria-label="marker_event"
               name="marker_event"
               row
-              style={{ justifyContent: 'space-around' }}
+              style={{ justifyContent: "space-around" }}
               value={event}
-              onChange={handleChange}>
+              onChange={handleChange}
+            >
               <FormControlLabel
                 value="reposition"
                 control={<Radio />}
@@ -485,7 +492,7 @@ function AddNewHistoryModal(props) {
                     error={Boolean(nmm_validation)}
                     label="New Marker Name"
                     value={new_marker_name}
-                    onChange={x =>
+                    onChange={(x) =>
                       setNewMarkerName(x.target.value.toUpperCase())
                     }
                     onBlur={handleBlur}
@@ -496,7 +503,7 @@ function AddNewHistoryModal(props) {
                       maxLength: 1,
                     }}
                     placeholder="Input a letter"
-                    helperText={nmm_validation || ''}
+                    helperText={nmm_validation || ""}
                   />
                 </Grid>
                 <Grid item xs={12} sm>
@@ -506,7 +513,7 @@ function AddNewHistoryModal(props) {
                       autoOk
                       label="Timestamp"
                       value={ts}
-                      onChange={x => setTs(x)}
+                      onChange={(x) => setTs(x)}
                       ampm={false}
                       placeholder="2010/01/01 00:00"
                       format="YYYY/MM/DD HH:mm"
@@ -514,7 +521,7 @@ function AddNewHistoryModal(props) {
                       clearable
                       disableFuture
                       fullWidth
-                      error={ts === '' || ts === null}
+                      error={ts === "" || ts === null}
                     />
                   </MuiPickersUtilsProvider>
                 </Grid>
@@ -522,14 +529,14 @@ function AddNewHistoryModal(props) {
                   <TextField
                     label="Remarks"
                     value={remarks}
-                    onChange={x => setRemarks(x.target.value)}
+                    onChange={(x) => setRemarks(x.target.value)}
                     onBlur={handleBlur}
                     type="text"
                     multiline
                     rowsMax={3}
                     fullWidth
                     required
-                    error={remarks === '' || remarks === null}
+                    error={remarks === "" || remarks === null}
                     inputProps={{
                       maxLength: 1500,
                     }}
@@ -539,13 +546,15 @@ function AddNewHistoryModal(props) {
               </Fragment>
             )}
 
-            {event === 'rename' && (
+            {event === "rename" && (
               <Grid item xs={12} sm>
                 <TextField
                   error={Boolean(nmm_validation)}
                   label="New Marker Name"
                   value={new_marker_name}
-                  onChange={x => setNewMarkerName(x.target.value.toUpperCase())}
+                  onChange={(x) =>
+                    setNewMarkerName(x.target.value.toUpperCase())
+                  }
                   onBlur={handleBlur}
                   type="text"
                   required
@@ -554,12 +563,12 @@ function AddNewHistoryModal(props) {
                     maxLength: 1,
                   }}
                   placeholder="Input a letter"
-                  helperText={nmm_validation || ''}
+                  helperText={nmm_validation || ""}
                 />
               </Grid>
             )}
 
-            {event !== '' && (
+            {event !== "" && (
               <Fragment>
                 <Grid item xs={12} sm>
                   <MuiPickersUtilsProvider utils={MomentUtils}>
@@ -568,7 +577,7 @@ function AddNewHistoryModal(props) {
                       autoOk
                       label="Timestamp"
                       value={ts}
-                      onChange={x => setTs(x)}
+                      onChange={(x) => setTs(x)}
                       ampm={false}
                       placeholder="2010/01/01 00:00"
                       format="YYYY/MM/DD HH:mm"
@@ -576,7 +585,7 @@ function AddNewHistoryModal(props) {
                       clearable
                       disableFuture
                       fullWidth
-                      error={ts === '' || ts === null}
+                      error={ts === "" || ts === null}
                     />
                   </MuiPickersUtilsProvider>
                 </Grid>
@@ -584,14 +593,14 @@ function AddNewHistoryModal(props) {
                   <TextField
                     label="Remarks"
                     value={remarks}
-                    onChange={x => setRemarks(x.target.value)}
+                    onChange={(x) => setRemarks(x.target.value)}
                     onBlur={handleBlur}
                     type="text"
                     multiline
                     rowsMax={3}
                     fullWidth
                     required
-                    error={remarks === '' || remarks === null}
+                    error={remarks === "" || remarks === null}
                     inputProps={{
                       maxLength: 1500,
                     }}
@@ -621,10 +630,11 @@ function AddNewHistoryModal(props) {
           <Button onClick={() => setVerifySubmit(false)}>Go Back</Button>
         )}
         <Button
-          variant={verify_submit ? 'contained' : 'text'}
+          variant={verify_submit ? "contained" : "text"}
           color="secondary"
           onClick={handleSubmit}
-          disabled={save_button_state}>
+          disabled={save_button_state}
+        >
           Submit
         </Button>
         {!verify_submit && <Button onClick={resetForm}>Cancel</Button>}
@@ -637,30 +647,30 @@ function MarkerHistoryTable(props) {
   const { markerInfo, markerName } = props;
   const column_options = [
     {
-      name: 'ts',
-      label: 'Timestamp',
+      name: "ts",
+      label: "Timestamp",
       options: {
         filter: false,
         customBodyRender(value) {
-          return moment(value).format('D MMMM YYYY, HH:mm');
+          return moment(value).format("D MMMM YYYY, HH:mm");
         },
         sort: true,
       },
     },
     {
-      name: 'event',
-      label: 'Event',
+      name: "event",
+      label: "Event",
     },
     {
-      name: 'm_name',
-      label: 'Name',
+      name: "m_name",
+      label: "Name",
       options: {
         filter: false,
       },
     },
     {
-      name: 'remarks',
-      label: 'Remarks',
+      name: "remarks",
+      label: "Remarks",
       options: {
         filter: false,
         display: false,
@@ -671,10 +681,10 @@ function MarkerHistoryTable(props) {
   const table_options = {
     textLabels: {
       body: {
-        noMatch: 'No data',
+        noMatch: "No data",
       },
     },
-    selectableRows: 'none',
+    selectableRows: "none",
     expandableRows: true,
     expandableRowsHeader: false,
     expandableRowsOnClick: true,
@@ -694,19 +704,19 @@ function MarkerHistoryTable(props) {
     print: false,
     download: false,
     viewColumns: false,
-    responsive: 'standard',
+    responsive: "standard",
     customSort(data, col_index, order) {
       return data.sort((a, b) => {
         if (col_index === 0) {
           return (
             (moment(a.data[col_index]).isAfter(b.data[col_index]) ? -1 : 1) *
-            (order === 'desc' ? 1 : -1)
+            (order === "desc" ? 1 : -1)
           );
         }
 
         return (
           (a.data[col_index] < b.data[col_index] ? -1 : 1) *
-          (order === 'desc' ? 1 : -1)
+          (order === "desc" ? 1 : -1)
         );
       });
     },
@@ -714,14 +724,14 @@ function MarkerHistoryTable(props) {
 
   let table_data = [];
   if (markerInfo) {
-    table_data = markerInfo.marker_history.map(x => {
+    table_data = markerInfo.marker_history.map((x) => {
       const { ts, event, marker_name, remarks } = x;
-      const m_name = marker_name ? marker_name.marker_name : '---';
+      const m_name = marker_name ? marker_name.marker_name : "---";
       return {
         event: capitalizeFirstLetter(event),
         m_name,
         ts,
-        remarks: remarks || 'None',
+        remarks: remarks || "None",
       };
     });
   }
@@ -746,22 +756,26 @@ function UpdateDeleteModal(props) {
     chosenPoint,
   } = props;
   const { is_open, ts, name, measurement, mo_id, data_id } = editModal;
-  const { ts: chosen_ts, measurement: chosen_meas, observer_name } = chosenPoint;
+  const {
+    ts: chosen_ts,
+    measurement: chosen_meas,
+    observer_name,
+  } = chosenPoint;
 
   // console.log(useSnackbar())
   // const { enqueueSnackbar, closeSnackbar } = useSnackbar();
   const [is_delete_clicked, setDeleteClick] = useState(false);
-  const [delete_quantity, setDeleteQuantity] = useState('one');
-  const changeRadioValueFn = x => setDeleteQuantity(x.target.value);
+  const [delete_quantity, setDeleteQuantity] = useState("one");
+  const changeRadioValueFn = (x) => setDeleteQuantity(x.target.value);
 
   useEffect(() => {
     setDeleteClick(false);
   }, [is_open]);
 
-  const changeHandlerFn = (prop, value) => x => {
+  const changeHandlerFn = (prop, value) => (x) => {
     let fin_val = value;
-    if (prop === 'ts') fin_val = x;
-    else if (prop === 'measurement') fin_val = x.target.value;
+    if (prop === "ts") fin_val = x;
+    else if (prop === "measurement") fin_val = x.target.value;
 
     setEditModal({
       ...editModal,
@@ -772,7 +786,7 @@ function UpdateDeleteModal(props) {
   const deleteDataFn = () => {
     // const { data_id, mo_id } = editModal;
     let id = data_id;
-    if (delete_quantity === 'all') {
+    if (delete_quantity === "all") {
       id = mo_id;
     }
 
@@ -786,14 +800,14 @@ function UpdateDeleteModal(props) {
       is_open: false,
     });
 
-    deleteSurficialData(input, data => {
+    deleteSurficialData(input, (data) => {
       const { status } = data;
-      let message = 'Error deleting surficial data...';
-      let variant = 'error';
+      let message = "Error deleting surficial data...";
+      let variant = "error";
 
-      if (status === 'success') {
-        message = 'Surficial data delete successful!';
-        variant = 'success';
+      if (status === "success") {
+        message = "Surficial data delete successful!";
+        variant = "success";
         setRedrawChart(true);
       }
 
@@ -814,7 +828,7 @@ function UpdateDeleteModal(props) {
       input = {
         ...input,
         mo_id,
-        ts: moment(ts).format('YYYY-MM-DD HH:mm:ss'),
+        ts: moment(ts).format("YYYY-MM-DD HH:mm:ss"),
       };
     }
 
@@ -832,14 +846,14 @@ function UpdateDeleteModal(props) {
     });
 
     if (Object.keys(input).length !== 0) {
-      updateSurficialData(input, data => {
+      updateSurficialData(input, (data) => {
         const { status } = data;
-        let message = 'Error updating surficial data...';
-        let variant = 'error';
+        let message = "Error updating surficial data...";
+        let variant = "error";
 
-        if (status === 'success') {
-          message = 'Surficial data update successful!';
-          variant = 'success';
+        if (status === "success") {
+          message = "Surficial data update successful!";
+          variant = "success";
           setRedrawChart(true);
         }
 
@@ -860,7 +874,8 @@ function UpdateDeleteModal(props) {
       fullScreen={fullScreen}
       open={is_open}
       aria-labelledby="form-dialog-title"
-      TransitionComponent={fullScreen ? SlideTransition : FadeTransition}>
+      TransitionComponent={fullScreen ? SlideTransition : FadeTransition}
+    >
       <DialogTitle id="form-dialog-title">Update surficial data</DialogTitle>
       <DialogContent>
         <DialogContentText>
@@ -869,12 +884,12 @@ function UpdateDeleteModal(props) {
 
         <Grid container spacing={2}>
           <Grid item xs={12} align="center">
-            <Typography variant="subtitle1" style={{ fontWeight: 'bold' }}>
+            <Typography variant="subtitle1" style={{ fontWeight: "bold" }}>
               {siteCode.toUpperCase()} - Marker {name}
             </Typography>
             <Typography variant="body2">
-              Observation Timestamp:{' '}
-              {moment(chosen_ts).format('DD MMMM YYYY, HH:mm:ss')}
+              Observation Timestamp:{" "}
+              {moment(chosen_ts).format("DD MMMM YYYY, HH:mm:ss")}
             </Typography>
             <Typography variant="body2">
               Measurement: {chosen_meas} cm
@@ -887,7 +902,7 @@ function UpdateDeleteModal(props) {
           </Grid>
 
           <Grid item xs={12}>
-            <Typography variant="subtitle2" style={{ fontWeight: 'bold' }}>
+            <Typography variant="subtitle2" style={{ fontWeight: "bold" }}>
               EDIT
             </Typography>
           </Grid>
@@ -896,7 +911,7 @@ function UpdateDeleteModal(props) {
             <TextField
               label="Change marker data measurement"
               value={measurement}
-              onChange={changeHandlerFn('measurement')}
+              onChange={changeHandlerFn("measurement")}
               type="number"
               fullWidth
               required
@@ -914,7 +929,7 @@ function UpdateDeleteModal(props) {
                 autoOk
                 label="Observation Timestamp"
                 value={moment(ts)}
-                onChange={changeHandlerFn('ts')}
+                onChange={changeHandlerFn("ts")}
                 ampm={false}
                 placeholder="2010/01/01 00:00"
                 format="YYYY/MM/DD HH:mm"
@@ -926,12 +941,13 @@ function UpdateDeleteModal(props) {
             </Grid>
           </MuiPickersUtilsProvider>
 
-          <Grid item xs={12} style={{ textAlign: 'right' }}>
+          <Grid item xs={12} style={{ textAlign: "right" }}>
             <Button
               variant="contained"
               color="primary"
               size="small"
-              onClick={updateDataFn}>
+              onClick={updateDataFn}
+            >
               Update Data
             </Button>
           </Grid>
@@ -941,7 +957,7 @@ function UpdateDeleteModal(props) {
           </Grid>
 
           <Grid item xs={12}>
-            <Typography variant="subtitle2" style={{ fontWeight: 'bold' }}>
+            <Typography variant="subtitle2" style={{ fontWeight: "bold" }}>
               DELETE
             </Typography>
           </Grid>
@@ -956,7 +972,8 @@ function UpdateDeleteModal(props) {
                 aria-label="gender"
                 name="gender1"
                 value={delete_quantity}
-                onChange={changeRadioValueFn}>
+                onChange={changeRadioValueFn}
+              >
                 <FormControlLabel
                   value="one"
                   control={<Radio />}
@@ -971,23 +988,25 @@ function UpdateDeleteModal(props) {
             </FormControl>
           </Grid>
 
-          <Grid item xs={12} style={{ textAlign: 'right' }}>
+          <Grid item xs={12} style={{ textAlign: "right" }}>
             <Button
               variant="contained"
               color="primary"
               size="small"
-              onClick={() => setDeleteClick(true)}>
+              onClick={() => setDeleteClick(true)}
+            >
               Delete Data
             </Button>
           </Grid>
 
           {is_delete_clicked && (
-            <Grid item xs={12} style={{ textAlign: 'right' }}>
+            <Grid item xs={12} style={{ textAlign: "right" }}>
               <ButtonGroup
                 variant="contained"
                 size="small"
                 color="secondary"
-                aria-label="small contained button group">
+                aria-label="small contained button group"
+              >
                 <Button disabled>Are you sure?</Button>
                 <Button onClick={deleteDataFn}>Yes</Button>
                 <Button onClick={() => setDeleteClick(false)}>No</Button>
@@ -997,7 +1016,7 @@ function UpdateDeleteModal(props) {
         </Grid>
       </DialogContent>
       <DialogActions>
-        <Button onClick={changeHandlerFn('is_open', false)}>Cancel</Button>
+        <Button onClick={changeHandlerFn("is_open", false)}>Cancel</Button>
       </DialogActions>
     </Dialog>
   );
@@ -1015,8 +1034,8 @@ function SurficialDataTagModal(props) {
 
   const user_id = 999;
   const [show_form, setShowForm] = useState(false);
-  const [remarks, setRemarks] = useState('');
-  const [tag_type, setTagType] = useState('');
+  const [remarks, setRemarks] = useState("");
+  const [tag_type, setTagType] = useState("");
   // const { enqueueSnackbar, closeSnackbar } = useSnackbar();
 
   useEffect(() => {
@@ -1031,9 +1050,9 @@ function SurficialDataTagModal(props) {
   };
 
   const handleCancel = () => {
-    changeHandlerFn('is_open', false);
-    setRemarks('');
-    setTagType('');
+    changeHandlerFn("is_open", false);
+    setRemarks("");
+    setTagType("");
   };
 
   // const snackBarActionFn = key => (<Button
@@ -1057,7 +1076,7 @@ function SurficialDataTagModal(props) {
       tag_type: parseInt(tag_type, 10),
     };
 
-    saveUnreliableMarkerData(input, data => {
+    saveUnreliableMarkerData(input, (data) => {
       const { status, message } = data;
       let variant;
       if (status === true) {
@@ -1066,11 +1085,11 @@ function SurficialDataTagModal(props) {
           ...surficialDataTagModal,
           is_open: false,
         });
-        variant = 'success';
+        variant = "success";
 
-        setRemarks('');
+        setRemarks("");
       } else {
-        variant = 'error';
+        variant = "error";
       }
 
       // enqueueSnackbar(
@@ -1093,17 +1112,17 @@ function SurficialDataTagModal(props) {
   return (
     <Dialog open={is_open} aria-labelledby="form-dialog-title">
       <DialogTitle id="form-dialog-title">
-        {unreliable_data ? 'Marker data tag information' : 'Tag marker data'}
+        {unreliable_data ? "Marker data tag information" : "Tag marker data"}
       </DialogTitle>
 
       <DialogContent>
         <Grid container spacing={2}>
           <Grid item xs={12} align="center">
-            <Typography variant="subtitle1" style={{ fontWeight: 'bold' }}>
+            <Typography variant="subtitle1" style={{ fontWeight: "bold" }}>
               {siteCode.toUpperCase()} - Marker {name}
             </Typography>
             <Typography variant="body2">
-              Timestamp: {moment(ts).format('DD MMMM YYYY, HH:mm:ss')}
+              Timestamp: {moment(ts).format("DD MMMM YYYY, HH:mm:ss")}
             </Typography>
             <Typography variant="body2">
               Measurement: {measurement} cm
@@ -1123,8 +1142,8 @@ function SurficialDataTagModal(props) {
                   </Typography>
                   <Typography variant="body1" gutterBottom>
                     {
-                      { '-1': 'Unreliable', 0: 'Validating', 1: 'Confirmed' }[
-                      unreliable_data.tag_type
+                      { "-1": "Unreliable", 0: "Validating", 1: "Confirmed" }[
+                        unreliable_data.tag_type
                       ]
                     }
                   </Typography>
@@ -1135,7 +1154,7 @@ function SurficialDataTagModal(props) {
                   </Typography>
                   <Typography variant="body1" gutterBottom>
                     {moment(unreliable_data.ts).format(
-                      'DD MMMM YYYY, HH:mm:ss',
+                      "DD MMMM YYYY, HH:mm:ss"
                     )}
                   </Typography>
                 </Grid>
@@ -1162,14 +1181,16 @@ function SurficialDataTagModal(props) {
               <Fragment>
                 <FormControl
                   component="fieldset"
-                  style={{ display: 'flex', marginBottom: '1rem' }}>
+                  style={{ display: "flex", marginBottom: "1rem" }}
+                >
                   <RadioGroup
                     aria-label="tag_type"
                     name="tag_type"
                     row
-                    style={{ justifyContent: 'space-around' }}
+                    style={{ justifyContent: "space-around" }}
                     value={tag_type}
-                    onChange={x => setTagType(x.target.value)}>
+                    onChange={(x) => setTagType(x.target.value)}
+                  >
                     <FormControlLabel
                       value="-1"
                       control={<Radio />}
@@ -1190,16 +1211,16 @@ function SurficialDataTagModal(props) {
                     />
                   </RadioGroup>
                 </FormControl>
-                {tag_type != '0' && (
+                {tag_type != "0" && (
                   <TextField
                     label="Remarks"
-                    value={remarks ? remarks : ''}
-                    onChange={event => setRemarks(event.target.value)}
+                    value={remarks ? remarks : ""}
+                    onChange={(event) => setRemarks(event.target.value)}
                     inputProps={{ maxLength: 1000 }}
                     fullWidth
                     required
-                    error={remarks === '' || remarks === null}
-                    helperText={remarks ? '' : 'Required'}
+                    error={remarks === "" || remarks === null}
+                    helperText={remarks ? "" : "Required"}
                   />
                 )}
               </Fragment>
@@ -1215,7 +1236,8 @@ function SurficialDataTagModal(props) {
             color="secondary"
             size="small"
             onClick={saveFunction}
-            disabled={remarks === '' || tag_type === '' || remarks === null}>
+            disabled={remarks === "" || tag_type === "" || remarks === null}
+          >
             Save
           </Button>
         ) : (
@@ -1223,7 +1245,8 @@ function SurficialDataTagModal(props) {
             variant="contained"
             color="secondary"
             size="small"
-            onClick={toggle_edit}>
+            onClick={toggle_edit}
+          >
             Edit
           </Button>
         )}
@@ -1271,7 +1294,7 @@ function ClickPointModal(props) {
     setGenerateTrending(true);
   };
 
-  const hadleSurficialDataTagClick = type => event => {
+  const hadleSurficialDataTagClick = (type) => (event) => {
     handleClose();
     setSurficialDataTagModal({
       ...chosenPoint,
@@ -1284,15 +1307,16 @@ function ClickPointModal(props) {
     <Dialog
       onClose={handleClose}
       aria-labelledby="simple-dialog-title"
-      open={open}>
+      open={open}
+    >
       <DialogTitle id="simple-dialog-title">Point options</DialogTitle>
       <DialogContent>
         <div align="center">
-          <Typography variant="subtitle1" style={{ fontWeight: 'bold' }}>
+          <Typography variant="subtitle1" style={{ fontWeight: "bold" }}>
             Marker {name}
           </Typography>
           <Typography variant="body2">
-            Timestamp: {moment(chosen_ts).format('DD MMMM YYYY, HH:mm:ss')}
+            Timestamp: {moment(chosen_ts).format("DD MMMM YYYY, HH:mm:ss")}
           </Typography>
           <Typography variant="body2">Measurement: {chosen_meas} cm</Typography>
           <Typography variant="body2">Observer: {observer_name}</Typography>
@@ -1313,7 +1337,7 @@ function ClickPointModal(props) {
           <ListItemText primary="Generate trending chart" />
         </ListItem>
 
-        <ListItem button onClick={hadleSurficialDataTagClick('tag')}>
+        <ListItem button onClick={hadleSurficialDataTagClick("tag")}>
           <ListItemIcon>
             <LocalOffer />
           </ListItemIcon>
@@ -1336,7 +1360,7 @@ function SurficialMarkersButton(props) {
 
   const [anchor, setAnchor] = useState(null);
 
-  const onMenuClick = event => {
+  const onMenuClick = (event) => {
     setAnchor(event.currentTarget);
   };
 
@@ -1345,7 +1369,7 @@ function SurficialMarkersButton(props) {
   };
 
   const has_enough_markers =
-    isWidthDown(width, 'sm') && surficialData.length <= 5;
+    isWidthDown(width, "sm") && surficialData.length <= 5;
 
   const handleAddMarker = () => {
     setAddNewMarker(true);
@@ -1359,19 +1383,21 @@ function SurficialMarkersButton(props) {
         color="primary"
         size="small"
         aria-label="Site markers button group"
-        style={{ marginRight: 6 }}>
-        <Button disabled style={{ color: '#000000' }}>
+        style={{ marginRight: 6 }}
+      >
+        <Button disabled style={{ color: "#000000" }}>
           Marker
         </Button>
 
         {has_enough_markers ? (
-          surficialData.map(marker => {
+          surficialData.map((marker) => {
             const { marker_name, marker_id } = marker;
             return (
               <Button
                 component={Link}
                 to={`${url}/${marker_name}`}
-                key={marker_id}>
+                key={marker_id}
+              >
                 {marker_name}
               </Button>
             );
@@ -1384,8 +1410,9 @@ function SurficialMarkersButton(props) {
             aria-controls="simple-menu"
             aria-haspopup="true"
             onClick={onMenuClick}
-            endIcon={<ArrowDropDown />}>
-            {selectedMarker ? selectedMarker.marker_name : 'Select'}
+            endIcon={<ArrowDropDown />}
+          >
+            {selectedMarker ? selectedMarker.marker_name : "Select"}
           </Button>
         )}
 
@@ -1401,15 +1428,17 @@ function SurficialMarkersButton(props) {
         anchorEl={anchor}
         keepMounted
         open={Boolean(anchor)}
-        onClose={onMenuClose}>
-        {surficialData.map(marker => {
+        onClose={onMenuClose}
+      >
+        {surficialData.map((marker) => {
           const { marker_name, marker_id } = marker;
           return (
             <MenuItem
               component={Link}
               to={`${url}/${marker_name}`}
               key={marker_id}
-              onClick={onMenuClose}>
+              onClick={onMenuClose}
+            >
               {marker_name}
             </MenuItem>
           );
@@ -1426,21 +1455,21 @@ function prepareOptions(
   width,
   setIsOpenClickModal,
   setChosenPointCopy,
-  is_end_of_shift,
+  is_end_of_shift
 ) {
   const { site_code, timestamps } = input;
   const { start, end } = timestamps;
-  const start_date = moment(start, 'YYYY-MM-DD HH:mm:ss');
-  const end_date = moment(end, 'YYYY-MM-DD HH:mm:ss');
+  const start_date = moment(start, "YYYY-MM-DD HH:mm:ss");
+  const end_date = moment(end, "YYYY-MM-DD HH:mm:ss");
 
-  const font_size = isWidthDown(width, 'sm') ? '1rem' : '0.90rem';
+  const font_size = isWidthDown(width, "sm") ? "1rem" : "0.90rem";
 
   let subtitle = `As of: <b>${moment(end_date).format(
-    'D MMM YYYY, hh:mm A',
+    "D MMM YYYY, hh:mm A"
   )}</b>`;
 
   let min_x = start_date;
-  if ((is_end_of_shift || start === 'None') && data.length > 0) {
+  if ((is_end_of_shift || start === "None") && data.length > 0) {
     const min = data.reduce((cur_min, row) => {
       const { data: cd } = cur_min;
       const { data: rd } = row;
@@ -1451,32 +1480,32 @@ function prepareOptions(
     min_x = min.data.length > 0 ? moment(min.data[0].x) : moment();
   }
 
-  data.forEach(row => {
+  data.forEach((row) => {
     // eslint-disable-next-line no-param-reassign
     row.turboThreshold = 100000;
     const { data: series_data } = row;
-    series_data.forEach(series_data_row => {
+    series_data.forEach((series_data_row) => {
       const { unreliable_data } = series_data_row;
       if (Object.keys(unreliable_data).length !== 0) {
         const { tag_type } = unreliable_data;
         let symbol;
         let fillColor;
         if (tag_type === -1) {
-          symbol = 'triangle-down';
-          fillColor = '#FF0000';
+          symbol = "triangle-down";
+          fillColor = "#FF0000";
         } else if (tag_type === 0) {
-          symbol = 'circle';
-          fillColor = '#FFFF00';
+          symbol = "circle";
+          fillColor = "#FFFF00";
         } else {
-          symbol = 'triangle';
-          fillColor = '#06e606';
+          symbol = "triangle";
+          fillColor = "#06e606";
         }
 
         const marker = {
           symbol,
           radius: 8,
           fillColor,
-          lineColor: '#000000',
+          lineColor: "#000000",
           lineWidth: 1,
         };
         // eslint-disable-next-line no-param-reassign
@@ -1490,7 +1519,7 @@ function prepareOptions(
 
   return {
     title: {
-      text: `<b>Surficial Data History Chart of Barangay Marirong</b>`,
+      text: `<b>Surficial Data History Chart of ${CBEWSL_SITE_LOCATION}</b>`,
       style: { fontSize: font_size },
       margin: 36,
       y: 18,
@@ -1498,10 +1527,10 @@ function prepareOptions(
     time: { timezoneOffset: -8 * 60 },
     series: data,
     chart: {
-      type: 'line',
-      zoomType: 'x',
+      type: "line",
+      zoomType: "x",
       panning: true,
-      panKey: 'shift',
+      panKey: "shift",
       height: 400,
       resetZoomButton: {
         position: {
@@ -1535,7 +1564,7 @@ function prepareOptions(
     },
     subtitle: {
       text: subtitle,
-      style: { fontSize: '0.75rem' },
+      style: { fontSize: "0.75rem" },
     },
     legend: {
       labelFormatter() {
@@ -1548,38 +1577,38 @@ function prepareOptions(
     },
     yAxis: {
       title: {
-        text: '<b>Measurement (cm)</b>',
+        text: "<b>Measurement (cm)</b>",
       },
     },
     xAxis: {
       min: Date.parse(min_x),
       max: Date.parse(end_date),
-      type: 'datetime',
+      type: "datetime",
       dateTimeLabelFormats: {
-        month: '%e. %b %Y',
-        year: '%b',
+        month: "%e. %b %Y",
+        year: "%b",
       },
       title: {
-        text: '<b>Date</b>',
+        text: "<b>Date</b>",
       },
     },
     tooltip: {
       shared: true,
       crosshairs: true,
-      xDateFormat: "%A, %b %d, %I:%M %p"
+      xDateFormat: "%A, %b %d, %I:%M %p",
     },
     plotOptions: {
       line: {
         marker: {
           enabled: true,
         },
-        dashStyle: 'ShortDash',
+        dashStyle: "ShortDash",
       },
       series: {
         marker: {
           radius: 6,
         },
-        cursor: 'pointer',
+        cursor: "pointer",
         point: {
           events: {
             click() {
@@ -1645,19 +1674,19 @@ function SurficialGraph(props) {
     isEndOfShift,
   } = props;
 
-  const default_range_info = { label: '3 months', unit: 'months', duration: 3 };
+  const default_range_info = { label: "3 months", unit: "months", duration: 3 };
   const [selected_range_info, setSelectedRangeInfo] =
     useState(default_range_info);
   const { unit, duration } = selected_range_info;
 
   const ts_now = moment();
-  let ts_end = ts_now.format('YYYY-MM-DD HH:mm:ss');
+  let ts_end = ts_now.format("YYYY-MM-DD HH:mm:ss");
   let dt_ts_end = ts_now;
-  const site_code = 'mar';
+  const site_code = "mar";
 
-  const save_svg = typeof saveSVG === 'undefined' ? false : saveSVG;
+  const save_svg = typeof saveSVG === "undefined" ? false : saveSVG;
   const is_end_of_shift =
-    typeof isEndOfShift === 'undefined' ? false : isEndOfShift;
+    typeof isEndOfShift === "undefined" ? false : isEndOfShift;
 
   const ts_start = computeForStartTs(dt_ts_end, duration, unit);
   const chartRef = React.useRef(null);
@@ -1708,16 +1737,16 @@ function SurficialGraph(props) {
     }
 
     if (to_redraw_chart) {
-      console.log('HERE');
+      console.log("HERE");
       const f_input = { site_code, ...timestamps };
       getSurficialPlotData(
         f_input,
-        data => {
-          let filter_data = data.filter(e => e.data.length > 0);
+        (data) => {
+          let filter_data = data.filter((e) => e.data.length > 0);
           if (filter_data.length > 0) {
             setSurficialData(filter_data);
           } else {
-            filter_data = data.filter(e => e.in_use === 1);
+            filter_data = data.filter((e) => e.in_use === 1);
             setSurficialData(filter_data);
           }
 
@@ -1733,7 +1762,7 @@ function SurficialGraph(props) {
             }
           }
         },
-        is_end_of_shift,
+        is_end_of_shift
       );
 
       setRedrawChart(false);
@@ -1743,8 +1772,8 @@ function SurficialGraph(props) {
   useEffect(() => {
     if (!historical_markers && surficial_data.length !== 0) {
       const markers = [];
-      const rainbow_colors = Chroma.scale(['#f00', '#0f0', '#00f'])
-        .mode('lch')
+      const rainbow_colors = Chroma.scale(["#f00", "#0f0", "#00f"])
+        .mode("lch")
         .domain([0, surficial_data.length - 1]);
       surficial_data.forEach(({ marker_history }, i) => {
         marker_history.forEach(({ marker_name }) => {
@@ -1765,7 +1794,7 @@ function SurficialGraph(props) {
         current: { chart },
       } = chartRef;
       if (selected_marker) {
-        chart.series.forEach(s => {
+        chart.series.forEach((s) => {
           const bool = selected_marker.marker_name === s.name;
           s.setVisible(bool, false);
         });
@@ -1782,7 +1811,7 @@ function SurficialGraph(props) {
     width,
     setIsOpenClickModal,
     setChosenPointCopy,
-    is_end_of_shift,
+    is_end_of_shift
   );
   const graph_component = createSurficialGraph(options, chartRef);
 
@@ -1793,12 +1822,14 @@ function SurficialGraph(props) {
           container
           spacing={2}
           justifyContent="space-between"
-          alignItems="stretch">
+          alignItems="stretch"
+        >
           <Grid
             item
             xs={12}
             md={selected_marker ? 7 : 12}
-            lg={selected_marker ? 8 : 12}>
+            lg={selected_marker ? 8 : 12}
+          >
             <Paper elevation={2}>
               {surficial_data.length > 0 ? (
                 graph_component
@@ -1807,7 +1838,7 @@ function SurficialGraph(props) {
                   <Grid item md={12} sm={12}>
                     <Skeleton
                       variant="rectangular"
-                      width={'auto'}
+                      width={"auto"}
                       height={400}
                     />
                   </Grid>

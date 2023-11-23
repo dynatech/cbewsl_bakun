@@ -13,6 +13,7 @@ import React, { Fragment, useState, useEffect } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import moment from "moment";
 import { CBEWSL_SITE_LOCATION, CBEWSL_SITE_NAME } from "../../../host";
+import Swal from "sweetalert2";
 
 function DisseminateModal(props) {
   const {
@@ -145,7 +146,7 @@ function DisseminateModal(props) {
         const recommended_response = ewiTemplates.find(
           (e) => e.alert_level === alert_level
         );
-
+        console.log("recommended_response", recommended_response);
         setBarangayRP(recommended_response.barangay_response);
         setLewcRP(recommended_response.lewc_response);
         setCommunityRP(recommended_response.commmunity_response);
@@ -204,6 +205,15 @@ function DisseminateModal(props) {
     });
   };
 
+  const sendEwiSMS = () => {
+    setOpenModal(false);
+    Swal.fire({
+      icon: "success",
+      title: "Success!",
+      text: "Successfully sent early warning information!",
+    });
+  };
+
   return (
     <Dialog
       fullWidth
@@ -246,6 +256,15 @@ function DisseminateModal(props) {
           color="error"
         >
           Cancel
+        </Button>
+        <Button
+          variant="contained"
+          onClick={() => {
+            sendEwiSMS();
+          }}
+          color="primary"
+        >
+          Send EWI SMS
         </Button>
         <Button
           variant="contained"

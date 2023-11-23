@@ -33,6 +33,7 @@ import AlertReleaseFormModal from "./modals/AlertReleaseModal";
 import DisseminateModal from "./modals/DisseminateModal";
 import NotificationSoundFolder from "../../audio/notif_sound.mp3";
 import { useNavigate } from "react-router-dom";
+import Swal from "sweetalert2";
 
 import {
   getCandidateAlert,
@@ -51,6 +52,7 @@ import {
 } from "@material-ui/icons";
 import UpdateMomsModal from "./modals/UpdateMomsModal";
 import OnDemandModal from "./modals/OnDemandModal";
+import { CBEWSL_SITE_NAME } from "../../host";
 
 const alert_level_colors = [
   { alert_level: 0, color: "#c5e0b4" },
@@ -243,58 +245,77 @@ function HeaderAlertInformation(props) {
 
   return (
     <Grid
-        container
-        justifyContent={'center'}
-        alignItems={'center'}
-        textAlign={'center'}>
-        <Grid item xs={12} style={{ width: '100%', margin: 50 }}>
-            <Card
-                style={{
-                    padding: 10,
-                    backgroundColor: alert_level_colors.find(
-                                        (e) => e.alert_level === alert_level
-                                      ).color,
-                    borderTopLeftRadius: 0,
-                    borderTopRightRadius: 60,
-                }}>
-                <Grid container spacing={1}>
-                    <Grid item xs={3} style={{ alignSelf: "center" }} >
-                        <Typography variant="h3">ALERT LEVEL {alert_level}</Typography>
-                        <Typography variant="h5">{data_timestamp}</Typography>
-                    </Grid>
-                    <Grid item xs={9} style={{ alignSelf: "center", borderLeft: "solid 2px rgba(0, 0, 0, 0.5)", marginTop: 8 }}>
-                        <h2>
-                            Alert {alert_level} (
-                            {latest_triggers.length > 0 && (
-                                latest_triggers.map((row, index) => {
-                                    const { trigger_description } = row;
-                                    return (
-                                        trigger_description
-                                    )
-
-                                })
-                            )}
-                            )<br />
-                            {validity && (
-                                validity
-                            )}
-                        </h2>
-                        <h3>
-                            Responde (Komunidad): {responses.commmunity_response ? responses.commmunity_response : "N/A"}
-                        </h3>
-                        <h3>
-                            Responde (LEWC at Barangay): {responses.barangay_response ? responses.barangay_response: "N/A"}
-                        </h3>
-                        <h3>
-                            Responde (Munisipyo): {responses.munisipyo_response ? responses.munisipyo_response: "N/A"}
-                        </h3>
-                    </Grid>
-                </Grid>
-            </Card>
-        </Grid>
+      container
+      justifyContent={"center"}
+      alignItems={"center"}
+      textAlign={"center"}
+    >
+      <Grid item xs={12} style={{ width: "100%", margin: 50 }}>
+        <Card
+          style={{
+            padding: 10,
+            backgroundColor: alert_level_colors.find(
+              (e) => e.alert_level === alert_level
+            ).color,
+            borderTopLeftRadius: 0,
+            borderTopRightRadius: 60,
+          }}
+        >
+          <Grid container spacing={1}>
+            <Grid item xs={3} style={{ alignSelf: "center" }}>
+              <Typography variant="h3">ALERT LEVEL {alert_level}</Typography>
+              <Typography variant="h5">{data_timestamp}</Typography>
+            </Grid>
+            <Grid
+              item
+              xs={9}
+              style={{
+                alignSelf: "center",
+                borderLeft: "solid 2px rgba(0, 0, 0, 0.5)",
+                marginTop: 8,
+                padding: 30,
+              }}
+            >
+              <Typography variant="h6" gutterBottom>
+                <strong>
+                  Alert {alert_level} (
+                  {latest_triggers.length > 0 &&
+                    latest_triggers.map((row, index) => {
+                      if (row) {
+                        const { trigger_description } = row;
+                        return trigger_description;
+                      }
+                      return "";
+                    })}
+                  )<br />
+                  {validity && validity}
+                </strong>
+              </Typography>
+              <br />
+              <Typography variant="body1" gutterBottom>
+                <strong>Responde (Komunidad):</strong>{" "}
+                {responses.commmunity_response
+                  ? responses.commmunity_response
+                  : "N/A"}
+              </Typography>
+              <br />
+              <Typography variant="body1" gutterBottom>
+                <strong>Responde (LEWC at Barangay):</strong>{" "}
+                {responses.barangay_response
+                  ? responses.barangay_response
+                  : "N/A"}
+              </Typography>
+              <br />
+              <Typography variant="body1" gutterBottom>
+                <strong>Responde (Munisipyo):</strong>{" "}
+                {responses.mlgu_response ? responses.mlgu_response : "N/A"}
+              </Typography>
+            </Grid>
+          </Grid>
+        </Card>
+      </Grid>
     </Grid>
-)
-
+  );
 }
 
 function ExtendedAccordionPanel(props) {
@@ -448,7 +469,7 @@ function PendingAccordionPanel(props) {
   const [header_color, setHeaderColor] = useState("");
 
   const viewChart = (chart) => {
-    const url = `${window.location.origin}${chart}`;
+    const url = `${window.location.origin}/${CBEWSL_SITE_NAME}${chart}`;
     window.open(url, "_blank", "noopener,noreferrer");
   };
 
@@ -563,7 +584,6 @@ function PendingAccordionPanel(props) {
                         onClick={() => openValidateModal(row)}
                       />
                     )}
-
                     {validating_status === 1 && (
                       <Chip
                         icon={<CheckCircle />}
@@ -896,7 +916,11 @@ function OpCen2(props) {
   const handleValidation = (message) => {
     setIsOpenValidationModal(!is_open_validation_modal);
     setNotifMessage(message);
-    setIsOpenPromptModal(true);
+    Swal.fire({
+      icon: "success",
+      title: "Success!",
+      text: message,
+    });
   };
 
   const handleRelease = (trigger) => {
@@ -908,9 +932,11 @@ function OpCen2(props) {
 
   const handleSubmitRelease = (message, status) => {
     setIsOpenValidationModal(false);
-    setNotifMessage(message);
-    setIsOpenPromptModal(true);
-    setAlertVariant(status ? "success" : "error");
+    Swal.fire({
+      icon: status,
+      title: status === "success" ? "Success!" : "Error!",
+      text: message,
+    });
   };
 
   const handleDisseminate = (data) => {

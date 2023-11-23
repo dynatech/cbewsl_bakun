@@ -1,16 +1,26 @@
-import React, { Fragment, useState, useEffect } from 'react';
+import React, { Fragment, useState, useEffect } from "react";
 import {
-  Grid, Typography, Button, Box, Modal, TextField,
-  Checkbox, FormLabel, FormControl, FormControlLabel, FormGroup, FormHelperText
-} from '@mui/material';
+  Grid,
+  Typography,
+  Button,
+  Box,
+  Modal,
+  TextField,
+  Checkbox,
+  FormLabel,
+  FormControl,
+  FormControlLabel,
+  FormGroup,
+  FormHelperText,
+} from "@mui/material";
 import { createMuiTheme, MuiThemeProvider } from "@material-ui/core/styles";
-import RainfallGraph from '../analysis/RainfallGraph';
-import SurficialGraph from '../analysis/SurficialGraph';
-import SubsurfaceGraph from '../analysis/SubsurfaceGraph';
-import LandslideFeaturesTable from '../analysis/LandslideFeaturesTable';
-import EarthquakeChart from '../analysis/EarthquakeChart';
-import MomsTable from './MomsTable';
-import { getInstances } from '../../apis/MoMs';
+import RainfallGraph from "../analysis/RainfallGraph";
+import SurficialGraph from "../analysis/SurficialGraph";
+import SubsurfaceGraph from "../analysis/SubsurfaceGraph";
+import LandslideFeaturesTable from "../analysis/LandslideFeaturesTable";
+import EarthquakeChart from "../analysis/EarthquakeChart";
+import MomsTable from "./MomsTable";
+import { getInstances } from "../../apis/MoMs";
 
 const Analysis = (props) => {
   const [open, setOpen] = React.useState(false);
@@ -30,20 +40,19 @@ const Analysis = (props) => {
     });
   };
 
-  const [instances, setInstances] = useState([])
-  
+  const [instances, setInstances] = useState([]);
+
   const reloadTable = () => {
     getInstances((response) => {
       if (response) {
-        setInstances(response)
+        setInstances(response);
       }
-    })
-
-  }
+    });
+  };
 
   useEffect(() => {
-    reloadTable()
-  }, [props])
+    reloadTable();
+  }, [props]);
 
   const { rainfall, surficial, subsurface } = state;
   const error = [rainfall, surficial, subsurface].filter((v) => v).length === 0;
@@ -52,33 +61,30 @@ const Analysis = (props) => {
     <Fragment>
       <Grid item xs={12} sx={{ padding: 8 }}>
         <Grid item xs={12} sm={12} md={12} lg={12}>
-          <Button variant="contained" onClick={handleOpen} sx={{ marginBottom: 4 }}>
+          {/* <Button variant="contained" onClick={handleOpen} sx={{ marginBottom: 4 }}>
             Load Graph per needed timestamp
-          </Button>
+          </Button> */}
 
           <Box>
-            <Typography variant='h5' sx={{ marginBottom: 4 }}>
+            <Typography variant="h5" sx={{ marginBottom: 4 }}>
               Rainfall Data
             </Typography>
           </Box>
-
         </Grid>
         <RainfallGraph />
-        <Typography variant='h5' sx={{ marginBottom: 4, marginTop: 8 }}>
+        <Typography variant="h5" sx={{ marginBottom: 4, marginTop: 8 }}>
           Surficial Data
         </Typography>
         <SurficialGraph />
-        <Typography variant='h5' sx={{ marginBottom: 4, marginTop: 8 }}>
+        <Typography variant="h5" sx={{ marginBottom: 4, marginTop: 8 }}>
           Subsurface Data
         </Typography>
         <SubsurfaceGraph />
-        <Typography variant='h5' sx={{ marginBottom: 4, marginTop: 8 }}>
+        <Typography variant="h5" sx={{ marginBottom: 4, marginTop: 8 }}>
           Manifestations of Movement
         </Typography>
-        <MomsTable
-          instances = {instances} 
-        />
-        <Typography variant='h5' sx={{ marginBottom: 4, marginTop: 8 }}>
+        <MomsTable instances={instances} />
+        <Typography variant="h5" sx={{ marginBottom: 4, marginTop: 8 }}>
           Earthquake Proximity Map
         </Typography>
         <EarthquakeChart />
@@ -90,33 +96,57 @@ const Analysis = (props) => {
         aria-describedby="modal-modal-description"
       >
         <Box sx={style}>
-          <Typography id="modal-modal-title" variant="h6" component="h2" sx={{ marginBottom: 2 }}>
+          <Typography
+            id="modal-modal-title"
+            variant="h6"
+            component="h2"
+            sx={{ marginBottom: 2 }}
+          >
             Consolidate charts per needed timestamp
           </Typography>
           <Box>
-            <FormControl sx={{ m: 2 }} error={error} component="fieldset" variant="standard">
+            <FormControl
+              sx={{ m: 2 }}
+              error={error}
+              component="fieldset"
+              variant="standard"
+            >
               <FormLabel component="legend">Select data source</FormLabel>
               <FormGroup>
                 <FormControlLabel
                   control={
-                    <Checkbox checked={rainfall} onChange={handleChange} name="rainfall" />
+                    <Checkbox
+                      checked={rainfall}
+                      onChange={handleChange}
+                      name="rainfall"
+                    />
                   }
                   label="Rainfall"
                 />
                 <FormControlLabel
                   control={
-                    <Checkbox checked={surficial} onChange={handleChange} name="surficial" />
+                    <Checkbox
+                      checked={surficial}
+                      onChange={handleChange}
+                      name="surficial"
+                    />
                   }
                   label="Surficial Marker"
                 />
                 <FormControlLabel
                   control={
-                    <Checkbox checked={subsurface} onChange={handleChange} name="subsurface" />
+                    <Checkbox
+                      checked={subsurface}
+                      onChange={handleChange}
+                      name="subsurface"
+                    />
                   }
                   label="Subsurface"
                 />
               </FormGroup>
-              <FormHelperText>Please select atleast 1 data source</FormHelperText>
+              <FormHelperText>
+                Please select atleast 1 data source
+              </FormHelperText>
             </FormControl>
           </Box>
 
@@ -126,19 +156,17 @@ const Analysis = (props) => {
         </Box>
       </Modal>
     </Fragment>
-
-
-  )
-}
+  );
+};
 
 const style = {
-  position: 'absolute',
-  top: '50%',
-  left: '50%',
-  transform: 'translate(-50%, -50%)',
+  position: "absolute",
+  top: "50%",
+  left: "50%",
+  transform: "translate(-50%, -50%)",
   width: 400,
-  bgcolor: 'background.paper',
-  border: '2px solid #000',
+  bgcolor: "background.paper",
+  border: "2px solid #000",
   boxShadow: 24,
   p: 4,
 };
