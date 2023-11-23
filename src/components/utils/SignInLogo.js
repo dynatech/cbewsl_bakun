@@ -6,13 +6,34 @@ import phivolcs_seal from "../../assets/phivolcs_seal.png";
 import dynaslope_seal from "../../assets/dynaslope_seal.png";
 import benguet_province_seal from "../../assets/benguet_province_seal.png";
 import bak_municipal_seal from "../../assets/bakun_municipal_seal.png";
-import leon_mdrrmc_responder from "../../assets/leon_mdrrmc_responder.png";
+import bakun_barangay_seal from "../../assets/bakun_barangay_seal.png";
 import lewc_seal from "../../assets/bak_lewc_seal.png";
 
 const useStyles = makeStyles((theme) => ({
     md_image: {
-        length: "110px",
-        width: "110px",
+        length: "85px",
+        width: "85px",
+        [theme.breakpoints.down("sm")]: {
+            length: "60px",
+            width: "60px",
+        },
+    },
+    sm_image: {
+        length: "70px",
+        width: "75px",
+        marginLeft: '12px',
+        [theme.breakpoints.down("sm")]: {
+            length: "50px",
+            width: "50px",
+        },
+    },
+    lg_image: {
+        length: "100px",
+        width: "100px",
+        [theme.breakpoints.down("sm")]: {
+            length: "70px",
+            width: "70px",
+        },
     },
 }));
 
@@ -25,34 +46,27 @@ function SignInLogo(props) {
                 container
                 spacing={2}
                 alignItems="center"
-                justify="space-around"
-                style={{ paddingTop: "20%", paddingBottom: "5%"}}
+                style={{ paddingTop: "2%", paddingBottom: "1%"}}
             >
-                <Grid 
-                    container
-                    alignItems="center"
-                    justify="space-evenly"
-                >
-                    <Grid item xs={1} md={1}>
-                        <img className={classes.md_image} src={phivolcs_seal} />
+                    <Grid item xs={2}>
+                        <img className={classes.lg_image} src={phivolcs_seal} alt="phivolcs_seal"/>
                     </Grid>
-                    <Grid item xs={1} md={1}>
-                        <img className={classes.md_image} src={dynaslope_seal} />
+                    <Grid item xs={2}>
+                        <img className={classes.sm_image} src={dynaslope_seal} alt="dynaslope_seal"/>
                     </Grid>
-                    <Grid item xs={1} md={1}>
-                        <img className={classes.md_image} src={benguet_province_seal} />
+                    <Grid item xs={2}>
+                        <img className={classes.md_image} src={benguet_province_seal} alt="bak_province_seal"/>
                     </Grid>
-                    <Grid item xs={1} md={1}>
-                        <img className={classes.md_image} src={bak_municipal_seal} />
+                    <Grid item xs={2}>
+                        <img className={classes.md_image} src={bak_municipal_seal} alt="bak_municipality_seal"/>
                     </Grid>
-                    {/* <Grid item xs={1} md={1}>
-                        <img className={classes.md_image} src={leon_mdrrmc_responder} />
-                    </Grid> */}
-                    {/* <Grid item xs={1} md={1}>
-                        <img className={classes.md_image} src={mar_lewc_seal} />
-                    </Grid> */}
+                    <Grid item xs={2}>
+                        <img className={classes.md_image} src={bakun_barangay_seal} alt="bak_brgy_seal"/>
+                    </Grid> 
+                    <Grid item xs={2}>
+                        <img className={classes.md_image} src={lewc_seal} alt="bak_lewc_seal"/>
+                    </Grid>
                 </Grid>    
-            </Grid>
         </Container>
     );
 }
