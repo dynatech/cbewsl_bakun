@@ -53,6 +53,7 @@ import {
 import UpdateMomsModal from "./modals/UpdateMomsModal";
 import OnDemandModal from "./modals/OnDemandModal";
 import { CBEWSL_SITE_NAME } from "../../host";
+import tempAlertGen from "../data/alert_gen.json";
 
 const alert_level_colors = [
   { alert_level: 0, color: "#c5e0b4" },
@@ -945,40 +946,36 @@ function OpCen2(props) {
   };
 
   const generateDashboardData = () => {
-    getCandidateAlert((data) => {
-      console.log(data);
-      const { candidate_alerts, on_going, ewi_templates } = data;
-      // setCandidateAlerts([JSON.parse(candidate_alerts)[1]]);
+    const temp_on_going_data = tempAlertGen;
+    // getCandidateAlert((data) => {
+    console.log(temp_on_going_data);
+    const { candidate_alerts, on_going, ewi_templates } = temp_on_going_data;
+    // setCandidateAlerts([JSON.parse(candidate_alerts)[1]]);
 
-      const temp_candidate = JSON.parse(candidate_alerts);
-      const temp_on_going = JSON.parse(on_going);
-      const {
-        latest,
-        overdue,
-        extended,
-        routine: routine_data,
-      } = temp_on_going;
-      let temp = [];
-      temp.push(...latest);
-      temp.push(...overdue);
-      setOnGoingAlerts(temp);
-      if (!routine_data.released_sites) {
-        routine_data.released_sites = [];
+    const temp_candidate = JSON.parse(candidate_alerts);
+    const temp_on_going = JSON.parse(on_going);
+    const { latest, overdue, extended, routine: routine_data } = temp_on_going;
+    let temp = [];
+    temp.push(...latest);
+    temp.push(...overdue);
+    setOnGoingAlerts(temp);
+    if (!routine_data.released_sites) {
+      routine_data.released_sites = [];
+    }
+    setRoutine(routine_data);
+    setEwiTemplates(ewi_templates);
+    setExtendedAlerts(extended);
+    if (extended.length > 0) {
+      const extended_site = extended.find((e) => e.event.site.site_id);
+      if (extended_site) {
+        setCandidateAlerts(
+          temp_candidate.filter((e) => e.general_status === "extended")
+        );
       }
-      setRoutine(routine_data);
-      setEwiTemplates(ewi_templates);
-      setExtendedAlerts(extended);
-      if (extended.length > 0) {
-        const extended_site = extended.find((e) => e.event.site.site_id);
-        if (extended_site) {
-          setCandidateAlerts(
-            temp_candidate.filter((e) => e.general_status === "extended")
-          );
-        }
-      } else {
-        setCandidateAlerts(temp_candidate);
-      }
-    });
+    } else {
+      setCandidateAlerts(temp_candidate);
+    }
+    // });
   };
 
   const generateMomsForValidation = () => {
