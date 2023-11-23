@@ -154,7 +154,7 @@ function DisseminateModal(props) {
         msg += `\nResponde (Barangay): ${recommended_response.barangay_response}\n`;
         msg += `\nResponde (LEWC):${recommended_response.lewc_response}\n`;
         msg += `\nResponde (Komunidad): ${recommended_response.commmunity_response}\n`;
-        msg += `Source: Leon MDRRMO`;
+        msg += `Source: Bakun MDRRMO`;
         setMessage(msg);
       } else {
         // need icheck if gagana din sa extended
@@ -184,7 +184,7 @@ function DisseminateModal(props) {
         setBarangayRP(recommended_response.barangay_response);
 
         msg += `\nBakit: ${recommended_response.trigger_description}`;
-        msg += `\nResponde (Komunidad): ${recommended_response.commmunity_response}\nResponde (LEWC):${recommended_response.barangay_response}\nSource: Leon MDRRMO`;
+        msg += `\nResponde (Komunidad): ${recommended_response.commmunity_response}\nResponde (LEWC):${recommended_response.barangay_response}\nSource: Bakun MDRRMO`;
         setMessage(msg);
       }
     }
@@ -210,7 +210,7 @@ function DisseminateModal(props) {
     Swal.fire({
       icon: "success",
       title: "Success!",
-      text: "Successfully sent early warning information!",
+      text: "EWI sent!",
     });
   };
 

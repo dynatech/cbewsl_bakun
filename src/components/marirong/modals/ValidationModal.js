@@ -49,7 +49,7 @@ function ValidationModal(props) {
     updateAlertStatus(input, (data) => {
       setOpenModal(false);
       console.log(data);
-      handleValidation("Invalid alert success!");
+      handleValidation("Alert invalidated!");
       setRemarks("");
       setIsValidated(true);
       generateDashboardData();
@@ -71,7 +71,7 @@ function ValidationModal(props) {
     updateAlertStatus(input, (data) => {
       setOpenModal(false);
       console.log(data);
-      handleValidation("Validating alert success!");
+      handleValidation("Alert validating!");
       setRemarks("");
       setIsValidated(true);
       generateDashboardData();
@@ -92,7 +92,7 @@ function ValidationModal(props) {
     updateAlertStatus(input, (data) => {
       setOpenModal(false);
       console.log(data);
-      handleValidation("Valid alert success!");
+      handleValidation("Alert validated!");
       setRemarks("");
       setIsValidated(true);
       generateDashboardData();

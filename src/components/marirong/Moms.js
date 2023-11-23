@@ -337,7 +337,7 @@ const Moms = (props) => {
         Swal.fire({
           icon: "success",
           title: "Success!",
-          text: "Successfully saved manifestations of movement",
+          text: "Manifestations of movements saved!",
         });
         setOpen(false);
       } else {

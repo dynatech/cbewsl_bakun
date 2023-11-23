@@ -58,7 +58,7 @@ const alert_level_colors = [
   { alert_level: 0, color: "#c5e0b4" },
   { alert_level: 1, color: "#FCEE27" },
   { alert_level: 2, color: "#F8991D" },
-  { alert_level: 3, color: "#FE0000" },
+  { alert_level: 3, color: "#e11e1ec9" },
 ];
 function capitalizeFirstLetter(str, every_word = false) {
   const capitalize = (s) => s.charAt(0).toUpperCase() + s.slice(1);
@@ -278,12 +278,12 @@ function HeaderAlertInformation(props) {
             >
               <Typography variant="h6" gutterBottom>
                 <strong>
-                  Alert {alert_level} (
+                  Alert {alert_level} (&nbsp;
                   {latest_triggers.length > 0 &&
                     latest_triggers.map((row, index) => {
                       if (row) {
                         const { trigger_description } = row;
-                        return trigger_description;
+                        return `${trigger_description} `;
                       }
                       return "";
                     })}
