@@ -112,7 +112,7 @@ function ExtendedAccordionPanel(props) {
             <Grid item xs={6}>
               {data_timestamp && (
                 <Typography variant="h6">
-                  Data Timestamp: {moment(data_timestamp).format('LLL')}
+                  Data Timestamp: {moment(data_timestamp).format("MMMM D, YYYY, h:mm A")}
                 </Typography>
               )}
             </Grid>
@@ -267,7 +267,7 @@ function LatestAccordionPanel(props) {
           </Grid>
           <Grid item xs={7}>
             <Typography variant="h6" style={{ textAlign: 'center' }}>
-              Date and Time: {data_timestamp}
+              Date and Time: {moment(data_timestamp).format("MMMM D, YYYY, h:mm A")}
             </Typography>
             {!isRoutine && (
               <Typography variant="h6" style={{ textAlign: 'center' }}>

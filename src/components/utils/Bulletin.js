@@ -108,7 +108,7 @@ const Bulletin = () => {
                 Location: {location.state.siteLocation}
               </Typography>
               <Typography variant="h5">
-                Date/Time: {location.state.currentAlertTs}
+                Date/Time:{moment(location.state.currentAlertTs).format("MMMM D, YYYY, h:mm A")}
               </Typography>
               <Typography variant="h5">
                 Alert Level Released: {location.state.alertLevel}

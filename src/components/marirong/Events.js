@@ -53,7 +53,8 @@ const Events = (props) => {
     getEvents((response) => {
       console.log(response)
       if(response.status){
-        setActivity(response.data)
+        const sortedActivity = response.data.slice().reverse();
+        setActivity(sortedActivity);
       }
     })
   }

@@ -265,7 +265,7 @@ function HeaderAlertInformation(props) {
           <Grid container spacing={1}>
             <Grid item xs={3} style={{ alignSelf: "center" }}>
               <Typography variant="h3">ALERT LEVEL {alert_level}</Typography>
-              <Typography variant="h5">{data_timestamp}</Typography>
+              <Typography variant="h5">{moment(data_timestamp).format("MMMM D, YYYY, h:mm A")}</Typography>
             </Grid>
             <Grid
               item
@@ -393,7 +393,7 @@ function ExtendedAccordionPanel(props) {
             <Grid item xs={6}>
               {data_timestamp && (
                 <Typography variant="h6">
-                  Data Timestamp: {moment(data_timestamp).format("LLL")}
+                  Data Timestamp: {moment(data_timestamp).format("MMMM D, YYYY, h:mm A")}
                 </Typography>
               )}
             </Grid>
@@ -525,7 +525,7 @@ function PendingAccordionPanel(props) {
             <Grid item xs={6}>
               {data_timestamp && (
                 <Typography variant="h6">
-                  Data Timestamp: {moment(data_timestamp).format("LLL")}
+                  Data Timestamp: {moment(data_timestamp).format("MMMM D, YYYY, h:mm A")}
                 </Typography>
               )}
             </Grid>
@@ -558,7 +558,7 @@ function PendingAccordionPanel(props) {
                   </Grid>
                   <Grid item md={3}>
                     <Typography variant="h6">Trigger timestamp</Typography>
-                    <Typography>{moment(ts_updated).format("LLL")}</Typography>
+                    <Typography>{moment(ts_updated).format("MMMM D, YYYY, h:mm A")}</Typography>
                   </Grid>
                   <Grid item md={5}>
                     <Typography variant="h6">Technical Information</Typography>
@@ -760,11 +760,11 @@ function LatestAccordionPanel(props) {
           </Grid>
           <Grid item xs={7}>
             <Typography variant="h6" style={{ textAlign: "center" }}>
-              Date and Time: {data_timestamp}
+              Date and Time: {moment(data_timestamp).format("MMMM D, YYYY, h:mm A")}
             </Typography>
             {!isRoutine && (
               <Typography variant="h6" style={{ textAlign: "center" }}>
-                Validity: {moment(alert_validity).format("LLL")}
+                Validity: {moment(alert_validity).format("MMMM D, YYYY, h:mm A")}
               </Typography>
             )}
           </Grid>
@@ -786,7 +786,7 @@ function LatestAccordionPanel(props) {
             </Grid>
             <Grid item md={3}>
               <Typography variant="h6">Trigger timestamp</Typography>
-              <Typography>{moment(trig_ts).format("LLL")}</Typography>
+              <Typography>{moment(trig_ts).format("MMMM D, YYYY, h:mm A")}</Typography>
             </Grid>
             <Grid item md={6}>
               <Typography variant="h6">Technical Information</Typography>
