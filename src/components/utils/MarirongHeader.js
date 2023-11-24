@@ -31,6 +31,7 @@ import NotificationsNoneIcon from "@mui/icons-material/NotificationsNone";
 import { useNavigate } from "react-router-dom";
 import moment from "moment";
 import { STORAGE_URL } from "../../config";
+import { SignInLogo } from "./SignInLogo";
 
 import { CBEWSL_SITE_NAME } from "../../host";
 
@@ -198,90 +199,11 @@ const MarirongHeader = () => {
   return (
     <Fragment>
       <Grid container spacing={0} style={{ background: "white" }}>
-        <Grid
-          item
-          xs={4}
-          md={4}
-          lg={3.5}
-          sx={{ marginTop: 1, marginBottom: 2 }}
-        >
-          <div
-            style={{
-              textAlign: "left",
-              height: "auto",
-              width: "100%",
-              marginTop: 10,
-              marginLeft: 40,
-            }}
-          >
-            <img
-              src={DostSeal}
-              alt="dost-seal-png"
-              style={{
-                objectFit: "contain",
-                height: 75,
-                width: 75,
-                marginRight: 8,
-              }}
-            />
-            <img
-              src={DynaslopeSealMini}
-              alt="dynaslope-seal-mini-png"
-              style={{
-                objectFit: "contain",
-                height: 72,
-                width: 75,
-                marginRight: 8,
-                marginBottom: 2,
-              }}
-            />
-            <img
-              src={benguet_provincial_seal}
-              alt="benguet_provincial_seal"
-              style={{
-                objectFit: "cover",
-                height: 70,
-                width: 70,
-                marginRight: 8,
-                marginBottom: 3,
-              }}
-            />
-            <img
-              src={bakun_municipal_seal}
-              alt="bakun_municipal_seal"
-              style={{
-                objectFit: "contain",
-                height: 70,
-                width: 70,
-                marginRight: 8,
-                marginBottom: 3,
-              }}
-            />
-            <img
-              src={bakun_brgy_seal}
-              alt="bakun_brgy_seal"
-              style={{
-                objectFit: "contain",
-                height: 70,
-                width: 70,
-                marginRight: 8,
-                marginBottom: 3,
-              }}
-            />
-            <img
-              src={bakun_lewc_seal}
-              alt="bakun_lewc_seal"
-              style={{
-                objectFit: "contain",
-                height: 70,
-                width: 70,
-                marginBottom: 3,
-              }}
-            />
-          </div>
+        <Grid item xs={12} sm={4} md={4} lg={4} sx={{ marginTop: 1, marginBottom: 2 }}>
+          <SignInLogo/>
         </Grid>
 
-        <Grid item xs={12} md={6} lg={6.5}>
+        <Grid item xs={12} sm={6} md={6} lg={6}>
           <div
             style={{
               textAlign: "left",
@@ -305,7 +227,7 @@ const MarirongHeader = () => {
           </div>
         </Grid>
 
-        <Grid item xs={12} md={12} lg={2}>
+        <Grid item xs={12} sm={2} md={2} lg={2}>
           <div style={{ textAlign: "end" }}>
             <Tooltip title="Notification">
               <IconButton onClick={handleOpenNotifs} sx={{ p: 2, mt: 4 }}>
