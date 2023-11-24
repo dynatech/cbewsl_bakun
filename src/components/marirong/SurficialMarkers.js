@@ -116,6 +116,7 @@ const SurficialMarkers = (props) => {
 
     getTableSurficial(submitData, (response) => {
       if (response.status) {
+        console.log(response.data);
         let tempColumns = [
           { name: "date", label: "Date" },
           { name: "time", label: "Time" },
@@ -128,6 +129,7 @@ const SurficialMarkers = (props) => {
           });
         });
 
+        tempColumns.push({ name: "weather", label: "Weather" });
         tempColumns.push({ name: "measurer", label: "Measurer" });
 
         setMarkers(response.data.markers);
@@ -686,19 +688,6 @@ const SurficialMarkers = (props) => {
                 options={options}
               />
             </Grid>
-            {/* <Grid item xs={12}>
-              <Grid container align="center">
-                <Grid item xs={12}>
-                  <Button
-                    variant="contained"
-                    onClick={handleClickOpen}
-                    style={{ backgroundColor: "#ffd400", color: "black" }}
-                  >
-                    Add surficial marker measurement
-                  </Button>
-                </Grid>
-              </Grid>
-            </Grid> */}
           </Grid>
         </Grid>
       </Grid>
