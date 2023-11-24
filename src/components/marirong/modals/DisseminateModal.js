@@ -83,7 +83,7 @@ function DisseminateModal(props) {
           data_timestamp
         )
           .add(30, "minutes")
-          .format("LLL")}`;
+          .format("MMMM D, YYYY, h:mm A")}`;
 
         setAlertLevel(`Alert level ${alert_level}`);
         setCurrentAlertTs(
@@ -168,7 +168,7 @@ function DisseminateModal(props) {
           recommended_response.alert_level
         }\nLokasyon: ${site_location}\nPetsa at oras: ${moment(data_ts)
           .add(30, "minutes")
-          .format("LLL")}`;
+          .format("MMMM D, YYYY, h:mm A")}`;
 
         setAlertLevel(`Alert Level ${recommended_response.alert_level}`);
         setCurrentAlertTs(moment(data_ts).add(30, "minutes").format("LLL"));
