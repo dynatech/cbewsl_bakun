@@ -389,7 +389,7 @@ const Moms = (props) => {
   const [confirmation, setConfirmation] = useState(false);
 
   return (
-    <Container>
+    <Grid sx={{ mx: 10 }}>
       <PromptModal
         isOpen={openPrompt}
         error={errorPrompt}
@@ -654,11 +654,24 @@ const Moms = (props) => {
       <Grid container spacing={4} sx={{ mt: 2, mb: 6, padding: "2%" }}>
         <Grid item xs={12}>
           <Grid container spacing={2}>
-            <Grid item xs={12}>
+            <Grid item xs={6}>
               <Typography variant="h4">Manifestations of Movement</Typography>
             </Grid>
+            <Grid item xs={6}>
+              <Button
+                variant="contained"
+                onClick={handleClickOpen}
+                style={{
+                  backgroundColor: "#ffd400",
+                  color: "black",
+                  float: "right",
+                }}
+              >
+                Add surficial marker measurement
+              </Button>
+            </Grid>
             <MomsTable instances={instances} />
-            <Grid item xs={12}>
+            {/* <Grid item xs={12}>
               <Grid container align="center">
                 <Grid item xs={12}>
                   <Button
@@ -670,11 +683,11 @@ const Moms = (props) => {
                   </Button>
                 </Grid>
               </Grid>
-            </Grid>
+            </Grid> */}
           </Grid>
         </Grid>
       </Grid>
-    </Container>
+    </Grid>
   );
 };
 

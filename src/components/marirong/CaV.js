@@ -261,10 +261,10 @@ const CaV = () => {
           // setPromptTitle("Success");
           // setNotifMessage(response.message);
           Swal.fire({
-            icon:'success',
-            title:'Success!',
-            text: 'Successfully added household data'
-          })
+            icon: "success",
+            title: "Success!",
+            text: "Successfully added household data",
+          });
           fetchAll();
         } else {
           // setOpenPrompt(true);
@@ -272,10 +272,10 @@ const CaV = () => {
           // setPromptTitle("Fail");
           // setNotifMessage(response.message);
           Swal.fire({
-            icon:'error',
-            title:'Error!',
-            text: 'Error adding household data. Please contact developers'
-          })
+            icon: "error",
+            title: "Error!",
+            text: "Error adding household data. Please contact developers",
+          });
         }
       });
     } else if (action == "edit") {
@@ -288,10 +288,10 @@ const CaV = () => {
           // setPromptTitle("Success");
           // setNotifMessage(response.message);
           Swal.fire({
-            icon:'success',
-            title:'Success!',
-            text: 'Successfully edited household data'
-          })
+            icon: "success",
+            title: "Success!",
+            text: "Successfully edited household data",
+          });
           fetchAll();
         } else {
           // setOpenPrompt(true);
@@ -299,10 +299,10 @@ const CaV = () => {
           // setPromptTitle("Fail");
           // setNotifMessage(response.message);
           Swal.fire({
-            icon:'error',
-            title:'Error!',
-            text: 'Error editing household data. Please contact developers'
-          })
+            icon: "error",
+            title: "Error!",
+            text: "Error editing household data. Please contact developers",
+          });
         }
       });
     }
@@ -551,7 +551,48 @@ const CaV = () => {
           }
         }}
       />
-      <Grid container spacing={4} sx={{ mt: 2, mb: 6, padding: "2%" }}>
+
+      <Grid container spacing={4} sx={{ mt: 2, padding: "2%" }}>
+        <Grid item xs={12}>
+          <Grid container spacing={2}>
+            <Grid item xs={12}>
+              <Typography variant="h4">Vulnerable Household</Typography>
+            </Grid>
+
+            {vulnerables.map((x) => (
+              <Grid item xs={4}>
+                <Card sx={{ minWidth: "100%" }}>
+                  <CardContent>
+                    <Typography
+                      sx={{ fontSize: 16 }}
+                      color="text.secondary"
+                      gutterBottom
+                    >
+                      {x.title}
+                    </Typography>
+                    <Typography variant="h5" component="div"></Typography>
+                    <Typography variant="body2">
+                      No. of households with {x.label}: {x.count}
+                    </Typography>
+                  </CardContent>
+                  <CardActions>
+                    <Button
+                      size="small"
+                      onClick={() => {
+                        handleViewMore(x);
+                      }}
+                    >
+                      View details
+                    </Button>
+                  </CardActions>
+                </Card>
+              </Grid>
+            ))}
+          </Grid>
+        </Grid>
+      </Grid>
+
+      <Grid container spacing={4} sx={{ mt: 1, mb: 6, padding: "2%" }}>
         <Grid item xs={12}>
           <Grid container spacing={2}>
             <Grid item xs={12}>
@@ -589,44 +630,6 @@ const CaV = () => {
             >
               Add Household
             </Button>
-          </Grid>
-        </Grid>
-
-        <Grid item xs={12}>
-          <Grid container spacing={2}>
-            <Grid item xs={12}>
-              <Typography variant="h4">Vulnerable Household</Typography>
-            </Grid>
-
-            {vulnerables.map((x) => (
-              <Grid item xs={4}>
-                <Card sx={{ minWidth: "100%" }}>
-                  <CardContent>
-                    <Typography
-                      sx={{ fontSize: 16 }}
-                      color="text.secondary"
-                      gutterBottom
-                    >
-                      {x.title}
-                    </Typography>
-                    <Typography variant="h5" component="div"></Typography>
-                    <Typography variant="body2">
-                      No. of households with {x.label}: {x.count}
-                    </Typography>
-                  </CardContent>
-                  <CardActions>
-                    <Button
-                      size="small"
-                      onClick={() => {
-                        handleViewMore(x);
-                      }}
-                    >
-                      View details
-                    </Button>
-                  </CardActions>
-                </Card>
-              </Grid>
-            ))}
           </Grid>
         </Grid>
       </Grid>
