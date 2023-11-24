@@ -24,8 +24,8 @@ const Bulletin = () => {
           sx={{
             marginTop: 10,
             marginBottom: 10,
-            maxWidth: isRendering == false ? 1050 : 800,
-            height: "auto",
+            maxWidth: isRendering == false ? 800 : 800,
+            height: 1150,
             border: "2px solid black",
           }}
         >
@@ -38,22 +38,22 @@ const Bulletin = () => {
             {/* <Grid item xs={12} md={12} lg={12} style={{marginBottom: 10}}> */}
             <Grid
               container
-              spacing={0}
+              spacing={3}
               alignItems="center"
-              justifyContent="flex-start"
+              justifyContent="flex-center"
             >
-              <Grid item xs={4} style={{ marginTop: 20 }}>
+              <Grid item xs={3} style={{ marginTop: 20, textAlign: "right" }}>
                 <img
                   src={mdrrmc_logo}
                   alt="letter-header"
                   style={{
                     objectFit: "contain",
-                    width: 90,
-                    height: 90,
+                    width: 100,
+                    height: 100,
                   }}
                 />
               </Grid>
-              <Grid item xs={6} style={{ textAlign: "center" }}>
+              <Grid item xs={9} style={{ textAlign: "left", marginTop: 20 }}>
                 <Typography variant="body1">
                   <b>Republic of the Philippines</b>
                 </Typography>
@@ -64,7 +64,7 @@ const Bulletin = () => {
                   <b>Municipality of Bakun</b>
                 </Typography>
                 <Typography variant="body1">
-                  <b>Community-based Early Warning Systems for Landslides</b>
+                  <b>Community-based Early Warning System for Landslides</b>
                 </Typography>
                 {/* <Typography variant="body1">
                   <b>Systems for Landslides</b>
@@ -86,7 +86,7 @@ const Bulletin = () => {
               xs={12}
               md={12}
               lg={12}
-              style={{ marginBottom: 20, marginTop: 10 }}
+              style={{ marginBottom: 20, marginTop: 20 }}
             >
               <Typography variant="h5">
                 <b>
@@ -95,23 +95,23 @@ const Bulletin = () => {
               </Typography>
             </Grid>
           </Grid>
-          <Grid container justifyContent="center" style={{ marginBottom: 10 }}>
+          <Grid container justifyContent="center" style={{ marginBottom: 20 }}>
             <Box
               sx={{
-                width: 550,
+                width: 600,
                 height: "auto",
                 border: "2px solid black",
                 padding: 2,
               }}
             >
-              <Typography variant="h5">
-                Location: {location.state.siteLocation}
+              <Typography variant="body1">
+                Location: <strong>{location.state.siteLocation}</strong>
               </Typography>
-              <Typography variant="h5">
-                Date/Time:{moment(location.state.currentAlertTs).format("MMMM D, YYYY, h:mm A")}
+              <Typography variant="body1">
+                Date/Time: <strong>{moment(location.state.currentAlertTs).format("MMMM D, YYYY, h:mm A")}</strong>
               </Typography>
-              <Typography variant="h5">
-                Alert Level Released: {location.state.alertLevel}
+              <Typography variant="body1">
+                Alert Level Released: <strong>{location.state.alertLevel}</strong>
               </Typography>
               {/* <Typography>Recommended Response: {}</Typography> */}
             </Box>
@@ -124,7 +124,7 @@ const Bulletin = () => {
               lg={12}
               style={{ marginLeft: 80, marginRight: 80 }}
             >
-              <Typography variant="h6">
+              <Typography variant="body1">
                 <b>
                   <u>AREA SITUATION:</u>
                 </b>
@@ -132,62 +132,62 @@ const Bulletin = () => {
               {location.state.triggerSource.map((data) =>
                 data.source.toLowerCase() == "landslide features" ? (
                   <Fragment>
-                    <Typography variant="h6">
+                    <Typography variant="subtitle1">
                       <b>LANDSLIDE FEATURES</b>
                     </Typography>
                     <Typography variant="subtitle1" style={{ marginLeft: 20 }}>
-                      <u>{data.description}</u>
+                      {data.description}
                     </Typography>
                   </Fragment>
                 ) : data.source.toLowerCase() == "rainfall" ? (
                   <Fragment>
-                    <Typography variant="h6">
+                    <Typography variant="subtitle1">
                       <b>RAINFALL</b>
                     </Typography>
                     <Typography variant="subtitle1" style={{ marginLeft: 20 }}>
-                      <u>{data.description}</u>
+                      {data.description}
                     </Typography>
                   </Fragment>
                 ) : data.source.toLowerCase() == "earthquake" ||
                   data.source.toLowerCase() == "surficial" ||
                   data.source.toLowerCase() == "subsurface" ? (
                   <Fragment>
-                    <Typography variant="h6">
+                    <Typography variant="subtitle1">
                       <b>GROUND MOVEMENT</b>
                     </Typography>
                     <Typography variant="subtitle1" style={{ marginLeft: 20 }}>
-                      <u>{data.description}</u>
+                      {data.description}
                     </Typography>
                   </Fragment>
                 ) : (
-                  <Typography variant="subtitle1">
+                  <Typography variant="subtitle1" style={{ marginLeft: 20 }}>
                     No ground movement observed
                   </Typography>
                 )
               )}
-              <Typography variant="h6">
+              <Typography variant="subtitle1">
                 <b>ELEMENTS AT RISK</b>
               </Typography>
-              <Typography variant="subtitle1">
+              <Typography variant="subtitle1" style={{ marginLeft: 20 }}>
                 At least 31 households, Roman Catholic Church
               </Typography>
-              <Typography variant="h6">
+              <Typography variant="body1" style={{ marginTop: 20 }}>
                 <b>
                   <u>OTHER RECOMMENDATIONS:</u>
                 </b>
               </Typography>
-              {location.state.lewcRP != "" && (
-                <Typography variant="subtitle1">
-                  <b>For the Landslide Early Warning Committee (LEWC):</b>{" "}
-                  {location.state.lewcRP}
-                </Typography>
-              )}
               {location.state.communityRP != "" ? (
                 <Typography variant="subtitle1">
                   <b>For the Community:</b> {location.state.communityRP}
                 </Typography>
               ) : (
                 "N/A"
+              )}
+              {location.state.lewcRP != "" && (
+                <Typography variant="subtitle1">
+                  <b>For the Landslide Early Warning Committee (LEWC):</b>{" "}
+                  {location.state.lewcRP}
+                </Typography>
               )}
               {location.state.barangayRP != "" ? (
                 <Typography variant="subtitle1">
@@ -196,9 +196,23 @@ const Bulletin = () => {
               ) : (
                 "N/A"
               )}
-              <Typography variant="subtitle1">
-                <b>NOTE:</b> This bulletin contains the official alert level and
-                recommended response of the Bakun MDRRMO for Brgy. Poblacion and
+              {location.state.municipalRP != "" ? (
+                <Typography variant="subtitle1">
+                  <b>For the Municipal:</b> {location.state.municipalRP}
+                </Typography>
+              ) : (
+                "N/A"
+              )}
+              {location.state.provincialRP != "" ? (
+                <Typography variant="subtitle1">
+                  <b>For the Provincial:</b> {location.state.provincialRP}
+                </Typography>
+              ) : (
+                "N/A"
+              )}
+              <Typography variant="subtitle1" style={{ marginTop: 20 }}>
+                <b>NOTE:</b> This bulletin contains the official Alert Level and
+                Recommended Response of the Bakun MDRRMO for Brgy. Poblacion and
                 will hold true until a new bulletin is released.
               </Typography>
             </Grid>
@@ -226,7 +240,7 @@ const Bulletin = () => {
             {({ toPdf }) => (
               <Button
                 variant="contained"
-                style={{ marginButtom: 10, textAlign: "center" }}
+                style={{ marginBottom: 10, textAlign: "center" }}
                 onClick={() => {
                   setIsRendering(true);
                   toPdf();
