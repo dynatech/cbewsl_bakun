@@ -58,6 +58,7 @@ const ProfileSettings = () => {
     useEffect(() => {
         const data = localStorage.getItem('credentials');
         const parse_data = JSON.parse(data);
+        console.log(parse_data)
         const first_name = parse_data.user.first_name ? parse_data.user.first_name : parse_data.user.firstname;
         const last_name = parse_data.user.last_name ? parse_data.user.last_name : parse_data.user.lastname;
         const middle_name = parse_data.user.middle_name ? parse_data.user.middle_name : parse_data.user.middlename;
@@ -119,6 +120,7 @@ const ProfileSettings = () => {
             sex: gender,
             birthday: updatedBday,
             nickname: firstName,
+            mobile_number: mobileNum,
         }
         const prof_input = {
             address: address,
@@ -131,11 +133,11 @@ const ProfileSettings = () => {
                 const credentials = localStorage.getItem('credentials')
                 const parsed_credentials = JSON.parse(credentials);
                 const updated_input = {
-                    ...parsed_credentials
+                    ...parsed_credentials,
+                    mobile_no: mobileNum,
+                    user: {...parsed_credentials.user, ...input},
+                    profile: {...parsed_credentials.profile, ...prof_input}
                 }
-                console.log(parsed_credentials)
-                updated_input.user = {...updated_input.user, ...input}
-                updated_input.profile = {...updated_input.profile, ...prof_input}
                 localStorage.setItem('credentials', JSON.stringify(updated_input))
                 Swal.fire({
                     icon: 'success',
@@ -256,7 +258,7 @@ const ProfileSettings = () => {
                                                 multiline 
                                                 rows={2}/>
                                     </Grid>
-                                    <Grid item xs={6}>
+                                    <Grid item xs={4}>
                                         <Typography>Birthdate</Typography>
                                         <LocalizationProvider dateAdapter={AdapterDayjs}>
                                             <DesktopDatePicker
@@ -267,6 +269,14 @@ const ProfileSettings = () => {
                                                 renderInput={params => <TextField {...params} />}
                                             />
                                             </LocalizationProvider>
+                                    </Grid>
+                                    <Grid item xs={8}>
+                                        <Typography>Mobile Number</Typography>
+                                        <TextField id="outlined-basic" 
+                                                variant="outlined" 
+                                                value={mobileNum}
+                                                onChange={e => setMobileNum(e.target.value)}
+                                                 />
                                     </Grid>
                                 </Grid>
                             </CardContent>
