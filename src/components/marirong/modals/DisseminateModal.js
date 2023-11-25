@@ -40,6 +40,8 @@ function DisseminateModal(props) {
   const [barangayRP, setBarangayRP] = useState("");
   const [communityRP, setCommunityRP] = useState("");
   const [lewcRP, setLewcRP] = useState("");
+  const [municipalRP, setMunicipalRp] = useState("");
+  const [provincialRp, setProvincialRp] = useState("");
 
   const releaseEWISms = () => {
     handleSendSMS(message);
@@ -149,11 +151,13 @@ function DisseminateModal(props) {
         console.log("recommended_response", recommended_response);
         setBarangayRP(recommended_response.barangay_response);
         setLewcRP(recommended_response.lewc_response);
-        setCommunityRP(recommended_response.commmunity_response);
+        setCommunityRP(recommended_response.community_response);
+        setMunicipalRp(recommended_response.mlgu_response);
+        setProvincialRp(recommended_response.plgu_response);
 
         msg += `\nResponde (Barangay): ${recommended_response.barangay_response}\n`;
         msg += `\nResponde (LEWC):${recommended_response.lewc_response}\n`;
-        msg += `\nResponde (Komunidad): ${recommended_response.commmunity_response}\n`;
+        msg += `\nResponde (Komunidad): ${recommended_response.community_response}\n`;
         msg += `Source: Bakun MDRRMO`;
         setMessage(msg);
       } else {
@@ -180,11 +184,13 @@ function DisseminateModal(props) {
         });
         console.log("THIS IS TEMP:", temp);
         setTriggerSource(temp);
-        setCommunityRP(recommended_response.commmunity_response);
+        setCommunityRP(recommended_response.community_response);
         setBarangayRP(recommended_response.barangay_response);
+        setMunicipalRp(recommended_response.mlgu_response);
+        setProvincialRp(recommended_response.plgu_response);
 
         msg += `\nBakit: ${recommended_response.trigger_description}`;
-        msg += `\nResponde (Komunidad): ${recommended_response.commmunity_response}\nResponde (LEWC):${recommended_response.barangay_response}\nSource: Bakun MDRRMO`;
+        msg += `\nResponde (Komunidad): ${recommended_response.community_response}\nResponde (LEWC):${recommended_response.barangay_response}\nSource: Bakun MDRRMO`;
         setMessage(msg);
       }
     }
@@ -201,6 +207,9 @@ function DisseminateModal(props) {
         barangayRP: barangayRP,
         communityRP: communityRP,
         lewcRP: lewcRP,
+        municipalRP,
+        provincialRp,
+        triggerList: [],
       },
     });
   };
@@ -266,15 +275,17 @@ function DisseminateModal(props) {
         >
           Send EWI SMS
         </Button>
-        <Button
-          variant="contained"
-          onClick={() => {
-            renderBulletin();
-          }}
-          color="primary"
-        >
-          Generate Bulletin
-        </Button>
+        {alertLevel !== 0 && (
+          <Button
+            variant="contained"
+            onClick={() => {
+              renderBulletin();
+            }}
+            color="primary"
+          >
+            Generate Bulletin
+          </Button>
+        )}
       </DialogActions>
     </Dialog>
   );

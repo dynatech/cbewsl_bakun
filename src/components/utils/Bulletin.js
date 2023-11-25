@@ -108,10 +108,16 @@ const Bulletin = () => {
                 Location: <strong>{location.state.siteLocation}</strong>
               </Typography>
               <Typography variant="body1">
-                Date/Time: <strong>{moment(location.state.currentAlertTs).format("MMMM D, YYYY, h:mm A")}</strong>
+                Date/Time:{" "}
+                <strong>
+                  {moment(location.state.currentAlertTs).format(
+                    "MMMM D, YYYY, h:mm A"
+                  )}
+                </strong>
               </Typography>
               <Typography variant="body1">
-                Alert Level Released: <strong>{location.state.alertLevel}</strong>
+                Alert Level Released:{" "}
+                <strong>{location.state.alertLevel}</strong>
               </Typography>
               {/* <Typography>Recommended Response: {}</Typography> */}
             </Box>
@@ -203,9 +209,9 @@ const Bulletin = () => {
               ) : (
                 "N/A"
               )}
-              {location.state.provincialRP != "" ? (
+              {location.state.provincialRp != "" ? (
                 <Typography variant="subtitle1">
-                  <b>For the Provincial:</b> {location.state.provincialRP}
+                  <b>For the Provincial:</b> {location.state.provincialRp}
                 </Typography>
               ) : (
                 "N/A"

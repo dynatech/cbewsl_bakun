@@ -269,6 +269,13 @@ const Moms = (props) => {
     setOpen(false);
   };
 
+  useEffect(() => {
+    if (selectedAlertLevel === 0) {
+      setNarrative("No changes were observed.");
+      setFeatureDetails("No changes were observed.");
+    }
+  }, [selectedAlertLevel]);
+
   const initialize = () => {
     setDateTimestamp(new Date());
     setSelectedFeatureIndex(null);
@@ -315,9 +322,11 @@ const Moms = (props) => {
             (o) => o.feature_id == selectedFeatureIndex
           ).feature,
           report_narrative: featureDetails,
-          observance_ts: moment(datetimestamp).format("YYYY-MM-DD HH:mm:ss"),
+          observance_ts: moment(new Date(datetimestamp)).format(
+            "YYYY-MM-DD HH:mm:ss"
+          ),
           remarks: narrative,
-          reporter_id: 1, //default muna
+          reporter_id: 1, //default muna, need mag create ng general community account
           validator_id: userId,
           location: featureLocation,
           iomp: userId,
@@ -326,14 +335,12 @@ const Moms = (props) => {
       ],
       uploads: [],
     };
+    console.log("moms_entry", moms_entry);
 
     insertMomsEntry(moms_entry, (response) => {
       if (response.status == true) {
         initialize();
-        // setOpenPrompt(true);
-        // setErrorPrompt(false);
-        // setPromptTitle("Success");
-        // setNotifMessage(response.message);
+        reloadTable();
         Swal.fire({
           icon: "success",
           title: "Success!",
@@ -341,10 +348,6 @@ const Moms = (props) => {
         });
         setOpen(false);
       } else {
-        // setOpenPrompt(true);
-        // setErrorPrompt(true);
-        // setPromptTitle("Fail");
-        // setNotifMessage(response.message);
         Swal.fire({
           icon: "error",
           title: "Error!",
@@ -359,7 +362,7 @@ const Moms = (props) => {
 
     console.log("valid", valid);
     if (valid) {
-      let promptMsg = `Date: ${moment(datetimestamp).format(
+      let promptMsg = `Date: ${moment(new Date(datetimestamp)).format(
         "YYYY-MM-DD HH:mm:ss"
       )}\n`;
       promptMsg += `Feature Type: ${
@@ -667,7 +670,7 @@ const Moms = (props) => {
                   float: "right",
                 }}
               >
-                Add surficial marker measurement
+                Add manifestations of movement
               </Button>
             </Grid>
             <MomsTable instances={instances} />
