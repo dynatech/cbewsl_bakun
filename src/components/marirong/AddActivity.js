@@ -23,6 +23,7 @@ import { addEvent } from '../../apis/EventsManagement'
 import PromptModal from './modals/PromptModal';
 import AddPhotoAlternateIcon from '@mui/icons-material/AddPhotoAlternate';
 import Swal from 'sweetalert2'
+import { CBEWSL_SITE } from "../../host";
 
 const localizer = momentLocalizer(moment);
 const AddActivity = (props) => {
@@ -103,6 +104,7 @@ const AddActivity = (props) => {
         formData.append('activity_name', eventName);
         formData.append('activity_place', eventPlace);
         formData.append('activity_note', eventNote);
+        formData.append('site_id', CBEWSL_SITE);
         formData.append('file', selectedImage);
         console.log(formData)
         setIsConfirm(false)
