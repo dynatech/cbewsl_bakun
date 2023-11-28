@@ -1,13 +1,13 @@
 import { Box, Grid, Typography, Button } from "@mui/material";
 import { useLocation } from "react-router-dom";
-import React, { Fragment, createRef, useState } from "react";
+import React, { Fragment, createRef, useState, useEffect } from "react";
 import letter_header from "../../assets/phivolcs-letter-head.png";
 import mdrrmc_logo from "../../assets/bakun_municipal_seal.png";
 import leon_logo from "../../assets/leon_municipal_seal.png";
 import letter_footer from "../../assets/phivolcs-letter-footer.png";
 import Pdf from "react-to-pdf";
 import moment from "moment";
-import { CBEWSL_SITE_CODE } from "../../host";
+import { CBEWSL_SITE_CODE, CBEWSL_SITE_LOCATION } from "../../host";
 
 const Bulletin = () => {
   const location = useLocation();
@@ -141,8 +141,8 @@ const Bulletin = () => {
                     <Typography variant="subtitle1">
                       <b>LANDSLIDE FEATURES</b>
                     </Typography>
-                    <Typography variant="subtitle1" style={{ marginLeft: 20 }}>
-                      {data.description}
+                    <Typography variant="subtitle1">
+                      {data.info} ({data.description})
                     </Typography>
                   </Fragment>
                 ) : data.source.toLowerCase() == "rainfall" ? (
@@ -150,8 +150,8 @@ const Bulletin = () => {
                     <Typography variant="subtitle1">
                       <b>RAINFALL</b>
                     </Typography>
-                    <Typography variant="subtitle1" style={{ marginLeft: 20 }}>
-                      {data.description}
+                    <Typography variant="subtitle1">
+                      {data.info} ({data.description})
                     </Typography>
                   </Fragment>
                 ) : data.source.toLowerCase() == "earthquake" ||
@@ -161,12 +161,12 @@ const Bulletin = () => {
                     <Typography variant="subtitle1">
                       <b>GROUND MOVEMENT</b>
                     </Typography>
-                    <Typography variant="subtitle1" style={{ marginLeft: 20 }}>
-                      {data.description}
+                    <Typography variant="subtitle1">
+                      {data.info} ({data.description})
                     </Typography>
                   </Fragment>
                 ) : (
-                  <Typography variant="subtitle1" style={{ marginLeft: 20 }}>
+                  <Typography variant="subtitle1">
                     No ground movement observed
                   </Typography>
                 )
@@ -174,7 +174,7 @@ const Bulletin = () => {
               <Typography variant="subtitle1">
                 <b>ELEMENTS AT RISK</b>
               </Typography>
-              <Typography variant="subtitle1" style={{ marginLeft: 20 }}>
+              <Typography variant="subtitle1">
                 At least 31 households, Roman Catholic Church
               </Typography>
               <Typography variant="body1" style={{ marginTop: 20 }}>
@@ -182,44 +182,37 @@ const Bulletin = () => {
                   <u>OTHER RECOMMENDATIONS:</u>
                 </b>
               </Typography>
-              {location.state.communityRP != "" ? (
+              {location.state.communityRP !== "" && (
                 <Typography variant="subtitle1">
                   <b>For the Community:</b> {location.state.communityRP}
                 </Typography>
-              ) : (
-                "N/A"
               )}
-              {location.state.lewcRP != "" && (
+              {location.state.lewcRP !== "" && (
                 <Typography variant="subtitle1">
                   <b>For the Landslide Early Warning Committee (LEWC):</b>{" "}
                   {location.state.lewcRP}
                 </Typography>
               )}
-              {location.state.barangayRP != "" ? (
+              {location.state.barangayRP !== "" && (
                 <Typography variant="subtitle1">
                   <b>For the Barangay:</b> {location.state.barangayRP}
                 </Typography>
-              ) : (
-                "N/A"
               )}
-              {location.state.municipalRP != "" ? (
+              {location.state.municipalRP !== "" && (
                 <Typography variant="subtitle1">
                   <b>For the Municipal:</b> {location.state.municipalRP}
                 </Typography>
-              ) : (
-                "N/A"
               )}
-              {location.state.provincialRp != "" ? (
+              {location.state.provincialRp !== "" && (
                 <Typography variant="subtitle1">
                   <b>For the Provincial:</b> {location.state.provincialRp}
                 </Typography>
-              ) : (
-                "N/A"
               )}
               <Typography variant="subtitle1" style={{ marginTop: 20 }}>
                 <b>NOTE:</b> This bulletin contains the official Alert Level and
-                Recommended Response of the Bakun MDRRMO for Brgy. Poblacion and
-                will hold true until a new bulletin is released.
+                Recommended Response of the Bakun MDRRMO for{" "}
+                {CBEWSL_SITE_LOCATION} and will hold true until a new bulletin
+                is released.
               </Typography>
             </Grid>
           </Grid>
