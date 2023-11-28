@@ -45,10 +45,8 @@ function ValidationModal(props) {
         "YYYY-MM-DD HH:MM:00"
       )}`,
     };
-    console.log(input);
     updateAlertStatus(input, (data) => {
       setOpenModal(false);
-      console.log(data);
       handleValidation("Alert invalidated!");
       setRemarks("");
       setIsValidated(true);
@@ -67,10 +65,8 @@ function ValidationModal(props) {
         "YYYY-MM-DD HH:MM:00"
       )}`,
     };
-    console.log(input);
     updateAlertStatus(input, (data) => {
       setOpenModal(false);
-      console.log(data);
       handleValidation("Alert validating!");
       setRemarks("");
       setIsValidated(true);
@@ -88,10 +84,8 @@ function ValidationModal(props) {
         "YYYY-MM-DD HH:MM:00"
       )}`,
     };
-    console.log(input);
     updateAlertStatus(input, (data) => {
       setOpenModal(false);
-      console.log(data);
       handleValidation("Alert validated!");
       setRemarks("");
       setIsValidated(true);

@@ -25,7 +25,6 @@ import lewc_seal from "../../assets/bak_lewc_seal.png";
 import { CBEWSL_SITE_NAME } from "../../host";
 
 const Signin = () => {
-
   const [openModal, setOpenModal] = useState(false);
   const [inputOTPModal, setInputOTPModal] = useState(false);
   const [createAccountModal, setCreateAccountModal] = useState(false);
@@ -54,7 +53,6 @@ const Signin = () => {
 
   const numOfFiles = () => {
     getNumberOfFiles("assets", (data) => {
-      console.log(data.length);
       setFileCount(data.length);
     });
   };
@@ -109,10 +107,7 @@ const Signin = () => {
             id="filled-helperText"
             placeholder="E.g. JuanDelacruz"
             helperText={
-              <Typography
-                variant="caption"
-                display="block"
-              >
+              <Typography variant="caption" display="block">
                 Username or Mobile Number
               </Typography>
             }
@@ -141,7 +136,6 @@ const Signin = () => {
             color="primary"
             onClick={(e) => {
               forgotPassword({ indicator: indicator }, (response) => {
-                console.log(response);
                 if (response.status == true) {
                   setOpenPrompt(true);
                   setErrorPrompt(false);
@@ -222,9 +216,7 @@ const Signin = () => {
             color="primary"
             disabled={passwordMatched && confirmPassword != "" ? false : true}
             onClick={(e) => {
-              console.log("pinapasa", password);
               verifyOTP({ password: newPassword, otp: otp }, (response) => {
-                console.log(response);
                 if (response.status == true) {
                   setOpenPrompt(true);
                   setErrorPrompt(false);

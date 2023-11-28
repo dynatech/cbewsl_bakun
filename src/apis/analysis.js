@@ -15,7 +15,6 @@ export function getSurficialPlotData(input, callback, is_end_of_shift = false) {
     .get(api_link)
     .then((response) => {
       const { data } = response;
-      console.log("Surficial Plot Data", data);
       callback(data);
     })
     .catch((error) => {
@@ -30,7 +29,6 @@ export function deleteSurficialData(input, callback) {
     .post(api_link, input)
     .then((response) => {
       const { data } = response;
-      console.log("Delete Surficial Data Response", data);
       callback(data);
     })
     .catch((error) => {
@@ -45,7 +43,6 @@ export function updateSurficialData(input, callback) {
     .post(api_link, input)
     .then((response) => {
       const { data } = response;
-      console.log("Update Surficial Data Response", data);
       callback(data);
     })
     .catch((error) => {
@@ -63,7 +60,6 @@ export function getSurficialMarkerTrendingData(input, callback) {
     .get(api_link)
     .then((response) => {
       const { data } = response;
-      console.log("Surficial Marker Trending Data", data);
       callback(data);
     })
     .catch((error) => {
@@ -78,7 +74,6 @@ export function insertMarkerEvent(input, callback) {
     .post(api_link, input)
     .then((response) => {
       const { data } = response;
-      console.log(data);
       callback(data);
     })
     .catch((error) => {
@@ -95,7 +90,6 @@ export function getRainfallPlotData(input, callback) {
     .get(api_link)
     .then((response) => {
       const { data } = response;
-      console.log("Rainfall Plot Data", data);
       callback(data);
     })
     .catch((error) => {
@@ -122,7 +116,6 @@ export function getSubsurfacePlotData(input, callback) {
     .get(api_link)
     .then((response) => {
       const { data } = response;
-      console.log("Subsurface Plot Data", data);
       callback(data);
     })
     .catch((error) => {
@@ -138,7 +131,6 @@ export function getSurfaceNodeHealth(input, callback) {
     .get(api_link)
     .then((response) => {
       const { data } = response;
-      console.log("Subsurface Node Health Data", data);
       callback(data);
     })
     .catch((error) => {
@@ -148,7 +140,7 @@ export function getSurfaceNodeHealth(input, callback) {
 
 export function getSubsurfaceNodeLevel(input, callback) {
   const { subsurface_column, ts_end, ts_start, node_id } = input;
-  console.log("node level input", input);
+
   // const api_link = `${API_URL}/api/subsurface/get_subsurface_node_level/${subsurface_column}/${ts_end}/${ts_start}/${node_id}`;
   const api_link = `http://192.168.150.110:5000/api/subsurface/get_subsurface_node_level/${subsurface_column}/${ts_end}/${ts_start}/${node_id}`;
 
@@ -156,7 +148,6 @@ export function getSubsurfaceNodeLevel(input, callback) {
     .get(api_link)
     .then((response) => {
       const { data } = response;
-      console.log("Subsurface Node Level Data", data);
       callback(data);
     })
     .catch((error) => {
@@ -171,7 +162,6 @@ export function getEarthquakeEvents(callback) {
     .get(api_link)
     .then((response) => {
       const { data } = response;
-      console.log("Earthquake Events", data);
       callback(data);
     })
     .catch((error) => {
@@ -201,7 +191,6 @@ export function getEarthquakeAlerts(request, callback) {
     .get(api_link)
     .then((response) => {
       const { data } = response;
-      console.log("Earthquake Alerts", data);
       callback(data);
     })
     .catch((error) => {
@@ -216,7 +205,6 @@ export function getMOMsAlertSummary(callback) {
     .get(api_link)
     .then((response) => {
       const { data } = response;
-      console.log("MOMs Alerts", data);
       callback(data);
     })
     .catch((error) => {
@@ -231,7 +219,6 @@ export function getMOMsInstances(site_code, callback) {
     .get(api_link)
     .then((response) => {
       const { data } = response;
-      console.log(`MOMs Instances of ${site_code.toUpperCase()}`, data);
       callback(data);
     })
     .catch((error) => {
@@ -247,7 +234,6 @@ export function getSiteSubsurfaceColumns(site_code, callback) {
     .get(api_link)
     .then((response) => {
       const { data } = response;
-      console.log(`Subsurface Columns of ${site_code.toUpperCase()}`, data);
       callback(data);
     })
     .catch((error) => {
@@ -262,7 +248,6 @@ export function getOnDemandEvents(callback) {
     .get(api_link)
     .then((response) => {
       const { data } = response;
-      console.log(`On Demand Events`, data);
       callback(data);
     })
     .catch((error) => {
@@ -277,7 +262,6 @@ export function saveChartSVG(input, callback) {
     .post(api_link, input)
     .then((response) => {
       const { data } = response;
-      console.log("Save SVG", data);
       callback(data);
     })
     .catch((error) => {
@@ -292,7 +276,6 @@ export function saveInvalidRainfallTag(input, callback) {
     .post(api_link, input)
     .then((response) => {
       const { data } = response;
-      console.log("Save tag information", data);
       callback(data);
     })
     .catch((error) => {
@@ -305,12 +288,9 @@ export function getLoggersAndSensorsData(callback) {
     .get(`${API_URL}/api/sensor_deployment/get_loggers_data`)
     .then((response) => {
       const { data } = response;
-      console.log("Loggers and Sensors Data", data);
       callback(data);
     })
-    .catch((error) => {
-      console.log(error);
-    });
+    .catch((error) => {});
 }
 
 export function saveLoggerDeployment(input, callback) {
@@ -319,7 +299,6 @@ export function saveLoggerDeployment(input, callback) {
     .post(api_link, input)
     .then((response) => {
       const { data } = response;
-      console.log("Save deployment logs reponse", data);
       callback(data);
     })
     .catch((error) => {
@@ -334,7 +313,6 @@ export function saveUnreliableMarkerData(input, callback) {
     .post(api_link, input)
     .then((response) => {
       const { data } = response;
-      console.log("Save unreliable data", data);
       callback(data);
     })
     .catch((error) => {
@@ -362,7 +340,6 @@ export function saveDataUpdate(input, callback) {
     .post(api_link, input)
     .then((response) => {
       const { data } = response;
-      console.log("Save data update reponse", data);
       callback(data);
     })
     .catch((error) => {
@@ -377,7 +354,6 @@ export function getMonitoringAnalyticsData(input, callback) {
     .post(api_link, input)
     .then((response) => {
       const { data } = response;
-      console.log("Monitoring analytics data", data);
       callback(data);
     })
     .catch((error) => {

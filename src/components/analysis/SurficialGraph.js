@@ -310,7 +310,7 @@ function AddNewHistoryModal(props) {
   }
 
   // const { enqueueSnackbar, closeSnackbar } = useSnackbar();
-  // console.log(useSnackbar())
+
   const [event, setEvent] = useState("");
   const [ts, setTs] = useState(null);
   const [new_marker_name, setNewMarkerName] = useState("");
@@ -762,7 +762,6 @@ function UpdateDeleteModal(props) {
     observer_name,
   } = chosenPoint;
 
-  // console.log(useSnackbar())
   // const { enqueueSnackbar, closeSnackbar } = useSnackbar();
   const [is_delete_clicked, setDeleteClick] = useState(false);
   const [delete_quantity, setDeleteQuantity] = useState("one");
@@ -1737,7 +1736,6 @@ function SurficialGraph(props) {
     }
 
     if (to_redraw_chart) {
-      console.log("HERE");
       const f_input = { site_code, ...timestamps };
       getSurficialPlotData(
         f_input,
@@ -1755,7 +1753,6 @@ function SurficialGraph(props) {
               const {
                 current: { chart },
               } = chartRef;
-              console.log(chart);
               chart.hideLoading();
 
               if (save_svg) setSaveSVGNow(true);

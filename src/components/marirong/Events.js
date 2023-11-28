@@ -1,7 +1,7 @@
-import React, {useMemo, div, useState, useEffect, Fragment} from 'react';
-import {Calendar, momentLocalizer, Views} from 'react-big-calendar';
-import moment from 'moment';
-import 'react-big-calendar/lib/css/react-big-calendar.css';
+import React, { useMemo, div, useState, useEffect, Fragment } from "react";
+import { Calendar, momentLocalizer, Views } from "react-big-calendar";
+import moment from "moment";
+import "react-big-calendar/lib/css/react-big-calendar.css";
 import {
   Grid,
   Box,
@@ -18,184 +18,179 @@ import {
   TextareaAutosize,
   CardActionArea,
   IconButton,
-} from '@mui/material';
-import CircleIcon from '@mui/icons-material/Circle';
-import MarirongHeader from '../utils/MarirongHeader';
-import DoNotDisturbIcon from '@mui/icons-material/DoNotDisturb';
-import CloseIcon from '@mui/icons-material/Close';
-import EditIcon from '@mui/icons-material/Edit';
-import DeleteIcon from '@mui/icons-material/Delete';
-import FabMuiTable from '../utils/MuiTable';
-import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
-import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
-import { DateTimePicker } from '@mui/x-date-pickers/DateTimePicker';
-import Dialog from '@mui/material/Dialog';
-import DialogActions from '@mui/material/DialogActions';
-import DialogContent from '@mui/material/DialogContent';
-import DialogTitle from '@mui/material/DialogTitle';
-import AddActivity from './AddActivity';
-import PromptModal from './modals/PromptModal';
-import { getEvents, deleteEvent } from '../../apis/EventsManagement'
-import { STORAGE_URL } from '../../config';
-import Swal from 'sweetalert2';
+} from "@mui/material";
+import CircleIcon from "@mui/icons-material/Circle";
+import MarirongHeader from "../utils/MarirongHeader";
+import DoNotDisturbIcon from "@mui/icons-material/DoNotDisturb";
+import CloseIcon from "@mui/icons-material/Close";
+import EditIcon from "@mui/icons-material/Edit";
+import DeleteIcon from "@mui/icons-material/Delete";
+import FabMuiTable from "../utils/MuiTable";
+import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
+import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
+import { DateTimePicker } from "@mui/x-date-pickers/DateTimePicker";
+import Dialog from "@mui/material/Dialog";
+import DialogActions from "@mui/material/DialogActions";
+import DialogContent from "@mui/material/DialogContent";
+import DialogTitle from "@mui/material/DialogTitle";
+import AddActivity from "./AddActivity";
+import PromptModal from "./modals/PromptModal";
+import { getEvents, deleteEvent } from "../../apis/EventsManagement";
+import { STORAGE_URL } from "../../config";
+import Swal from "sweetalert2";
 
 const localizer = momentLocalizer(moment);
 
 const Events = (props) => {
-
   const [activity, setActivity] = useState([]);
 
   useEffect(() => {
-    getAllEvents()
-  },[])
+    getAllEvents();
+  }, []);
 
   const getAllEvents = () => {
     getEvents((response) => {
-      console.log(response)
+
       if(response.status){
         const sortedActivity = response.data.slice().reverse();
         setActivity(sortedActivity);
+
       }
-    })
-  }
+    });
+  };
 
   const columns = [
-    {name: 'title', label: 'Activity name'},
-    {name: 'note', label: 'Activity details'},
-    {name: 'start', label: 'Start date'},
-    {name: 'end', label: 'End date'},
+    { name: "title", label: "Activity name" },
+    { name: "note", label: "Activity details" },
+    { name: "start", label: "Start date" },
+    { name: "end", label: "End date" },
     // {name: 'actions', label: 'Actions'},
   ];
 
   const options = {
     print: false,
     filter: true,
-    selectableRows: 'multiple',
+    selectableRows: "multiple",
     selectableRowsOnClick: true,
-    filterType: 'checkbox',
-    responsive: 'vertical',
+    filterType: "checkbox",
+    responsive: "vertical",
     downloadOptions: {
-      filename: `events_${moment().format("YYYY-MM-DD")}`
-    }, 
-    onRowsDelete: rowsDeleted => {
-      const idsToDelete = rowsDeleted.data.map (item => item.dataIndex)
+      filename: `events_${moment().format("YYYY-MM-DD")}`,
+    },
+    onRowsDelete: (rowsDeleted) => {
+      const idsToDelete = rowsDeleted.data.map((item) => item.dataIndex);
 
-      idsToDelete.forEach(element => {
-        handleDelete({activity_id: activity[element].id})
+      idsToDelete.forEach((element) => {
+        handleDelete({ activity_id: activity[element].id });
       });
     },
   };
 
   const [calendarEvent, setCalendarEvent] = useState([]);
   const [slotInfo, setSlotInfo] = useState([]);
-  const [openAddActivityModal, setOpenAddActivityModal] = useState(false)
-  const [activityAction, setActivityAction] = useState("")
+  const [openAddActivityModal, setOpenAddActivityModal] = useState(false);
+  const [activityAction, setActivityAction] = useState("");
 
-  const [openPrompt, setOpenPrompt] = useState(false)
-  const [promptTitle, setPromptTitle] = useState("")
-  const [notifMessage, setNotifMessage] = useState("")
-  const [errorPrompt, setErrorPrompt] = useState(false)
-  const [confirmation, setConfirmation] = useState(false)
+  const [openPrompt, setOpenPrompt] = useState(false);
+  const [promptTitle, setPromptTitle] = useState("");
+  const [notifMessage, setNotifMessage] = useState("");
+  const [errorPrompt, setErrorPrompt] = useState(false);
+  const [confirmation, setConfirmation] = useState(false);
 
   useEffect(() => {
-    getAllEvents()
-  },[calendarEvent])
+    getAllEvents();
+  }, [calendarEvent]);
 
-  const {views} = useMemo(
+  const { views } = useMemo(
     () => ({
       views: {
         month: true,
       },
     }),
-    [],
+    []
   );
 
-  const [deleteID,setDeleteID] = useState(null)
+  const [deleteID, setDeleteID] = useState(null);
 
   const confirmDelete = (response) => {
-    setActivityAction("delete")
-    console.log("Confirm",response)
-    setOpenPrompt(true)
-    setErrorPrompt(false)
-    setPromptTitle("Are you sure you want to delete this event?")
-    setNotifMessage("This event will be deleted immediately.")
-    setConfirmation(true)
-    if(response != undefined) setDeleteID(response)
-  }
+    setActivityAction("delete");
+    setOpenPrompt(true);
+    setErrorPrompt(false);
+    setPromptTitle("Are you sure you want to delete this event?");
+    setNotifMessage("This event will be deleted immediately.");
+    setConfirmation(true);
+    if (response != undefined) setDeleteID(response);
+  };
 
   const handleDelete = (passedId = null) => {
     let tempDelete = null;
     if (passedId === null) {
       tempDelete = {
-        activity_id: deleteID != null ? deleteID.id : calendarEvent.id
-      }
+        activity_id: deleteID != null ? deleteID.id : calendarEvent.id,
+      };
     } else {
       tempDelete = passedId;
     }
 
     deleteEvent(tempDelete, (response) => {
-      if(response.status == true){
+      if (response.status == true) {
         if (passedId != null) {
-          setErrorPrompt(false)
-          setConfirmation(false)
+          setErrorPrompt(false);
+          setConfirmation(false);
           Swal.fire({
-            icon:'success',
-            title:'Success!',
-            text: "Activity successfully deleted!"
-          })
+            icon: "success",
+            title: "Success!",
+            text: "Activity successfully deleted!",
+          });
         }
-        getAllEvents()
-        setDeleteID(null)
+        getAllEvents();
+        setDeleteID(null);
         // setOpenPrompt(true);
-        setErrorPrompt(false)
+        setErrorPrompt(false);
         Swal.fire({
-          icon:'success',
-          title:'Success!',
-          text: "Activity successfully deleted!"
-        })
-        setConfirmation(false)
+          icon: "success",
+          title: "Success!",
+          text: "Activity successfully deleted!",
+        });
+        setConfirmation(false);
         setCalendarEvent({});
-        
-      }
-      else{
+      } else {
         if (passedId != null) {
           // setOpenPrompt(true)
-          setErrorPrompt(true)
+          setErrorPrompt(true);
           Swal.fire({
-            icon: 'error',
-            title: 'Error!',
-            text: response.feedback
-          })
-          setConfirmation(false)
-          setDeleteID(null)
+            icon: "error",
+            title: "Error!",
+            text: response.feedback,
+          });
+          setConfirmation(false);
+          setDeleteID(null);
         }
       }
-    })
-  }
+    });
+  };
 
-  const [editElement, setEditElement] = useState(null)
+  const [editElement, setEditElement] = useState(null);
   const handleEdit = (response) => {
-    console.log(response)
-    if(response != undefined) setEditElement(response)
-    setOpenAddActivityModal(true)
-    setActivityAction("edit")
-  }
+    if (response != undefined) setEditElement(response);
+    setOpenAddActivityModal(true);
+    setActivityAction("edit");
+  };
 
   const eventStyleGetter = () => {
     const style = {
-      backgroundColor: 'green',
-      borderRadius: '3px',
+      backgroundColor: "green",
+      borderRadius: "3px",
       opacity: 0.8,
-      color: 'white',
-      border: '0px',
-      display: 'block',
+      color: "white",
+      border: "0px",
+      display: "block",
     };
 
     return {
       style,
     };
   };
-  
 
   const ActivityCard = () => {
     const [editModal, setEditModal] = useState(false);
@@ -203,7 +198,7 @@ const Events = (props) => {
 
     const closeEditModal = () => {
       let id = calendarEvent.id;
-      let current_activities = activity.filter(e => e.id !== id);
+      let current_activities = activity.filter((e) => e.id !== id);
       current_activities.push(calendarEvent);
       setActivity(current_activities);
     };
@@ -217,14 +212,13 @@ const Events = (props) => {
 
     const deleteCard = () => {
       let id = calendarEvent.id;
-      let current_activities = activity.filter(e => e.id !== id);
+      let current_activities = activity.filter((e) => e.id !== id);
       setActivity(current_activities);
       setCalendarEvent([]);
     };
 
     const viewCardOpen = () => {
-      setViewModal(true)
-      console.log(calendarEvent.id)
+      setViewModal(true);
     };
     const viewCardClose = () => setViewModal(false);
 
@@ -232,58 +226,69 @@ const Events = (props) => {
       <div>
         {calendarEvent.id !== undefined ? (
           <Fragment>
-            <Card sx={{mb: 1}}>
+            <Card sx={{ mb: 1 }}>
               <CardActionArea onClick={viewCardOpen}>
-                <CardContent sx={{pl: 0}}>
-                  <Grid sx={{display: 'flex', flexDirection: 'row'}}>
+                <CardContent sx={{ pl: 0 }}>
+                  <Grid sx={{ display: "flex", flexDirection: "row" }}>
                     <Grid>
                       <Container>
-                        <CircleIcon fontSize="large" sx={{color:"#ffd400"}}/>
+                        <CircleIcon
+                          fontSize="large"
+                          sx={{ color: "#ffd400" }}
+                        />
                       </Container>
                     </Grid>
                     <Grid>
                       <Typography variant="h5" component="div">
                         {calendarEvent.title}
                       </Typography>
-                      <Typography sx={{mb: 1}} color="text.secondary">
-                        {moment(calendarEvent.start).format('LLL')} -{' '}
-                        {moment(calendarEvent.end).format('LLL')}
+                      <Typography sx={{ mb: 1 }} color="text.secondary">
+                        {moment(calendarEvent.start).format("LLL")} -{" "}
+                        {moment(calendarEvent.end).format("LLL")}
                       </Typography>
-                      <Typography variant="body1">{calendarEvent.place}</Typography>
-                      <Typography variant="body1">{calendarEvent.note}</Typography>
+                      <Typography variant="body1">
+                        {calendarEvent.place}
+                      </Typography>
+                      <Typography variant="body1">
+                        {calendarEvent.note}
+                      </Typography>
                       <Fragment>
-                            {calendarEvent.file && (
-                              <Box mt={2} textAlign="center">
-                                <div style={{marginBottom: 10}}>Uploaded Image:</div>
-                                <img
-                                  src={`${STORAGE_URL}/${calendarEvent.file}`}
-                                  alt={calendarEvent.file}
-                                  height="auto"
-                                  width="100%"
-                                />
-                              </Box>
-                            )}
+                        {calendarEvent.file && (
+                          <Box mt={2} textAlign="center">
+                            <div style={{ marginBottom: 10 }}>
+                              Uploaded Image:
+                            </div>
+                            <img
+                              src={`${STORAGE_URL}/${calendarEvent.file}`}
+                              alt={calendarEvent.file}
+                              height="auto"
+                              width="100%"
+                            />
+                          </Box>
+                        )}
                       </Fragment>
                     </Grid>
                   </Grid>
                 </CardContent>
               </CardActionArea>
               <CardActions>
-                <Grid container direction='row' justifyContent='center'>
+                <Grid container direction="row" justifyContent="center">
                   <Button
                     startIcon={<DeleteIcon />}
                     color="error"
                     onClick={() => {
-                      confirmDelete()
+                      confirmDelete();
                     }}
-                    sx={{marginRight: 2}}>
+                    sx={{ marginRight: 2 }}
+                  >
                     Delete
                   </Button>
-                  <Button startIcon={<EditIcon />} 
+                  <Button
+                    startIcon={<EditIcon />}
                     onClick={() => {
                       // setOpenAddActivityModal(true)
                       // setActivityAction("edit")
-                      handleEdit()
+                      handleEdit();
                     }}
                   >
                     Edit
@@ -291,56 +296,59 @@ const Events = (props) => {
                 </Grid>
               </CardActions>
             </Card>
-        <Modal open={viewModal}>
-        <Box sx={modalStyle}>
-          <Grid container>
-            <Grid item xs={11}>
-              <Typography variant="h6" component="h2">
-                Activity for {moment(calendarEvent.start).format('LL')}
-              </Typography>
-            </Grid>
-            <Grid item xs={1}>
-                <IconButton onClick={viewCardClose}>
-                    <CloseIcon/>
-                </IconButton>
-            </Grid>
-          </Grid>
-          <Typography sx={{ mt: 2 }}>
-            <b>Activity name:</b>&nbsp;{calendarEvent.title}<br/>
-            <b>Activity place:</b>&nbsp;{calendarEvent.place}<br/>
-            <b>Activity note:</b>&nbsp;{calendarEvent.note}<br/>
-          </Typography>
-        </Box>
-      </Modal>
-          </Fragment>
-      ): (
-        <Card>
-          <CardContent sx={{pl: 0}}>
-            <Grid sx={{display: 'flex', flexDirection: 'row'}}>
-              <Grid>
-                <Container>
-                  <CircleIcon fontSize="large" sx={{color:"green"}}/>
-                </Container>
-              </Grid>
-              <Grid>
-                <Typography sx={{mb: 1}} color="text.secondary">
-                  {moment(calendarEvent.start).format('LL')}
+            <Modal open={viewModal}>
+              <Box sx={modalStyle}>
+                <Grid container>
+                  <Grid item xs={11}>
+                    <Typography variant="h6" component="h2">
+                      Activity for {moment(calendarEvent.start).format("LL")}
+                    </Typography>
+                  </Grid>
+                  <Grid item xs={1}>
+                    <IconButton onClick={viewCardClose}>
+                      <CloseIcon />
+                    </IconButton>
+                  </Grid>
+                </Grid>
+                <Typography sx={{ mt: 2 }}>
+                  <b>Activity name:</b>&nbsp;{calendarEvent.title}
+                  <br />
+                  <b>Activity place:</b>&nbsp;{calendarEvent.place}
+                  <br />
+                  <b>Activity note:</b>&nbsp;{calendarEvent.note}
+                  <br />
                 </Typography>
+              </Box>
+            </Modal>
+          </Fragment>
+        ) : (
+          <Card>
+            <CardContent sx={{ pl: 0 }}>
+              <Grid sx={{ display: "flex", flexDirection: "row" }}>
+                <Grid>
+                  <Container>
+                    <CircleIcon fontSize="large" sx={{ color: "green" }} />
+                  </Container>
+                </Grid>
+                <Grid>
+                  <Typography sx={{ mb: 1 }} color="text.secondary">
+                    {moment(calendarEvent.start).format("LL")}
+                  </Typography>
+                </Grid>
               </Grid>
-            </Grid>
-          </CardContent>
-        </Card>
-      )}
-       </div>
+            </CardContent>
+          </Card>
+        )}
+      </div>
     );
   };
 
   return (
     <Grid container>
-      <AddActivity 
-        slotInfo={slotInfo} 
-        openModal={openAddActivityModal} 
-        setOpenModal={setOpenAddActivityModal} 
+      <AddActivity
+        slotInfo={slotInfo}
+        openModal={openAddActivityModal}
+        setOpenModal={setOpenAddActivityModal}
         calendarEvent={editElement != null ? editElement : calendarEvent}
         setEditElement={setEditElement}
         action={activityAction}
@@ -353,19 +361,17 @@ const Events = (props) => {
         setOpenModal={setOpenPrompt}
         notifMessage={notifMessage}
         confirmation={confirmation}
-        callback={ (response) => {
-          if(response == true) {
-            if(activityAction=="delete"){
-              handleDelete()
+        callback={(response) => {
+          if (response == true) {
+            if (activityAction == "delete") {
+              handleDelete();
             }
-          }
-          else if(response == false){
+          } else if (response == false) {
             // setDeleteID(null)
           }
-          
         }}
       />
-      <Grid item xs={9} sm={9} md={9} lg={9} sx={{padding: 4}}>
+      <Grid item xs={9} sm={9} md={9} lg={9} sx={{ padding: 4 }}>
         <Calendar
           selectable={true}
           localizer={localizer}
@@ -374,60 +380,64 @@ const Events = (props) => {
           events={activity}
           startAccessor="start"
           endAccessor="end"
-          modalStyle={{height: '90vh'}}
+          modalStyle={{ height: "90vh" }}
           views={views}
           selected
           onSelectEvent={setCalendarEvent}
           eventPropGetter={eventStyleGetter}
-          onSelectSlot={e => {
-            setSlotInfo(e)
+          onSelectSlot={(e) => {
+            setSlotInfo(e);
           }}
         />
       </Grid>
-      <Grid item xs={3} sm={3} md={3} lg={3} sx={{padding: 2}}>
+      <Grid item xs={3} sm={3} md={3} lg={3} sx={{ padding: 2 }}>
         <Box
           sx={{
-            display: 'flex',
-            flexDirection: 'column',
+            display: "flex",
+            flexDirection: "column",
             m: 2,
             marginLeft: 0,
             marginTop: 1,
             borderRadius: 2,
             padding: 2,
-            maxWidth: '100%',
+            maxWidth: "100%",
             height: 650,
-            backgroundColor: '#ebf6ff',
-          }}>
+            backgroundColor: "#ebf6ff",
+          }}
+        >
           <Typography
             variant="h5"
             fontWeight="bold"
             component="div"
-            sx={{mb: 1}}>
-            {' '}
-            Activity Details{' '}
+            sx={{ mb: 1 }}
+          >
+            {" "}
+            Activity Details{" "}
           </Typography>
           <Divider />
           <Box>
-            <Card sx={{mb: 1}}>
-              <CardContent sx={{alignItems: 'center', mt: 1}}>
-                  <Button variant="outlined" sx={{}} 
-                    onClick={() => {
-                      setOpenAddActivityModal(true)
-                      setActivityAction("add")
-                    }}
-                  >
-                    <Typography style={{fontWeight: 'bold'}}>
-                      Add Activity for {moment(slotInfo.start).format('LL')}
-                    </Typography>
-                  </Button>
+            <Card sx={{ mb: 1 }}>
+              <CardContent sx={{ alignItems: "center", mt: 1 }}>
+                <Button
+                  variant="outlined"
+                  sx={{}}
+                  onClick={() => {
+                    setOpenAddActivityModal(true);
+                    setActivityAction("add");
+                  }}
+                >
+                  <Typography style={{ fontWeight: "bold" }}>
+                    Add Activity for {moment(slotInfo.start).format("LL")}
+                  </Typography>
+                </Button>
               </CardContent>
             </Card>
             <ActivityCard />
           </Box>
         </Box>
       </Grid>
-      <Grid item xs={12} sx={{padding: 2}}>
-        <Typography variant="h5" sx={{marginBottom: 4}}>
+      <Grid item xs={12} sx={{ padding: 2 }}>
+        <Typography variant="h5" sx={{ marginBottom: 4 }}>
           Summary of activities
         </Typography>
         <FabMuiTable
@@ -435,10 +445,10 @@ const Events = (props) => {
             columns: columns,
             rows: activity,
           }}
-            onEdit={handleEdit}
-            onDelete={confirmDelete}
-            buttons="update-delete"
-            options={options}
+          onEdit={handleEdit}
+          onDelete={confirmDelete}
+          buttons="update-delete"
+          options={options}
         />
       </Grid>
     </Grid>
@@ -448,13 +458,13 @@ const Events = (props) => {
 export default Events;
 
 const modalStyle = {
-  position: 'absolute',
-  top: '50%',
-  left: '50%',
-  transform: 'translate(-50%, -50%)',
+  position: "absolute",
+  top: "50%",
+  left: "50%",
+  transform: "translate(-50%, -50%)",
   width: 400,
-  bgcolor: 'background.paper',
-  border: '2px solid #000',
+  bgcolor: "background.paper",
+  border: "2px solid #000",
   boxShadow: 24,
   p: 4,
   maxWidth: 500,

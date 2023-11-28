@@ -73,7 +73,6 @@ function OnDemandModal(props) {
       reporter_id: userId,
       site_id: 29,
     };
-    console.log("input", input);
     insertOnDemandToDb(input, (response) => {
       const { status, message } = response;
       setOpenModal(false);
@@ -114,7 +113,6 @@ function OnDemandModal(props) {
       end_ts: moment().subtract(1, "days").format("YYYY-MM-DD HH:mm:ss"),
     };
     getEarthquakeEventsForLast24hrs(json_data, (response) => {
-      console.log(response);
       const eq_alerts = response.find(
         (e) => e.eq_id === parseInt(earthquake_id) && e.eq_alerts.length > 0
       );
@@ -130,7 +128,6 @@ function OnDemandModal(props) {
       const selected_eq_event = earthquake_events.find(
         (e) => e.eq_id === parseInt(earthquake_id)
       );
-      console.log(selected_eq_event);
       if (selected_eq_event) {
         const { province, magnitude } = selected_eq_event;
         setReason(
@@ -140,9 +137,6 @@ function OnDemandModal(props) {
     }
   }, [earthquake_id, earthquake_events]);
 
-  useEffect(() => {
-    console.log(trigger_type, alert_level);
-  }, [trigger_type, alert_level]);
   return (
     <Fragment>
       <PromptModal

@@ -55,7 +55,6 @@ function DisseminateModal(props) {
       if (public_alert_level !== 0) {
         let data_timestamp;
         let site_location;
-        console.log(ewiTemplates);
         const {
           event,
           public_alert_symbol,
@@ -155,7 +154,6 @@ function DisseminateModal(props) {
         const recommended_response = ewiTemplates.find(
           (e) => e.alert_level === alert_level
         );
-        console.log("recommended_response", recommended_response);
         setBarangayRP(recommended_response.barangay_response);
         setLewcRP(recommended_response.lewc_response);
         setCommunityRP(recommended_response.community_response);
@@ -191,7 +189,6 @@ function DisseminateModal(props) {
           source: "Extended",
           description: recommended_response.trigger_description,
         });
-        console.log("THIS IS TEMP:", temp);
         setTriggerSource(temp);
         setCommunityRP(recommended_response.community_response);
         setBarangayRP(recommended_response.barangay_response);
@@ -206,7 +203,6 @@ function DisseminateModal(props) {
   }, [disseminateData]);
 
   const renderBulletin = () => {
-    console.log(message);
     navigate(`/${CBEWSL_SITE_NAME}/bulletin`, {
       state: {
         alertLevel: alertLevel,

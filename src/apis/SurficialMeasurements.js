@@ -3,8 +3,6 @@ import axios from "axios";
 import { CBEWSL_SITE, CBEWSL_SITE_CODE } from "../host";
 
 export const getTableSurficial = (data, callback) => {
-  let apii = `${API_URL}/api/surficial/tabled_marker_observations/${CBEWSL_SITE_CODE}/${data.startDate}/${data.endDate}`;
-  console.log("data", apii);
   axios
     .get(
       `${API_URL}/api/surficial/tabled_marker_observations/${CBEWSL_SITE_CODE}/${data.startDate}/${data.endDate}`

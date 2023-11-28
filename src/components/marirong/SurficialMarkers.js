@@ -116,7 +116,6 @@ const SurficialMarkers = (props) => {
 
     getTableSurficial(submitData, (response) => {
       if (response.status) {
-        console.log(response.data);
         let tempColumns = [
           { name: "date", label: "Date" },
           { name: "time", label: "Time" },
@@ -231,16 +230,12 @@ const SurficialMarkers = (props) => {
       site_code: CBEWSL_SITE_CODE.toLocaleUpperCase(),
     };
 
-    console.log("submit", submitData);
     if (isUpdate) {
       deletePrevMeasurement(selectedMoId, (response) => {
         sendMeasurement(submitData, (response) => {
           if (response.status == true) {
             setOpen(false);
-            // setOpenPrompt(true);
-            // setErrorPrompt(false);
-            // setPromptTitle("Success");
-            // setNotifMessage("Ground measurements succesfully saved!");
+
             Swal.fire({
               icon: "success",
               title: "Success!",
@@ -248,10 +243,6 @@ const SurficialMarkers = (props) => {
             });
             fetchAll();
           } else {
-            // setOpenPrompt(true);
-            // setErrorPrompt(true);
-            // setPromptTitle("Fail");
-            // setNotifMessage("Failed to save ground measurement.");
             Swal.fire({
               icon: "error",
               title: "Error!",
@@ -262,13 +253,8 @@ const SurficialMarkers = (props) => {
       });
     } else {
       sendMeasurement(submitData, (response) => {
-        console.log("checkiiiiing", response);
         if (response.status == true) {
           setOpen(false);
-          // setOpenPrompt(true);
-          // setErrorPrompt(false);
-          // setPromptTitle("Success");
-          // setNotifMessage("Ground measurements succesfully sent!");
           Swal.fire({
             icon: "success",
             title: "Success!",
@@ -277,13 +263,8 @@ const SurficialMarkers = (props) => {
           fetchAll();
           initialize();
         } else {
-          console.log("??????");
           initialize();
           setOpen(false);
-          // setOpenPrompt(true);
-          // setErrorPrompt(true);
-          // setPromptTitle("Fail");
-          // setNotifMessage("Ground measurements sending failed!");
           Swal.fire({
             icon: "error",
             title: "Error!",
@@ -295,14 +276,8 @@ const SurficialMarkers = (props) => {
   };
 
   const handleSubmit = () => {
-    console.log("measurement", measurement);
     let valid = checkRequired() && reporterCheck();
 
-    console.log("wwww", measurement.reporter);
-    console.log("reporter", reporterCheck());
-    console.log("checkRequired", checkRequired());
-    console.log("atleast one", checkAtleastOne());
-    console.log("valid", valid);
     if (valid) {
       let promptMsg = `Date ${moment(measurement.date).format("LL")}`;
       promptMsg += `Time ${moment(new Date(measurement.time)).format(
@@ -396,7 +371,6 @@ const SurficialMarkers = (props) => {
           if (response) {
             submitMeasurements();
           }
-          console.log("callback", response);
         }}
       />
       <Dialog
