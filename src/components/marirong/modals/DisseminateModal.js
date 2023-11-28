@@ -42,6 +42,7 @@ function DisseminateModal(props) {
   const [lewcRP, setLewcRP] = useState("");
   const [municipalRP, setMunicipalRp] = useState("");
   const [provincialRp, setProvincialRp] = useState("");
+  const [latestEventTriggers, setLatestEventTriggers] = useState([]);
 
   const releaseEWISms = () => {
     handleSendSMS(message);
@@ -49,6 +50,7 @@ function DisseminateModal(props) {
 
   useEffect(() => {
     if (disseminateData) {
+      console.log("disseminateData", disseminateData);
       const { public_alert_level } = disseminateData;
       if (public_alert_level !== 0) {
         let data_timestamp;
@@ -92,9 +94,11 @@ function DisseminateModal(props) {
           moment(data_timestamp).add(30, "minutes").format("LLL")
         );
 
+        let temp = [...triggerSource];
         if (alert_level > 0) {
+          setLatestEventTriggers(latest_event_triggers);
           latest_event_triggers.forEach((trigger) => {
-            const { internal_sym, trigger_misc } = trigger;
+            const { internal_sym, trigger_misc, info } = trigger;
             const { trigger_symbol } = internal_sym;
             const { trigger_hierarchy, alert_level } = trigger_symbol;
             const { trigger_source } = trigger_hierarchy;
@@ -102,6 +106,7 @@ function DisseminateModal(props) {
               (e) =>
                 e.alert_level === alert_level && e.trigger === trigger_source
             );
+            console.log("Template", template);
             if (trigger_source === "on demand") {
               const { on_demand } = trigger_misc;
               const { eq_id } = on_demand;
@@ -122,26 +127,28 @@ function DisseminateModal(props) {
               msg += `\nBakit (${capitalizeFirstLetter(trig_source)}): ${
                 template.trigger_description
               }`;
-              let temp = [...triggerSource];
               temp.push({
                 source: capitalizeFirstLetter(trig_source),
                 description: template.trigger_description,
+                info,
               });
             } else {
               const trig_source =
                 trigger_source === "moms"
                   ? "Landslide Features"
                   : trigger_source;
+              console.log("trig_source", trigger_source);
               msg += `\nBakit (${capitalizeFirstLetter(trig_source)}): ${
                 template.trigger_description
               }`;
 
-              let temp = [...triggerSource];
               temp.push({
                 source: capitalizeFirstLetter(trig_source),
                 description: template.trigger_description,
+                info,
               });
               setTriggerSource(temp);
+              console.log("HERE", temp);
             }
           });
         }
@@ -162,11 +169,13 @@ function DisseminateModal(props) {
         setMessage(msg);
       } else {
         // need icheck if gagana din sa extended
-        const { data_ts, public_alert_level } = disseminateData;
+        const { releases } = disseminateData;
+        const { data_ts } = releases[0];
         const recommended_response = ewiTemplates.find(
           (e) => e.alert_level === public_alert_level
         );
         let site_location = CBEWSL_SITE_LOCATION;
+        console.log(recommended_response, 2222);
         setSiteLocation(site_location);
         let msg = `\nAlert Level: ${
           recommended_response.alert_level
@@ -209,7 +218,7 @@ function DisseminateModal(props) {
         lewcRP: lewcRP,
         municipalRP,
         provincialRp,
-        triggerList: [],
+        triggerList: latestEventTriggers,
       },
     });
   };
@@ -275,7 +284,7 @@ function DisseminateModal(props) {
         >
           Send EWI SMS
         </Button>
-        {alertLevel !== 0 && (
+        {alertLevel !== "Alert level 0" && (
           <Button
             variant="contained"
             onClick={() => {
