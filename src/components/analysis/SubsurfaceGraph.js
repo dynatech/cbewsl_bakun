@@ -207,7 +207,6 @@ function prepareCommunicationHealthChartOption(communication_health, form) {
 
 function prepareColumnPositionChartOption(set_data, input, is_desktop) {
   const { data, max_position, min_position, orientation } = set_data;
-  // console.log(set_data);
   const { subsurface_column } = input;
   const xAxisTitle =
     orientation === "across_slope" ? "Across Slope" : "Downslope";
@@ -761,14 +760,12 @@ function SubsurfaceGraphContainer(props) {
       const temp = [];
       data.forEach((row) => {
         const { tsm_name } = row;
-        console.log(row);
         const input = {
           tsm_name,
           site_code: CBEWSL_SITE_CODE,
         };
         temp.push(input);
       });
-      console.log(temp);
       setSubsurfaceColumns(temp);
     });
   }, []);

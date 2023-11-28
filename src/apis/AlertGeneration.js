@@ -3,7 +3,6 @@ import axios from "axios";
 import { CBEWSL_SITE, CBEWSL_SITE_CODE } from "../host";
 
 export const getLatestCandidatesAndAlerts = (callback) => {
-  console.log("1");
   axios
     .get(`${API_URL}/api/monitoring/candidate_alerts`)
     .then((response) => {
@@ -13,13 +12,11 @@ export const getLatestCandidatesAndAlerts = (callback) => {
 };
 
 export const validateAlert = (callback, state, data) => {
-  console.log("data:", data);
   axios
     .post(`${API_URL}/api/monitoring/update_alert_status`, data)
     .then((response) => {
       // callback(response.data);
       callback(state);
-      console.log(response.data);
     })
     .catch((error) => {});
 };
@@ -29,19 +26,16 @@ export const generateAlert = (data) => {
     .post(`${API_URL}/api/monitoring/insert_ewi`, data)
     .then((response) => {
       // callback(response.data);
-      console.log(response);
     })
     .catch((error) => {});
 };
 
 export function getCandidateAlert(callback) {
-  console.log("2");
   const api_link = `${API_URL}/api/monitoring/candidate_alerts/${CBEWSL_SITE_CODE}`;
   axios
     .get(api_link)
     .then((response) => {
       const { data } = response;
-      console.log(`Candidate alert`, data);
       callback(data);
     })
     .catch((error) => {
@@ -55,7 +49,6 @@ export function updateAlertStatus(input, callback) {
     .post(api_link, input)
     .then((response) => {
       const { data } = response;
-      console.log("Updated alert status", data);
       callback(data);
     })
     .catch((error) => {
@@ -69,7 +62,6 @@ export function releaseAlert(input, callback) {
     .post(api_link, input)
     .then((response) => {
       const { data } = response;
-      console.log("Release alert", data);
       callback(data);
     })
     .catch((error) => {
@@ -83,7 +75,6 @@ export function sendMessage(input, callback) {
     .post(api_link, input)
     .then((response) => {
       const { data } = response;
-      console.log("Send EWI Message", data);
       callback(data);
     })
     .catch((error) => {
@@ -97,7 +88,6 @@ export function getReleasedMessages(release_id, callback) {
     .get(api_link)
     .then((response) => {
       const { data } = response;
-      console.log(`Release ack`, data);
       callback(data);
     })
     .catch((error) => {
@@ -111,7 +101,6 @@ export function getTempMoms(callback) {
     .get(api_link)
     .then((response) => {
       const { data } = response;
-      console.log(`get temp moms`, data);
       callback(data);
     })
     .catch((error) => {
@@ -125,7 +114,6 @@ export function updateMoms(input, callback) {
     .post(api_link, input)
     .then((response) => {
       const { data } = response;
-      console.log("Updated moms", data);
       callback(data);
     })
     .catch((error) => {
@@ -139,7 +127,6 @@ export function getContacts(callback) {
     .get(api_link)
     .then((response) => {
       const { data } = response;
-      console.log("Updated moms", data);
       callback(data);
     })
     .catch((error) => {
@@ -155,13 +142,10 @@ export function insertOnDemandToDb(on_demand_data, callback) {
     .then((response) => {
       const { data } = response;
       if (callback !== null) {
-        console.log("On Demand Insert result", data);
         callback(data);
       }
     })
-    .catch((error) => {
-      console.log(error);
-    });
+    .catch((error) => {});
 }
 
 export function checkLatestSiteEventIfHasOnDemand(site_id, callback) {
@@ -170,7 +154,6 @@ export function checkLatestSiteEventIfHasOnDemand(site_id, callback) {
     .get(api_link)
     .then((response) => {
       const { data } = response;
-      console.log("check if has on demand", data);
       callback(data);
     })
     .catch((error) => {
@@ -185,11 +168,8 @@ export function getEarthquakeEventsForLast24hrs(json_data, callback) {
     .then((response) => {
       const { data } = response;
       if (callback !== null) {
-        console.log("24hrs eq event", data);
         callback(data);
       }
     })
-    .catch((error) => {
-      console.log(error);
-    });
+    .catch((error) => {});
 }

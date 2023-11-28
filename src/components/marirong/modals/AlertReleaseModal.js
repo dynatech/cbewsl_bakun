@@ -33,7 +33,6 @@ function AlertReleaseFormModal(props) {
   const [openBackdrop, setOpenBackdrop] = useState(false);
   const releaseWarning = () => {
     setOpenBackdrop(!openBackdrop);
-    // console.log(trigger)
     if (public_alert_level !== 0) {
       trigger.release_details.release_time = moment().format("HH:mm");
       trigger.release_details.with_retrigger_validation = false;
@@ -44,14 +43,11 @@ function AlertReleaseFormModal(props) {
         trigger.release_details.with_retrigger_validation = false;
         trigger.release_details.comments = "";
       } catch (e) {
-        console.log(e);
         trigger.release_time = moment().format("HH:mm");
         trigger.with_retrigger_validation = false;
       }
     }
-    console.log(trigger);
     releaseAlert(trigger, (return_data) => {
-      console.log(return_data);
       const { status, message } = return_data;
       setOpenModal(false);
       if (status) {

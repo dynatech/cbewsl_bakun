@@ -63,7 +63,6 @@ export function getCandidateAlert(callback) {
     .get(api_link)
     .then((response) => {
       const { data } = response;
-      console.log(`Candidate alert`, data);
       callback(data);
     })
     .catch((error) => {
@@ -77,7 +76,6 @@ export function updateAlertStatus(input, callback) {
     .post(api_link, input)
     .then((response) => {
       const { data } = response;
-      console.log("Updated alert status", data);
       callback(data);
     })
     .catch((error) => {
@@ -91,7 +89,6 @@ export function releaseAlert(input, callback) {
     .post(api_link, input)
     .then((response) => {
       const { data } = response;
-      console.log("Release alert", data);
       callback(data);
     })
     .catch((error) => {
@@ -105,7 +102,6 @@ export function sendMessage(input, callback) {
     .post(api_link, input)
     .then((response) => {
       const { data } = response;
-      console.log("Send EWI Message", data);
       callback(data);
     })
     .catch((error) => {
@@ -119,7 +115,6 @@ export function getReleasedMessages(release_id, callback) {
     .get(api_link)
     .then((response) => {
       const { data } = response;
-      console.log(`Release ack`, data);
       callback(data);
     })
     .catch((error) => {
@@ -133,7 +128,6 @@ export function getTempMoms(callback) {
     .get(api_link)
     .then((response) => {
       const { data } = response;
-      console.log(`get temp moms`, data);
       callback(data);
     })
     .catch((error) => {
@@ -147,7 +141,6 @@ export function updateMoms(input, callback) {
     .post(api_link, input)
     .then((response) => {
       const { data } = response;
-      console.log("Updated moms", data);
       callback(data);
     })
     .catch((error) => {
@@ -161,7 +154,6 @@ export function getContacts(callback) {
     .get(api_link)
     .then((response) => {
       const { data } = response;
-      console.log("Updated moms", data);
       callback(data);
     })
     .catch((error) => {
@@ -177,13 +169,10 @@ export function insertOnDemandToDb(on_demand_data, callback) {
     .then((response) => {
       const { data } = response;
       if (callback !== null) {
-        console.log("On Demand Insert result", data);
         callback(data);
       }
     })
-    .catch((error) => {
-      console.log(error);
-    });
+    .catch((error) => {});
 }
 
 export function checkLatestSiteEventIfHasOnDemand(site_id, callback) {
@@ -192,7 +181,6 @@ export function checkLatestSiteEventIfHasOnDemand(site_id, callback) {
     .get(api_link)
     .then((response) => {
       const { data } = response;
-      console.log("check if has on demand", data);
       callback(data);
     })
     .catch((error) => {
@@ -207,13 +195,10 @@ export function getEarthquakeEventsForLast24hrs(json_data, callback) {
     .then((response) => {
       const { data } = response;
       if (callback !== null) {
-        console.log("24hrs eq event", data);
         callback(data);
       }
     })
-    .catch((error) => {
-      console.log(error);
-    });
+    .catch((error) => {});
 }
 
 export const getStaffs = (callback) => {

@@ -92,13 +92,11 @@ function TempMomsTable(props) {
         }
       });
 
-      console.log(temp);
       setMomsList(temp);
     }
   }, []);
 
   const selectMoms = (data) => {
-    console.log(data);
     setSelectedMomsData(data);
     setIsOpenUpdateMomsModal(true);
   };
@@ -189,9 +187,7 @@ function HeaderAlertInformation(props) {
   const [validity, setValidity] = useState(null);
 
   useEffect(() => {
-    console.log("ON GOING", onGoingData);
     if (onGoingData.length > 0) {
-      console.log("with data");
       const { highest_event_alert_level, latest_event_triggers } =
         onGoingData[0];
       setAlertLevel(highest_event_alert_level);
@@ -230,13 +226,11 @@ function HeaderAlertInformation(props) {
           return template;
         }
       });
-      console.log(triggers);
       setLatestTriggers(triggers);
     } else {
       if (ewiTemplates.length > 0) {
         const template = ewiTemplates.find((e) => e.alert_level === 0);
         setResponses(template);
-        console.log(template);
         setLatestTriggers([template]);
         setAlertLevel(0);
       }
@@ -336,7 +330,6 @@ function ExtendedAccordionPanel(props) {
     });
   };
   useEffect(() => {
-    console.log("EXTENDED DATA", data);
     if (data) {
       const {
         event,
@@ -353,10 +346,8 @@ function ExtendedAccordionPanel(props) {
       setExtDay(day);
       const { data_ts, release_id } = releases[0];
       checkReleasedMessage(release_id);
-      console.log(releases);
       setDataTimestamp(data_ts);
       const { alert_level: alertLevel } = public_alert_symbol;
-      console.log(alertLevel);
       setAlertLevel(alertLevel);
       const colors = alert_level_colors.find(
         (e) => e.alert_level === alertLevel
@@ -475,7 +466,6 @@ function PendingAccordionPanel(props) {
   };
 
   const openValidateModal = (trigger) => {
-    console.log(trigger);
     setIsOpenValidationModal(true);
     setAlertTrigger(trigger);
   };
@@ -698,7 +688,6 @@ function LatestAccordionPanel(props) {
         } = data;
         const { site, validity } = event;
         setAlertValidity(validity);
-        console.log("latest_event_triggers", latest_event_triggers);
         if (latest_event_triggers.length > 0) {
           const {
             info,
@@ -725,7 +714,6 @@ function LatestAccordionPanel(props) {
           setTechInfo(info);
           setTriggerTimestamp(trigger_ts);
           const { alert_level: alertLevel, alert_symbol } = public_alert_symbol;
-          console.log(alertLevel);
           setAlertLevel(alertLevel);
           const colors = alert_level_colors.find(
             (e) => e.alert_level === alertLevel
@@ -948,7 +936,6 @@ function OpCen2(props) {
   const generateDashboardData = () => {
     const temp_on_going_data = tempAlertGen;
     // getCandidateAlert((data) => {
-    console.log(temp_on_going_data);
     const { candidate_alerts, on_going, ewi_templates } = temp_on_going_data;
     // setCandidateAlerts([JSON.parse(candidate_alerts)[1]]);
 
@@ -992,7 +979,6 @@ function OpCen2(props) {
 
   const handleSendSMS = (message) => {
     setOpenBackdrop(!openBackdrop);
-    console.log(disseminate_data);
     let alert_release_id;
     if (disseminate_data.isRoutine) {
       alert_release_id = disseminate_data.release_id;
@@ -1021,8 +1007,6 @@ function OpCen2(props) {
       release_id: alert_release_id,
       release_details: JSON.stringify([disseminate_data]),
     };
-
-    console.log(input);
 
     sendMessage(input, (callback) => {
       const { status, feedback } = callback;
@@ -1054,7 +1038,6 @@ function OpCen2(props) {
   const [audio] = useState(new Audio(NotificationSoundFolder));
 
   useEffect(() => {
-    console.log(is_open_new_alert_modal);
     if (is_open_new_alert_modal) audio.play();
     else {
       audio.pause();
@@ -1073,19 +1056,11 @@ function OpCen2(props) {
   useEffect(() => {
     const interval = setInterval(() => {
       generateDashboardData();
-      console.log("This will run every 5 minutes");
+      //"This will run every 5 minutes"
     }, 300000);
 
     return () => clearInterval(interval);
   }, []);
-
-  useEffect(() => {
-    console.log("candidate_alerts", candidate_alerts);
-    console.log("on_going_alerts", on_going_alerts);
-    console.log("extended_alerts", extended_alerts);
-    console.log("routine", routine);
-    console.log("ewi", cbewsl_ewi_template);
-  }, [candidate_alerts, on_going_alerts, extended_alerts, cbewsl_ewi_template]);
 
   return (
     <Fragment>

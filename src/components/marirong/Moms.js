@@ -92,29 +92,6 @@ const Moms = (props) => {
     setUserId(credentials.user.user_id);
   }, []);
 
-  // useEffect(() => {
-  //   let check = featureNames.find((o) => o.name === featureName.name);
-  //   if (check) setExistingFeatureName(true);
-  //   else setExistingFeatureName(false);
-  // }, [featureName]);
-
-  // useEffect(() => {
-  //   setFeatureDetails(selectedFeatureIndex != null ? (feature_list.find((o) => o.feature_id == selectedFeatureIndex)).details : "")
-  // }, [selectedFeatureIndex])
-
-  // useEffect(() => {
-  //   reloadDataTable();
-  // }, []);
-
-  // const reloadDataTable = () => {
-  //   getMomsInstances((response) => {
-  //     console.log("getMomsInstances repsonse:", response.data);
-  //   });
-  //   getMomsFeatures((response) => {
-  //     console.log("getMomsFeatures repsonse:", response.data);
-  //   });
-  // }
-
   const feature_list = [
     {
       feature_id: 1,
@@ -204,7 +181,6 @@ const Moms = (props) => {
               },
             ];
 
-            console.log("feature:", feature);
             if (feature.instances.length > 0) {
               feature.instances.map((instance) => {
                 tempFeatureNames.push({
@@ -357,7 +333,6 @@ const Moms = (props) => {
   const handleSubmit = () => {
     let valid = checkRequired();
 
-    console.log("valid", valid);
     if (valid) {
       let promptMsg = `Date: ${moment(datetimestamp).format(
         "YYYY-MM-DD HH:mm:ss"
@@ -401,7 +376,6 @@ const Moms = (props) => {
           if (response) {
             submitMoms();
           }
-          console.log("callback", response);
         }}
       />
 
@@ -477,7 +451,6 @@ const Moms = (props) => {
                   label="Feature Name"
                   value={featureName.name}
                   onChange={(e) => {
-                    console.log("e.target.value:", e.target.value);
                     setFeatureName(e.target.value);
                   }}
                 >
@@ -573,7 +546,6 @@ const Moms = (props) => {
                 label="Reporter"
                 value={`${reporter.first_name} ${reporter.last_name}`}
                 onChange={(e) => {
-                  console.log(e);
                   setReporter(e.target.value);
                 }}
                 renderValue={(selected) => selected}
