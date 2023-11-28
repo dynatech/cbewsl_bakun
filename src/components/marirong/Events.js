@@ -50,8 +50,11 @@ const Events = (props) => {
 
   const getAllEvents = () => {
     getEvents((response) => {
-      if (response.status) {
-        setActivity(response.data);
+
+      if(response.status){
+        const sortedActivity = response.data.slice().reverse();
+        setActivity(sortedActivity);
+
       }
     });
   };

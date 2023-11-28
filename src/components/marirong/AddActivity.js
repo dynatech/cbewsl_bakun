@@ -15,14 +15,16 @@ import {
 } from "@mui/material";
 import DoNotDisturbIcon from "@mui/icons-material/DoNotDisturb";
 import Dialog from "@mui/material/Dialog";
-import AddCircleOutlined from "@mui/icons-material/AddCircleOutlined";
-import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
-import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
-import { DateTimePicker } from "@mui/x-date-pickers/DateTimePicker";
-import { addEvent } from "../../apis/EventsManagement";
-import PromptModal from "./modals/PromptModal";
-import AddPhotoAlternateIcon from "@mui/icons-material/AddPhotoAlternate";
-import Swal from "sweetalert2";
+
+import AddCircleOutlined from '@mui/icons-material/AddCircleOutlined';
+import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
+import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
+import { DateTimePicker } from '@mui/x-date-pickers/DateTimePicker';
+import { addEvent } from '../../apis/EventsManagement'
+import PromptModal from './modals/PromptModal';
+import AddPhotoAlternateIcon from '@mui/icons-material/AddPhotoAlternate';
+import Swal from 'sweetalert2'
+import { CBEWSL_SITE } from "../../host";
 
 const localizer = momentLocalizer(moment);
 const AddActivity = (props) => {
@@ -101,20 +103,16 @@ const AddActivity = (props) => {
 
   const handleActivity = () => {
     const formData = new FormData();
-    formData.append("activity_id", action === "add" ? 0 : eventID);
-    formData.append(
-      "start_date",
-      moment(eventStartDate).format("YYYY-MM-DD HH:mm:ss")
-    );
-    formData.append(
-      "end_date",
-      moment(eventEndDate).format("YYYY-MM-DD HH:mm:ss")
-    );
-    formData.append("activity_name", eventName);
-    formData.append("activity_place", eventPlace);
-    formData.append("activity_note", eventNote);
-    formData.append("file", selectedImage);
-    setIsConfirm(false);
+        formData.append('activity_id', action === "add" ? 0 : eventID);
+        formData.append('start_date', moment(eventStartDate).format('YYYY-MM-DD HH:mm:ss'));
+        formData.append('end_date', moment(eventEndDate).format('YYYY-MM-DD HH:mm:ss'))
+        formData.append('activity_name', eventName);
+        formData.append('activity_place', eventPlace);
+        formData.append('activity_note', eventNote);
+        formData.append('site_id', CBEWSL_SITE);
+        formData.append('file', selectedImage);
+        console.log(formData)
+        setIsConfirm(false)
 
     addEvent(formData, (response) => {
       if (response.status) {
@@ -137,6 +135,7 @@ const AddActivity = (props) => {
       }
     });
   };
+
 
   return (
     <Fragment>

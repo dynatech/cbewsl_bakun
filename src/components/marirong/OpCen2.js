@@ -108,9 +108,9 @@ function TempMomsTable(props) {
           component={Paper}
           style={{
             width: "auto",
-            marginLeft: 70,
-            marginRight: 70,
-            marginBottom: 70,
+            marginLeft: 48,
+            marginRight: 48,
+            marginBottom: 48,
           }}
         >
           <Table aria-label="simple table">
@@ -190,10 +190,12 @@ function HeaderAlertInformation(props) {
     if (onGoingData.length > 0) {
       const { highest_event_alert_level, latest_event_triggers } =
         onGoingData[0];
+
       setAlertLevel(highest_event_alert_level);
       const template = ewiTemplates.find(
-        (e) => e.alert_level === highest_event_alert_level
+        (e) => e.alert_level === public_alert_symbol.alert_level
       );
+      console.log("template", template);
       setResponses(template);
       const triggers = latest_event_triggers.map((row, index) => {
         const { internal_sym, trigger_misc } = row;
@@ -259,7 +261,9 @@ function HeaderAlertInformation(props) {
           <Grid container spacing={1}>
             <Grid item xs={3} style={{ alignSelf: "center" }}>
               <Typography variant="h3">ALERT LEVEL {alert_level}</Typography>
-              <Typography variant="h5">{data_timestamp}</Typography>
+              <Typography variant="h5">
+                {moment(data_timestamp).format("MMMM D, YYYY, h:mm A")}
+              </Typography>
             </Grid>
             <Grid
               item
@@ -289,13 +293,18 @@ function HeaderAlertInformation(props) {
               <br />
               <Typography variant="body1" gutterBottom>
                 <strong>Responde (Komunidad):</strong>{" "}
-                {responses.commmunity_response
-                  ? responses.commmunity_response
+                {responses.community_response
+                  ? responses.community_response
                   : "N/A"}
               </Typography>
               <br />
               <Typography variant="body1" gutterBottom>
-                <strong>Responde (LEWC at Barangay):</strong>{" "}
+                <strong>Responde (LEWC):</strong>{" "}
+                {responses.lewc_response ? responses.lewc_response : "N/A"}
+              </Typography>
+              <br />
+              <Typography variant="body1" gutterBottom>
+                <strong>Responde (Barangay):</strong>{" "}
                 {responses.barangay_response
                   ? responses.barangay_response
                   : "N/A"}
@@ -359,7 +368,7 @@ function ExtendedAccordionPanel(props) {
   return (
     <Fragment>
       <Accordion
-        style={{ marginLeft: 70, marginRight: 70, marginBottom: 70 }}
+        style={{ marginLeft: 48, marginRight: 48, marginBottom: 48 }}
         expanded={true}
         // onChange={handleChange(`pending_panel_${key}`)}
         key={`pending_panel_${key}`}
@@ -384,7 +393,8 @@ function ExtendedAccordionPanel(props) {
             <Grid item xs={6}>
               {data_timestamp && (
                 <Typography variant="h6">
-                  Data Timestamp: {moment(data_timestamp).format("LLL")}
+                  Data Timestamp:{" "}
+                  {moment(data_timestamp).format("MMMM D, YYYY, h:mm A")}
                 </Typography>
               )}
             </Grid>
@@ -490,7 +500,7 @@ function PendingAccordionPanel(props) {
   return (
     <Fragment>
       <Accordion
-        style={{ marginLeft: 70, marginRight: 70, marginBottom: 70 }}
+        style={{ marginLeft: 48, marginRight: 48, marginBottom: 48 }}
         expanded={true}
         // onChange={handleChange(`pending_panel_${key}`)}
         key={`pending_panel_${key}`}
@@ -515,7 +525,8 @@ function PendingAccordionPanel(props) {
             <Grid item xs={6}>
               {data_timestamp && (
                 <Typography variant="h6">
-                  Data Timestamp: {moment(data_timestamp).format("LLL")}
+                  Data Timestamp:{" "}
+                  {moment(data_timestamp).format("MMMM D, YYYY, h:mm A")}
                 </Typography>
               )}
             </Grid>
@@ -548,7 +559,9 @@ function PendingAccordionPanel(props) {
                   </Grid>
                   <Grid item md={3}>
                     <Typography variant="h6">Trigger timestamp</Typography>
-                    <Typography>{moment(ts_updated).format("LLL")}</Typography>
+                    <Typography>
+                      {moment(ts_updated).format("MMMM D, YYYY, h:mm A")}
+                    </Typography>
                   </Grid>
                   <Grid item md={5}>
                     <Typography variant="h6">Technical Information</Typography>
@@ -726,7 +739,7 @@ function LatestAccordionPanel(props) {
 
   return (
     <Accordion
-      style={{ marginLeft: 70, marginRight: 70, marginBottom: 70 }}
+      style={{ marginLeft: 48, marginRight: 48, marginBottom: 48 }}
       expanded={true}
       onChange={handleChange(`event_panel_${key}`)}
       key={`event_panel_${key}`}
@@ -748,11 +761,13 @@ function LatestAccordionPanel(props) {
           </Grid>
           <Grid item xs={7}>
             <Typography variant="h6" style={{ textAlign: "center" }}>
-              Date and Time: {data_timestamp}
+              Date and Time:{" "}
+              {moment(data_timestamp).format("MMMM D, YYYY, h:mm A")}
             </Typography>
             {!isRoutine && (
               <Typography variant="h6" style={{ textAlign: "center" }}>
-                Validity: {moment(alert_validity).format("LLL")}
+                Validity:{" "}
+                {moment(alert_validity).format("MMMM D, YYYY, h:mm A")}
               </Typography>
             )}
           </Grid>
@@ -774,7 +789,9 @@ function LatestAccordionPanel(props) {
             </Grid>
             <Grid item md={3}>
               <Typography variant="h6">Trigger timestamp</Typography>
-              <Typography>{moment(trig_ts).format("LLL")}</Typography>
+              <Typography>
+                {moment(trig_ts).format("MMMM D, YYYY, h:mm A")}
+              </Typography>
             </Grid>
             <Grid item md={6}>
               <Typography variant="h6">Technical Information</Typography>
@@ -934,35 +951,42 @@ function OpCen2(props) {
   };
 
   const generateDashboardData = () => {
-    const temp_on_going_data = tempAlertGen;
-    // getCandidateAlert((data) => {
-    const { candidate_alerts, on_going, ewi_templates } = temp_on_going_data;
-    // setCandidateAlerts([JSON.parse(candidate_alerts)[1]]);
 
-    const temp_candidate = JSON.parse(candidate_alerts);
-    const temp_on_going = JSON.parse(on_going);
-    const { latest, overdue, extended, routine: routine_data } = temp_on_going;
-    let temp = [];
-    temp.push(...latest);
-    temp.push(...overdue);
-    setOnGoingAlerts(temp);
-    if (!routine_data.released_sites) {
-      routine_data.released_sites = [];
-    }
-    setRoutine(routine_data);
-    setEwiTemplates(ewi_templates);
-    setExtendedAlerts(extended);
-    if (extended.length > 0) {
-      const extended_site = extended.find((e) => e.event.site.site_id);
-      if (extended_site) {
-        setCandidateAlerts(
-          temp_candidate.filter((e) => e.general_status === "extended")
-        );
+    // const temp_on_going_data = tempAlertGen;
+    getCandidateAlert((data) => {
+      console.log(data);
+      const { candidate_alerts, on_going, ewi_templates } = data;
+      // setCandidateAlerts([JSON.parse(candidate_alerts)[1]]);
+
+      const temp_candidate = JSON.parse(candidate_alerts);
+      const temp_on_going = JSON.parse(on_going);
+      const {
+        latest,
+        overdue,
+        extended,
+        routine: routine_data,
+      } = temp_on_going;
+      let temp = [];
+      temp.push(...latest);
+      temp.push(...overdue);
+      setOnGoingAlerts(temp);
+      if (!routine_data.released_sites) {
+        routine_data.released_sites = [];
       }
-    } else {
-      setCandidateAlerts(temp_candidate);
-    }
-    // });
+      setRoutine(routine_data);
+      setEwiTemplates(ewi_templates);
+      setExtendedAlerts(extended);
+      if (extended.length > 0) {
+        const extended_site = extended.find((e) => e.event.site.site_id);
+        if (extended_site) {
+          setCandidateAlerts(
+            temp_candidate.filter((e) => e.general_status === "extended")
+          );
+        }
+      } else {
+        setCandidateAlerts(temp_candidate);
+      }
+    });
   };
 
   const generateMomsForValidation = () => {
@@ -1074,7 +1098,7 @@ function OpCen2(props) {
         <Grid
           item
           xs={12}
-          style={{ width: "95%", marginLeft: 50, padding: 10 }}
+          style={{ width: "95%", marginLeft: 38, padding: 10 }}
         >
           <Typography variant="h4">Landslide Features Validation</Typography>
         </Grid>
@@ -1092,7 +1116,7 @@ function OpCen2(props) {
         xs={12}
         style={{
           width: "95%",
-          marginLeft: 50,
+          marginLeft: 38,
           padding: 10,
           alignItems: "center",
         }}
@@ -1146,7 +1170,7 @@ function OpCen2(props) {
       <Grid
         item
         xs={12}
-        style={{ width: "95%", marginLeft: 50, padding: 10, marginTop: 30 }}
+        style={{ width: "95%", marginLeft: 38, padding: 10, marginTop: 30 }}
       >
         <Typography variant="h4">Event Monitoring</Typography>
       </Grid>
@@ -1177,7 +1201,7 @@ function OpCen2(props) {
         <Grid
           item
           xs={12}
-          style={{ width: "95%", marginLeft: 50, padding: 10, marginTop: 30 }}
+          style={{ width: "95%", marginLeft: 38, padding: 10, marginTop: 30 }}
         >
           <Typography variant="h4">Routine Monitoring</Typography>
         </Grid>
@@ -1201,7 +1225,7 @@ function OpCen2(props) {
         <Grid
           item
           xs={12}
-          style={{ width: "95%", marginLeft: 50, padding: 10, marginTop: 30 }}
+          style={{ width: "95%", marginLeft: 38, padding: 10, marginTop: 30 }}
         >
           <Typography variant="h4">Extended Monitoring</Typography>
         </Grid>

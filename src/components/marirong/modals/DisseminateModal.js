@@ -40,6 +40,9 @@ function DisseminateModal(props) {
   const [barangayRP, setBarangayRP] = useState("");
   const [communityRP, setCommunityRP] = useState("");
   const [lewcRP, setLewcRP] = useState("");
+  const [municipalRP, setMunicipalRp] = useState("");
+  const [provincialRp, setProvincialRp] = useState("");
+  const [latestEventTriggers, setLatestEventTriggers] = useState([]);
 
   const releaseEWISms = () => {
     handleSendSMS(message);
@@ -47,6 +50,7 @@ function DisseminateModal(props) {
 
   useEffect(() => {
     if (disseminateData) {
+      console.log("disseminateData", disseminateData);
       const { public_alert_level } = disseminateData;
       if (public_alert_level !== 0) {
         let data_timestamp;
@@ -82,16 +86,18 @@ function DisseminateModal(props) {
           data_timestamp
         )
           .add(30, "minutes")
-          .format("LLL")}`;
+          .format("MMMM D, YYYY, h:mm A")}`;
 
         setAlertLevel(`Alert level ${alert_level}`);
         setCurrentAlertTs(
           moment(data_timestamp).add(30, "minutes").format("LLL")
         );
 
+        let temp = [...triggerSource];
         if (alert_level > 0) {
+          setLatestEventTriggers(latest_event_triggers);
           latest_event_triggers.forEach((trigger) => {
-            const { internal_sym, trigger_misc } = trigger;
+            const { internal_sym, trigger_misc, info } = trigger;
             const { trigger_symbol } = internal_sym;
             const { trigger_hierarchy, alert_level } = trigger_symbol;
             const { trigger_source } = trigger_hierarchy;
@@ -99,6 +105,7 @@ function DisseminateModal(props) {
               (e) =>
                 e.alert_level === alert_level && e.trigger === trigger_source
             );
+            console.log("Template", template);
             if (trigger_source === "on demand") {
               const { on_demand } = trigger_misc;
               const { eq_id } = on_demand;
@@ -119,26 +126,28 @@ function DisseminateModal(props) {
               msg += `\nBakit (${capitalizeFirstLetter(trig_source)}): ${
                 template.trigger_description
               }`;
-              let temp = [...triggerSource];
               temp.push({
                 source: capitalizeFirstLetter(trig_source),
                 description: template.trigger_description,
+                info,
               });
             } else {
               const trig_source =
                 trigger_source === "moms"
                   ? "Landslide Features"
                   : trigger_source;
+              console.log("trig_source", trigger_source);
               msg += `\nBakit (${capitalizeFirstLetter(trig_source)}): ${
                 template.trigger_description
               }`;
 
-              let temp = [...triggerSource];
               temp.push({
                 source: capitalizeFirstLetter(trig_source),
                 description: template.trigger_description,
+                info,
               });
               setTriggerSource(temp);
+              console.log("HERE", temp);
             }
           });
         }
@@ -147,26 +156,30 @@ function DisseminateModal(props) {
         );
         setBarangayRP(recommended_response.barangay_response);
         setLewcRP(recommended_response.lewc_response);
-        setCommunityRP(recommended_response.commmunity_response);
+        setCommunityRP(recommended_response.community_response);
+        setMunicipalRp(recommended_response.mlgu_response);
+        setProvincialRp(recommended_response.plgu_response);
 
         msg += `\nResponde (Barangay): ${recommended_response.barangay_response}\n`;
         msg += `\nResponde (LEWC):${recommended_response.lewc_response}\n`;
-        msg += `\nResponde (Komunidad): ${recommended_response.commmunity_response}\n`;
+        msg += `\nResponde (Komunidad): ${recommended_response.community_response}\n`;
         msg += `Source: Bakun MDRRMO`;
         setMessage(msg);
       } else {
         // need icheck if gagana din sa extended
-        const { data_ts, public_alert_level } = disseminateData;
+        const { releases } = disseminateData;
+        const { data_ts } = releases[0];
         const recommended_response = ewiTemplates.find(
           (e) => e.alert_level === public_alert_level
         );
         let site_location = CBEWSL_SITE_LOCATION;
+        console.log(recommended_response, 2222);
         setSiteLocation(site_location);
         let msg = `\nAlert Level: ${
           recommended_response.alert_level
         }\nLokasyon: ${site_location}\nPetsa at oras: ${moment(data_ts)
           .add(30, "minutes")
-          .format("LLL")}`;
+          .format("MMMM D, YYYY, h:mm A")}`;
 
         setAlertLevel(`Alert Level ${recommended_response.alert_level}`);
         setCurrentAlertTs(moment(data_ts).add(30, "minutes").format("LLL"));
@@ -177,11 +190,13 @@ function DisseminateModal(props) {
           description: recommended_response.trigger_description,
         });
         setTriggerSource(temp);
-        setCommunityRP(recommended_response.commmunity_response);
+        setCommunityRP(recommended_response.community_response);
         setBarangayRP(recommended_response.barangay_response);
+        setMunicipalRp(recommended_response.mlgu_response);
+        setProvincialRp(recommended_response.plgu_response);
 
         msg += `\nBakit: ${recommended_response.trigger_description}`;
-        msg += `\nResponde (Komunidad): ${recommended_response.commmunity_response}\nResponde (LEWC):${recommended_response.barangay_response}\nSource: Bakun MDRRMO`;
+        msg += `\nResponde (Komunidad): ${recommended_response.community_response}\nResponde (LEWC):${recommended_response.barangay_response}\nSource: Bakun MDRRMO`;
         setMessage(msg);
       }
     }
@@ -197,6 +212,9 @@ function DisseminateModal(props) {
         barangayRP: barangayRP,
         communityRP: communityRP,
         lewcRP: lewcRP,
+        municipalRP,
+        provincialRp,
+        triggerList: latestEventTriggers,
       },
     });
   };
@@ -262,15 +280,17 @@ function DisseminateModal(props) {
         >
           Send EWI SMS
         </Button>
-        <Button
-          variant="contained"
-          onClick={() => {
-            renderBulletin();
-          }}
-          color="primary"
-        >
-          Generate Bulletin
-        </Button>
+        {alertLevel !== "Alert level 0" && (
+          <Button
+            variant="contained"
+            onClick={() => {
+              renderBulletin();
+            }}
+            color="primary"
+          >
+            Generate Bulletin
+          </Button>
+        )}
       </DialogActions>
     </Dialog>
   );

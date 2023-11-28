@@ -88,7 +88,7 @@ function AlertReleaseFormModal(props) {
                 <Grid item md={4}>
                   <Typography variant="body1">Trigger timestamp</Typography>
                   <Typography variant="body2">
-                    {moment(ts_updated).format("LLL")}
+                    {moment(ts_updated).format("MMMM D, YYYY, h:mm A")}
                   </Typography>
                 </Grid>
                 <Grid item md={6}>

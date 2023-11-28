@@ -140,7 +140,7 @@ const SurficialMarkers = (props) => {
           tempMarkers.push({
             ...marker,
             date: moment(marker.date).format("LL"),
-            time: moment(marker.time).format("LT"),
+            time: moment(new Date(marker.time)).format("LT"),
           });
         });
         setMarkersTable(tempMarkers);
@@ -350,6 +350,7 @@ const SurficialMarkers = (props) => {
     downloadOptions: {
       filename: `surficial_marker_data_${moment().format("YYYY-MM-DD")}`,
     },
+    setCellProps: () => ({ style: { textAlignLast: "center" } }),
     // onRowsDelete: rowsDeleted => {
     // const idsToDelete = rowsDeleted.data.map (item => item.dataIndex)
     // handleMuiTableBatchDelete(idsToDelete.sort());
