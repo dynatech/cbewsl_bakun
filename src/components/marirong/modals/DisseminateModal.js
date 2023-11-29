@@ -50,7 +50,6 @@ function DisseminateModal(props) {
 
   useEffect(() => {
     if (disseminateData) {
-      console.log("disseminateData", disseminateData);
       const { public_alert_level } = disseminateData;
       if (public_alert_level !== 0) {
         let data_timestamp;
@@ -105,7 +104,6 @@ function DisseminateModal(props) {
               (e) =>
                 e.alert_level === alert_level && e.trigger === trigger_source
             );
-            console.log("Template", template);
             if (trigger_source === "on demand") {
               const { on_demand } = trigger_misc;
               const { eq_id } = on_demand;
@@ -136,7 +134,6 @@ function DisseminateModal(props) {
                 trigger_source === "moms"
                   ? "Landslide Features"
                   : trigger_source;
-              console.log("trig_source", trigger_source);
               msg += `\nBakit (${capitalizeFirstLetter(trig_source)}): ${
                 template.trigger_description
               }`;
@@ -147,7 +144,6 @@ function DisseminateModal(props) {
                 info,
               });
               setTriggerSource(temp);
-              console.log("HERE", temp);
             }
           });
         }
@@ -167,13 +163,11 @@ function DisseminateModal(props) {
         setMessage(msg);
       } else {
         // need icheck if gagana din sa extended
-        const { releases } = disseminateData;
-        const { data_ts } = releases[0];
+        const { data_ts, public_alert_level } = disseminateData;
         const recommended_response = ewiTemplates.find(
           (e) => e.alert_level === public_alert_level
         );
         let site_location = CBEWSL_SITE_LOCATION;
-        console.log(recommended_response, 2222);
         setSiteLocation(site_location);
         let msg = `\nAlert Level: ${
           recommended_response.alert_level
@@ -221,11 +215,7 @@ function DisseminateModal(props) {
 
   const sendEwiSMS = () => {
     setOpenModal(false);
-    Swal.fire({
-      icon: "success",
-      title: "Success!",
-      text: "EWI sent!",
-    });
+    handleSendSMS(message);
   };
 
   return (
@@ -248,18 +238,6 @@ function DisseminateModal(props) {
               value={message}
               fullWidth
             />
-            {/* <Typography variant="body1"><b>Lugar:</b> {site_location}</Typography>
-                        <br />
-                        <Typography variant="body1"><b>Petsa at oras:</b> {moment(data_timestamp).add(30, "minutes").format("LLL")}</Typography>
-                        <br />
-                        <Typography variant="body1"><b>Bakit ({trigger.trigger}):</b> {trigger.waray_tech_info}</Typography>
-                        <br />
-                        <Typography variant="body1"><b>Responde (komunidad):</b> {trigger.community_response}</Typography>
-                        <br />
-                        <Typography variant="body1"><b>Responde (LEWC ngan barangay):</b> {trigger.barangay_response}</Typography>
-                        <br />
-                        <Typography variant="body1"><b>Source:</b> Paranas MDRRMO</Typography>
-                        <br /> */}
           </Grid>
         </Grid>
       </DialogContent>

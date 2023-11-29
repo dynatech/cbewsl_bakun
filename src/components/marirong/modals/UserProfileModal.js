@@ -76,6 +76,8 @@ function UserProfileModal(props) {
   };
 
   const handleSubmit = () => {
+    const mobile_num = mobileNo.toString();
+    let updated_mobile_num = mobile_num.replace(/^./g, "63");
     let submitData = {
       firstname: firstName,
       middlename: middleName,
@@ -86,7 +88,7 @@ function UserProfileModal(props) {
       birthday: moment(new Date(birthday)).format("YYYY-MM-DD"),
       address: address,
       designation_id: designation,
-      mobile_no: mobileNo,
+      mobile_no: updated_mobile_num,
       password: newPassword,
       username: username,
     };
@@ -295,8 +297,13 @@ function UserProfileModal(props) {
             variant="outlined"
             style={{ width: "100%", paddingBottom: 10 }}
             onChange={(e) => {
-              setMobileNo(e.target.value);
+              const value = e.target.value;
+              if (value.length <= 11) {
+                setMobileNo(e.target.value);
+              }
             }}
+            type="number"
+            value={mobileNo}
           />
 
           <TextField
