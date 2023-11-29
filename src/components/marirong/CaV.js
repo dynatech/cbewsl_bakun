@@ -1,12 +1,9 @@
-import React, { useState, useEffect, Fragment } from "react";
+import React, { useState, useEffect } from "react";
 import {
   Grid,
   Container,
   Button,
   Typography,
-  Modal,
-  Divider,
-  Stack,
   TextField,
   InputLabel,
   Select,
@@ -256,10 +253,6 @@ const CaV = () => {
         if (response.status == true) {
           initialize();
           setOpenModal(false);
-          // setOpenPrompt(true);
-          // setErrorPrompt(false);
-          // setPromptTitle("Success");
-          // setNotifMessage(response.message);
           Swal.fire({
             icon: "success",
             title: "Success!",
@@ -267,10 +260,6 @@ const CaV = () => {
           });
           fetchAll();
         } else {
-          // setOpenPrompt(true);
-          // setErrorPrompt(true);
-          // setPromptTitle("Fail");
-          // setNotifMessage(response.message);
           Swal.fire({
             icon: "error",
             title: "Error!",
@@ -283,10 +272,6 @@ const CaV = () => {
         if (response.status == true) {
           initialize();
           setOpenModal(false);
-          // setOpenPrompt(true);
-          // setErrorPrompt(false);
-          // setPromptTitle("Success");
-          // setNotifMessage(response.message);
           Swal.fire({
             icon: "success",
             title: "Success!",
@@ -294,10 +279,6 @@ const CaV = () => {
           });
           fetchAll();
         } else {
-          // setOpenPrompt(true);
-          // setErrorPrompt(true);
-          // setPromptTitle("Fail");
-          // setNotifMessage(response.message);
           Swal.fire({
             icon: "error",
             title: "Error!",
@@ -713,9 +694,6 @@ const CaV = () => {
                 label="Birthdate"
                 value={householdHead.birthdate}
                 onChange={(e) => {
-                  // let temp = { ...householdHead };
-                  // temp.birthdate = moment(new Date(e)).format("YYYY-MM-DD");
-                  // setHouseholdHead(temp);
                   setHouseholdHead({
                     ...householdHead,
                     birthdate: moment(new Date(e)).format("YYYY-MM-DD"),

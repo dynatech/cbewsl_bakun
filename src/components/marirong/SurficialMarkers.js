@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from "react";
 import {
   Grid,
-  Container,
   Button,
   Typography,
   Box,
@@ -23,7 +22,6 @@ import { TimePicker } from "@mui/x-date-pickers/TimePicker";
 import moment from "moment";
 import FormControlLabel from "@mui/material/FormControlLabel";
 import {
-  getSurficialData,
   sendMeasurement,
   deletePrevMeasurement,
   getStaffs,
@@ -35,14 +33,11 @@ import FormLabel from "@mui/material/FormLabel";
 import FormHelperText from "@mui/material/FormHelperText";
 import PromptModal from "./modals/PromptModal";
 import InputAdornment from "@mui/material/InputAdornment";
-import OutlinedInput from "@mui/material/OutlinedInput";
-
-import ListItemText from "@mui/material/ListItemText";
 import Checkbox from "@mui/material/Checkbox";
 
 import { useSnackbar } from "notistack";
 import Swal from "sweetalert2";
-import swal_success from "../../assets/phin_swal_success.png"
+import swal_success from "../../assets/phin_swal_success.png";
 import { CBEWSL_SITE_CODE } from "../../host";
 
 const MenuProps = {
@@ -72,8 +67,6 @@ const SurficialMarkers = (props) => {
   const [notifMessage, setNotifMessage] = useState("");
   const [errorPrompt, setErrorPrompt] = useState(false);
   const [confirmation, setConfirmation] = useState(false);
-
-  const [prevMeasurement, setPrevMeasurement] = useState([]);
 
   const [isUpdate, setIsUpdate] = useState(false);
   const [selectedMoId, setSelectedMoId] = useState(null);
@@ -177,11 +170,6 @@ const SurficialMarkers = (props) => {
         ? measurement.weather != ""
         : false)
     ) {
-      // markers.forEach((marker) => {
-      //   if (!measurement.hasOwnProperty(marker) || measurement[marker] == "") {
-      //     valid = false;
-      //   }
-      // });
       valid = checkAtleastOne();
     } else valid = false;
 
@@ -257,10 +245,10 @@ const SurficialMarkers = (props) => {
         if (response.status == true) {
           setOpen(false);
           Swal.fire({
-            // icon: "success",
-            imageUrl: swal_success,
-            title: "WOW!",
-            text: "Ang galing galing mo naman bading ka ba",
+            icon: "success",
+            // imageUrl: swal_success,
+            title: "Success!",
+            text: "Successfully saved ground measurements",
           });
           fetchAll();
           initialize();
@@ -322,25 +310,6 @@ const SurficialMarkers = (props) => {
     setIsUpdate(false);
     initialize();
   };
-
-  // const handleRowClick = (r, i) => {
-  //   setIsUpdate(true);
-  //   setPrevMeasurement(r);
-  //   setSelectedMoId(r[1]);
-  //   setMeasurement({
-  //     date: new Date(r[2]),
-  //     time: new Date(`${r[2]} ${r[3]}`),
-  //     A: r[4],
-  //     B: r[5],
-  //     C: r[6],
-  //     D: r[7],
-  //     E: r[8],
-  //     weather: r[10][0].toUpperCase() + r[10].toLowerCase().substring(1),
-  //     reporter: r[9],
-  //     type: r[11],
-  //   });
-  //   setOpen(true);
-  // };
 
   const options = {
     print: false,
