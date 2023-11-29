@@ -42,6 +42,7 @@ import Checkbox from "@mui/material/Checkbox";
 
 import { useSnackbar } from "notistack";
 import Swal from "sweetalert2";
+import swal_success from "../../assets/phin_swal_success.png"
 import { CBEWSL_SITE_CODE } from "../../host";
 
 const MenuProps = {
@@ -256,9 +257,10 @@ const SurficialMarkers = (props) => {
         if (response.status == true) {
           setOpen(false);
           Swal.fire({
-            icon: "success",
-            title: "Success!",
-            text: "Successfully sent ground measurements",
+            // icon: "success",
+            imageUrl: swal_success,
+            title: "WOW!",
+            text: "Ang galing galing mo naman bading ka ba",
           });
           fetchAll();
           initialize();
