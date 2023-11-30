@@ -1,11 +1,11 @@
 import React, { Fragment } from 'react';
 import { Grid } from '@mui/material'
-import MarirongHeader from '../utils/MarirongHeader';
+// import MarirongHeader from '../utils/MarirongHeader';
 
 const Dashboard = () => {
     return(
         <Fragment>
-            <MarirongHeader />
+            {/* <MarirongHeader /> */}
             <Grid container justifyContent={"center"} alignItems={"center"} textAlign={"center"}>
                 <Grid item xs={12}>
                     <h1>Dashboard</h1>

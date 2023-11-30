@@ -35,7 +35,7 @@ import { SignInLogo } from "./SignInLogo";
 
 import { CBEWSL_SITE_NAME } from "../../host";
 
-const MarirongHeader = () => {
+const BakunHeader = () => {
   let navigate = useNavigate();
   const [value, setValue] = useState(0);
   const [server_time, setServerTime] = useState("");
@@ -90,7 +90,7 @@ const MarirongHeader = () => {
       case 5:
         navigate(`${CBEWSL_SITE_NAME}/profile-settings`);
       default:
-        navigate(`${CBEWSL_SITE_NAME}/assessment`);
+        // navigate(`${CBEWSL_SITE_NAME}/assessment`);
         break;
     }
   };
@@ -559,4 +559,4 @@ const MarirongHeader = () => {
   );
 };
 
-export default MarirongHeader;
+export default BakunHeader;
