@@ -21,6 +21,7 @@ import moment from "moment";
 import { signUp } from "../../../apis/UserManagement";
 import PromptModal from "./PromptModal";
 import Swal from "sweetalert2";
+import { CBEWSL_SITE } from "../../../host";
 
 function UserProfileModal(props) {
   const isOpen = props.isOpen;
@@ -91,6 +92,7 @@ function UserProfileModal(props) {
       mobile_no: updated_mobile_num,
       password: newPassword,
       username: username,
+      siteID: CBEWSL_SITE
     };
 
     let filled = checkRequired();

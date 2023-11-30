@@ -1,7 +1,7 @@
 import React from "react";
 import { Grid, Button } from "@mui/material";
 import LipataHazardMap from "../../assets/lipata_hazard_map.jpg";
-import MarirongHeader from "../utils/MarirongHeader";
+// import MarirongHeader from "../utils/MarirongHeader";
 
 const Assessment = () => {
   const download = (e) => {
