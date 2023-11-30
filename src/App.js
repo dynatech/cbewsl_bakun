@@ -10,7 +10,7 @@ import Events from "./components/marirong/Events";
 import Communication from "./components/marirong/Communication";
 import Analysis from "./components/marirong/Analysis";
 import Assessment from "./components/marirong/Assessment";
-import MarirongHeader from "./components/utils/MarirongHeader";
+import BakunHeader from "./components/utils/BakunHeader";
 import CRA from "./components/marirong/CRA";
 import GroundData from "./components/marirong/GroundData";
 import CaV from "./components/marirong/CaV";
@@ -37,7 +37,7 @@ const App = (props) => {
       location !== `${CBEWSL_SITE_NAME}/signin` &&
       location !== `/${CBEWSL_SITE_NAME}`
     ) {
-      return <MarirongHeader />;
+      return <BakunHeader />;
     }
   };
 
@@ -105,11 +105,11 @@ const App = (props) => {
                 path={`${CBEWSL_SITE_NAME}/analysis`}
                 element={<Analysis />}
               />
-              <Route
+              {/* <Route
                 exact
                 path={`${CBEWSL_SITE_NAME}/assessment`}
                 element={<Assessment />}
-              />
+              /> */}
               <Route exact path={`${CBEWSL_SITE_NAME}/cra`} element={<CRA />} />
               <Route
                 exact
